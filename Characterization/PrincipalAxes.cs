@@ -71,13 +71,13 @@ namespace DigitalCircularityToolkit.Characterization
             }
 
             // sample points
-            Point3d[] discretized_points = new Point3d[n+1];
+            Point3d[] discretized_points = new Point3d[n];
 
             // populated discretized_points
-            curve.DivideByCount(n, true, out discretized_points);
+            double[] discretized_params = curve.DivideByCount(n, true, out discretized_points);
 
             // data of x, y, z points
-            double[][] positions = new double[n + 1][];
+            double[][] positions = new double[n][];
 
             for (int i = 0; i < discretized_points.Length; i++)
             {
@@ -85,7 +85,8 @@ namespace DigitalCircularityToolkit.Characterization
                 var point = discretized_points[i];
 
                 // populate data array
-                positions[i] = new double[] { point.X, point.Y, point.Z };
+                //positions[i] = new double[] { point.X, point.Y, point.Z };
+                positions[i] = new double[]{point.X, point.Y, point.Z};
             }
 
             // create a PCA class
@@ -106,7 +107,7 @@ namespace DigitalCircularityToolkit.Characterization
             };
 
             // populate vectors
-            for (int i = 0; i < 3;  i++)
+            for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
@@ -118,7 +119,7 @@ namespace DigitalCircularityToolkit.Characterization
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
-            DA.SetDataList(3, positions);
+            DA.SetDataList(3, discretized_points);
         }
 
         /// <summary>
