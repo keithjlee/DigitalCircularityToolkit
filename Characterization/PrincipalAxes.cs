@@ -42,7 +42,8 @@ namespace DigitalCircularityToolkit.Characterization
             pManager.AddVectorParameter("PCA1", "PCA1", "Principal Component 1", GH_ParamAccess.item) ;
             pManager.AddVectorParameter("PCA2", "PCA2", "Principal Component 2", GH_ParamAccess.item) ;
             pManager.AddVectorParameter("PCA3", "PCA3", "Principal Component 3", GH_ParamAccess.item) ;
-            pManager.AddPointParameter("Points", "Points", "Discretized points", GH_ParamAccess.list) ;
+            pManager.AddPointParameter("AnalysisPoints", "Points", "Discretized points used for analysis", GH_ParamAccess.list);
+            pManager.AddCurveParameter("AlignedCurve", "AlignedCrv", "Input curve with PCA1 aligned with global X", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -115,11 +116,55 @@ namespace DigitalCircularityToolkit.Characterization
                 }
             }
 
+            // align pca Y axis to global Y
+            if (pca_vectors[1].Y < 0)
+            {
+                pca_vectors[1] *= -1;
+                pca_vectors[2] *= -1;
+            }
+
+            // transformed points
+            double[][] transformed_positions = transform.Transform(positions);
+
+            Point3d[] transformed_points = new Point3d[n];
+
+            for (int i = 0;i < n; i++)
+            {
+                var point_positions = transformed_positions[i];
+                transformed_points[i] = new Point3d(point_positions[0], point_positions[1], point_positions[2]);
+            }
+
+            // Transform input curve
+            Point3d centroid = new Point3d();
+
+            if (curve.IsClosed)
+            {
+                var amp = AreaMassProperties.Compute(curve);
+                centroid = amp.Centroid;
+            }
+            else
+            {
+                // if open curve, centroid is the average of the sampled points
+                for (int i = 0; i < discretized_points.Length; i++)
+                {
+                    centroid += discretized_points[i] / n;
+                }
+            }
+
+            // planar align
+            Plane plane_PCA = new Plane(centroid, pca_vectors[0], pca_vectors[1]);
+            Plane plane_XYZ = new Plane(centroid, Vector3d.XAxis, Vector3d.YAxis);
+
+            // transformation object to map planes
+            Transform plane_transform = Transform.PlaneToPlane(plane_PCA, plane_XYZ);
+            curve.Transform(plane_transform);
+
             // return
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
             DA.SetDataList(3, discretized_points);
+            DA.SetData(4, curve);
         }
 
         /// <summary>
