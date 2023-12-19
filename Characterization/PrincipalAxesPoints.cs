@@ -35,7 +35,7 @@ namespace DigitalCircularityToolkit.Characterization
             pManager.AddVectorParameter("PCA1", "PCA1", "Principal Component 1", GH_ParamAccess.item);
             pManager.AddVectorParameter("PCA2", "PCA2", "Principal Component 2", GH_ParamAccess.item);
             pManager.AddVectorParameter("PCA3", "PCA3", "Principal Component 3", GH_ParamAccess.item);
-            pManager.AddCurveParameter("AlignedPoints", "AlignedPts", "Input points with PCA1 aligned with global X", GH_ParamAccess.item);
+            pManager.AddPointParameter("AlignedPoints", "AlignedPts", "Input points with PCA1 aligned with global X", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -62,16 +62,15 @@ namespace DigitalCircularityToolkit.Characterization
             Transform plane_transform = PCA.Aligner(pca_vectors, points);
 
             // apply
-            points.ForEach((point) =>
-            {
-                point.Transform(plane_transform);
-            });
+
+            PointCloud new_points = new PointCloud(points);
+            new_points.Transform(plane_transform);
 
             // return
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
-            DA.SetDataList(3, points);
+            DA.SetDataList(3, new_points.GetPoints());
 
         }
 
