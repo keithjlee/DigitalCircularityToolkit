@@ -63,7 +63,26 @@ namespace DigitalCircularityToolkit.Characterization
             List<int> n_uv = PCA.AssignUV(sample_densities);
 
             // get approx evenly distributed points on surfaces
-            Point3d[] discretized_points = PCA.DiscretizeBrep(brep, n_uv);
+            //Point3d[] discretized_points = PCA.DiscretizeBrep(brep, n_uv);
+
+            // create mesh
+            Mesh[] meshes = Mesh.CreateFromBrep(brep, new MeshingParameters(0.5));
+
+            // extract points
+            int n_points = 0;
+            foreach (Mesh mesh in meshes)
+            {
+                n_points += mesh.Vertices.Count;
+            }
+
+            Point3d[] discretized_points = new Point3d[n_points];
+            int offset = 0;
+            foreach (Mesh mesh in meshes)
+            {
+                Point3d[] vertices = mesh.Vertices.ToPoint3dArray();
+                vertices.CopyTo(discretized_points, offset);
+                offset += vertices.Length;
+            }
 
             // get PCA vectors
             double[][] positions = PCA.PositionMatrix(discretized_points);
@@ -74,6 +93,7 @@ namespace DigitalCircularityToolkit.Characterization
             // transform point set
             // get the centroid
             VolumeMassProperties props = VolumeMassProperties.Compute(brep);
+
 
             // transformation plane-to-plane
             Transform plane_transform = PCA.Aligner(pca_vectors, props.Centroid);
