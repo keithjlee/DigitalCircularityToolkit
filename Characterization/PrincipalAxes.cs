@@ -74,9 +74,6 @@ namespace DigitalCircularityToolkit.Characterization
             // sample points
             Point3d[] discretized_points = new Point3d[n];
 
-            // populated discretized_points
-            double[] discretized_params = curve.DivideByCount(n, true, out discretized_points);
-
             // data of x, y, z points
             double[][] positions = new double[n][];
 
@@ -86,7 +83,6 @@ namespace DigitalCircularityToolkit.Characterization
                 var point = discretized_points[i];
 
                 // populate data array
-                //positions[i] = new double[] { point.X, point.Y, point.Z };
                 positions[i] = new double[]{point.X, point.Y, point.Z};
             }
 
@@ -123,20 +119,10 @@ namespace DigitalCircularityToolkit.Characterization
                 pca_vectors[2] *= -1;
             }
 
-            // transformed points
-            double[][] transformed_positions = transform.Transform(positions);
-
-            Point3d[] transformed_points = new Point3d[n];
-
-            for (int i = 0;i < n; i++)
-            {
-                var point_positions = transformed_positions[i];
-                transformed_points[i] = new Point3d(point_positions[0], point_positions[1], point_positions[2]);
-            }
-
             // Transform input curve
             Point3d centroid = new Point3d();
 
+            // get the "centroid" of the curve
             if (curve.IsClosed)
             {
                 var amp = AreaMassProperties.Compute(curve);
@@ -151,12 +137,14 @@ namespace DigitalCircularityToolkit.Characterization
                 }
             }
 
-            // planar align
+            // PCA XY plane and world XY plane centered about curve centroid
             Plane plane_PCA = new Plane(centroid, pca_vectors[0], pca_vectors[1]);
             Plane plane_XYZ = new Plane(centroid, Vector3d.XAxis, Vector3d.YAxis);
 
-            // transformation object to map planes
+            // Map the PCA XY plane to the world XY plane
             Transform plane_transform = Transform.PlaneToPlane(plane_PCA, plane_XYZ);
+
+            // Transform input curve
             curve.Transform(plane_transform);
 
             // return
