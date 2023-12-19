@@ -31,7 +31,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Curve", "Curve", "Closed polyline curve", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("No. samples", "n", "Number of curve samples for PCA analysis", GH_ParamAccess.item, 15);
+            pManager.AddIntegerParameter("NumSamples", "n", "Number of curve samples for PCA analysis", GH_ParamAccess.item, 15);
             pManager.AddBooleanParameter("AlignY", "AlignY", "Orient PCA vectors such that local Y axis is aligned to global Y", GH_ParamAccess.item, true);
         }
 
