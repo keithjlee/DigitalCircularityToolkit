@@ -94,8 +94,8 @@ namespace DigitalCircularityToolkit.Characterization
             Point3d[] surface_points = new Point3d[n_total];
 
             // get the actual local width (u) and height (v) distances
-            double increment_u;
-            double increment_v;
+            //double increment_u;
+            //double increment_v;
 
             int counter = 0;
             for (int i = 0; i < brep.Faces.Count; i++)
@@ -104,17 +104,19 @@ namespace DigitalCircularityToolkit.Characterization
                 int n_uv = n_uvs[i];
 
                 // get the actual increment distances in u, v
-                face.GetSurfaceSize(out increment_u, out increment_v);
+                //face.GetSurfaceSize(out increment_u, out increment_v);
 
-                increment_u /= n_uv;
-                increment_v /= n_uv;
+                face.SetDomain(0, new Interval(0.0, 1.0));
+                face.SetDomain(1, new Interval(0.0, 1.0));
+
+                double increment = 1.0 / (n_uv + 1);
 
                 // sample
-                for (int j  = 0; j < n_uv; j++)
+                for (int j  = 1; j <= n_uv; j++)
                 {
-                    for (int k = 0;  k < n_uv; k++)
+                    for (int k = 1;  k <= n_uv; k++)
                     {
-                        surface_points[counter] = face.PointAt(k * increment_u, j * increment_v);
+                        surface_points[counter] = face.PointAt(j * increment, k * increment);
                         counter += 1;
                     }
                 }
@@ -122,6 +124,7 @@ namespace DigitalCircularityToolkit.Characterization
 
             return surface_points;
         }
+
 
         /// <summary>
         /// Convert an array of Point3ds to a jagged array positions[][] = [[X,Y,Z], [X,Y,Z],...]

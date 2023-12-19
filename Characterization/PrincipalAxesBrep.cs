@@ -48,7 +48,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             // Initialize
             Brep brep = new Brep();
-            int n = 0;
+            int n = 100;
             bool align = true;
 
             // Populate
@@ -63,26 +63,7 @@ namespace DigitalCircularityToolkit.Characterization
             List<int> n_uv = PCA.AssignUV(sample_densities);
 
             // get approx evenly distributed points on surfaces
-            //Point3d[] discretized_points = PCA.DiscretizeBrep(brep, n_uv);
-
-            // create mesh
-            Mesh[] meshes = Mesh.CreateFromBrep(brep, new MeshingParameters(0.5));
-
-            // extract points
-            int n_points = 0;
-            foreach (Mesh mesh in meshes)
-            {
-                n_points += mesh.Vertices.Count;
-            }
-
-            Point3d[] discretized_points = new Point3d[n_points];
-            int offset = 0;
-            foreach (Mesh mesh in meshes)
-            {
-                Point3d[] vertices = mesh.Vertices.ToPoint3dArray();
-                vertices.CopyTo(discretized_points, offset);
-                offset += vertices.Length;
-            }
+            Point3d[] discretized_points = PCA.DiscretizeBrep(brep, n_uv);
 
             // get PCA vectors
             double[][] positions = PCA.PositionMatrix(discretized_points);
