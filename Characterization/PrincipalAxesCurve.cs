@@ -9,7 +9,7 @@ using Accord.Statistics.Models.Regression.Linear;
 
 namespace DigitalCircularityToolkit.Characterization
 {
-    public class PrincipalAxes : GH_Component
+    public class PrincipalAxesCurve : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -18,9 +18,9 @@ namespace DigitalCircularityToolkit.Characterization
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public PrincipalAxes()
-          : base("PrincipalAxes", "PCA",
-            "Determine the principal axes of a discretized curve",
+        public PrincipalAxesCurve()
+          : base("PrincipalAxesCurve", "PCACurve",
+            "Determine the principal axes of a curve object",
             "DigitalCircularityToolkit", "Characterization")
         {
         }
@@ -31,7 +31,8 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Curve", "Curve", "Closed polyline curve", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("No. samples", "n", "Number of curve samples for PCA analysis", GH_ParamAccess.item, 25);
+            pManager.AddIntegerParameter("No. samples", "n", "Number of curve samples for PCA analysis", GH_ParamAccess.item, 15);
+            pManager.AddBooleanParameter("AlignY", "AlignY", "Orient PCA vectors such that local Y axis is aligned to global Y", GH_ParamAccess.item, true);
         }
 
         /// <summary>
@@ -56,10 +57,12 @@ namespace DigitalCircularityToolkit.Characterization
             // Initialize
             Curve curve = null;
             int n = 0;
+            bool align = true;
 
             // populate
             if (!DA.GetData(0, ref curve)) return;
             DA.GetData(1, ref n);
+            DA.GetData(2, ref align);
 
             if (n < 1)
             {
@@ -72,77 +75,16 @@ namespace DigitalCircularityToolkit.Characterization
             }
 
             // sample points
-            Point3d[] discretized_points = new Point3d[n];
+            Point3d[] discretized_points = PCA.DiscretizeCurve(curve, n);
 
             // data of x, y, z points
-            double[][] positions = new double[n][];
+            double[][] positions =PCA.PositionMatrix(discretized_points);
 
-            for (int i = 0; i < discretized_points.Length; i++)
-            {
-                // current point
-                var point = discretized_points[i];
+            // get PCA vecvtors
+            Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
 
-                // populate data array
-                positions[i] = new double[]{point.X, point.Y, point.Z};
-            }
-
-            // create a PCA class
-            var pca = new PrincipalComponentAnalysis()
-            {
-                Method = PrincipalComponentMethod.Center
-            };
-
-            // analyze data
-            MultivariateLinearRegression transform = pca.Learn(positions);
-
-            // get PCAs
-            Vector3d[] pca_vectors = new Vector3d[]
-            {
-                new Vector3d(),
-                new Vector3d(),
-                new Vector3d()
-            };
-
-            // populate vectors
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    pca_vectors[j][i] = transform.Weights[i][j];
-                }
-            }
-
-            // align pca Y axis to global Y
-            if (pca_vectors[1].Y < 0)
-            {
-                pca_vectors[1] *= -1;
-                pca_vectors[2] *= -1;
-            }
-
-            // Transform input curve
-            Point3d centroid = new Point3d();
-
-            // get the "centroid" of the curve
-            if (curve.IsClosed)
-            {
-                var amp = AreaMassProperties.Compute(curve);
-                centroid = amp.Centroid;
-            }
-            else
-            {
-                // if open curve, centroid is the average of the sampled points
-                for (int i = 0; i < discretized_points.Length; i++)
-                {
-                    centroid += discretized_points[i] / n;
-                }
-            }
-
-            // PCA XY plane and world XY plane centered about curve centroid
-            Plane plane_PCA = new Plane(centroid, pca_vectors[0], pca_vectors[1]);
-            Plane plane_XYZ = new Plane(centroid, Vector3d.XAxis, Vector3d.YAxis);
-
-            // Map the PCA XY plane to the world XY plane
-            Transform plane_transform = Transform.PlaneToPlane(plane_PCA, plane_XYZ);
+            // get the Transformation object to align curve to global XYZ
+            Transform plane_transform = PCA.Aligner(pca_vectors, curve, discretized_points);
 
             // Transform input curve
             curve.Transform(plane_transform);
