@@ -52,25 +52,18 @@ namespace DigitalCircularityToolkit.Orientation
             if (!DA.GetDataList(0, points)) return;
             DA.GetData(1, ref align);
 
-            //get xyz data
-            double[][] positions = PCA.PositionMatrix(points);
+            // Initialize
+            Vector3d[] pca_vectors;
+            Point3d[] new_points;
 
-            // get PCA vecvtors
-            Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
-
-            // transform point set
-            Transform plane_transform = PCA.Aligner(pca_vectors, points);
-
-            // apply
-
-            PointCloud new_points = new PointCloud(points);
-            new_points.Transform(plane_transform);
+            // Solve
+            PCA.SolvePCA(points, align, out pca_vectors, out new_points);
 
             // return
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
-            DA.SetDataList(3, new_points.GetPoints());
+            DA.SetDataList(3, new_points);
 
         }
 

@@ -15,6 +15,7 @@
   
   <ItemGroup>
     <Folder Include="Characterization\" />
+    <Folder Include="Analysis\" />
   </ItemGroup>
   
   <PropertyGroup Condition="$(Configuration) == 'Debug' AND $([MSBuild]::IsOSPlatform(Windows))">

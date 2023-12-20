@@ -57,13 +57,13 @@ namespace DigitalCircularityToolkit.Orientation
             Point3d[] points = mesh.Vertices.ToPoint3dArray();
 
             //get xyz data
-            double[][] positions = PCA.PositionMatrix(points);
+            double[][] positions = Discretizer.PositionMatrix(points);
 
             // get PCA vecvtors
             Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
 
             // transform point set
-            Transform plane_transform = PCA.Aligner(pca_vectors, points.ToList());
+            Transform plane_transform = PCA.GetPlaneTransformer(pca_vectors, points.ToList());
 
             mesh.Transform(plane_transform);
 

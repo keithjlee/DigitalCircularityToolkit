@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Testfiles/PCA/geometry.3dm
+
+Testfiles/PCA/script.gh

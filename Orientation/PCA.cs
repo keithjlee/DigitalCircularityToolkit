@@ -26,7 +26,13 @@ namespace DigitalCircularityToolkit.Orientation
         /// <returns></returns>
         public static List<int> AssignSampleDensity(Brep brep, int n)
         {
+
+            // Get total surface area of brep
+
+            // Area for each face
             List<double> areas = new List<double>();
+
+            // Total area
             double total_area = 0;
 
             foreach (BrepFace face in brep.Faces)
@@ -36,8 +42,10 @@ namespace DigitalCircularityToolkit.Orientation
                 total_area += area;
             }
 
+            // Number of point samples to take for each face
             List<int> n_samples = new List<int>();
 
+            // Number of samples on face is approx proportional to surface area
             foreach (double area in areas)
             {
                 int n_sample = (int)Math.Round(area / total_area * n);
@@ -65,105 +73,6 @@ namespace DigitalCircularityToolkit.Orientation
             return n_per_side;
         }
 
-        /// <summary>
-        /// Discretize a curve into n points
-        /// </summary>
-        /// <param name="curve"></param>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        public static Point3d[] DiscretizeCurve(Curve curve, int n)
-        {
-            // sample points
-            Point3d[] discretized_points = new Point3d[n];
-
-            // populated discretized_points
-            double[] discretized_params = curve.DivideByCount(n, true, out discretized_points);
-
-            return discretized_points;
-        }
-
-        public static Point3d[] DiscretizeBrep(Brep brep, List<int> n_uvs)
-        {
-            // total number of sample points
-            int n_total = 0;
-            foreach (int n in n_uvs)
-            {
-                n_total += (int)Math.Pow(n, 2);
-            }
-
-            Point3d[] surface_points = new Point3d[n_total];
-
-            // get the actual local width (u) and height (v) distances
-            //double increment_u;
-            //double increment_v;
-
-            int counter = 0;
-            for (int i = 0; i < brep.Faces.Count; i++)
-            {
-                BrepFace face = brep.Faces[i];
-                int n_uv = n_uvs[i];
-
-                // get the actual increment distances in u, v
-                //face.GetSurfaceSize(out increment_u, out increment_v);
-
-                face.SetDomain(0, new Interval(0.0, 1.0));
-                face.SetDomain(1, new Interval(0.0, 1.0));
-
-                double increment = 1.0 / (n_uv + 1);
-
-                // sample
-                for (int j  = 1; j <= n_uv; j++)
-                {
-                    for (int k = 1;  k <= n_uv; k++)
-                    {
-                        surface_points[counter] = face.PointAt(j * increment, k * increment);
-                        counter += 1;
-                    }
-                }
-            }
-
-            return surface_points;
-        }
-
-
-        /// <summary>
-        /// Convert an array of Point3ds to a jagged array positions[][] = [[X,Y,Z], [X,Y,Z],...]
-        /// </summary>
-        /// <param name="points"></param>
-        /// <returns></returns>
-        public static double[][] PositionMatrix(Point3d[] points)
-        {
-            // data of x, y, z points
-            double[][] positions = new double[points.Length][];
-
-            for (int i = 0; i < points.Length; i++)
-            {
-                // current point
-                var point = points[i];
-
-                // populate data array
-                positions[i] = new double[] { point.X, point.Y, point.Z };
-            }
-
-            return positions;
-        }
-
-        public static double[][] PositionMatrix(List<Point3d> points)
-        {
-            // data of x, y, z points
-            double[][] positions = new double[points.Count][];
-
-            for (int i = 0; i < points.Count; i++)
-            {
-                // current point
-                var point = points[i];
-
-                // populate data array
-                positions[i] = new double[] { point.X, point.Y, point.Z };
-            }
-
-            return positions;
-        }
 
         /// <summary>
         /// Flip PCA2 and PCA3 such that PCA2 is in the same direction as the global Y axis (if not perpendicular)
@@ -213,6 +122,7 @@ namespace DigitalCircularityToolkit.Orientation
                 }
             }
 
+            // Flip PCA2 and PCA3 if we want to align PCA2 to global Y
             if (align) AlignY(pca_vectors);
 
             return pca_vectors;
@@ -230,7 +140,7 @@ namespace DigitalCircularityToolkit.Orientation
             Point3d centroid = new Point3d();
 
             // get the "centroid" of the curve
-            if (curve.IsClosed)
+            if (curve.IsClosed && curve.IsPlanar())
             {
                 var amp = AreaMassProperties.Compute(curve);
                 centroid = amp.Centroid;
@@ -274,7 +184,7 @@ namespace DigitalCircularityToolkit.Orientation
         /// <param name="curve"></param>
         /// <param name="discretized_points"></param>
         /// <returns></returns>
-        public static Transform Aligner(Vector3d[] pca_vectors, Curve curve, Point3d[] discretized_points)
+        public static Transform GetPlaneTransformer(Vector3d[] pca_vectors, Curve curve, Point3d[] discretized_points)
         {
             // Transform input curve
             Point3d centroid = GetCentroid(curve, discretized_points);
@@ -296,7 +206,7 @@ namespace DigitalCircularityToolkit.Orientation
         /// <param name="curve"></param>
         /// <param name="discretized_points"></param>
         /// <returns></returns>
-        public static Transform Aligner(Vector3d[] pca_vectors, List<Point3d> discretized_points)
+        public static Transform GetPlaneTransformer(Vector3d[] pca_vectors, List<Point3d> discretized_points)
         {
             // Transform input curve
             Point3d centroid = GetCentroid(discretized_points);
@@ -311,7 +221,7 @@ namespace DigitalCircularityToolkit.Orientation
             return plane_transform;
         }
 
-        public static Transform Aligner(Vector3d[] pca_vectors, Point3d centroid)
+        public static Transform GetPlaneTransformer(Vector3d[] pca_vectors, Point3d centroid)
         {
             // PCA XY plane and world XY plane centered about curve centroid
             Plane plane_PCA = new Plane(centroid, pca_vectors[0], pca_vectors[1]);
@@ -321,6 +231,58 @@ namespace DigitalCircularityToolkit.Orientation
             Transform plane_transform = Transform.PlaneToPlane(plane_PCA, plane_XYZ);
 
             return plane_transform;
+        }
+
+        /// <summary>
+        /// Solve for PCA vectors and transformed geometry for a set of points
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="align"></param>
+        /// <param name="pca_vectors"></param>
+        /// <param name="transformed_points"></param>
+        public static void SolvePCA(List<Point3d> points, bool align, out Vector3d[] pca_vectors, out Point3d[] transformed_points)
+        {
+            //get xyz data
+            double[][] positions = Discretizer.PositionMatrix(points);
+
+            // get PCA vecvtors
+            pca_vectors = PCAvectors(positions, align);
+
+            // transform point set
+            Transform plane_transform = GetPlaneTransformer(pca_vectors, points);
+
+            // apply
+            PointCloud new_points = new PointCloud(points);
+            new_points.Transform(plane_transform);
+
+            transformed_points = new_points.GetPoints();
+        }
+
+        /// <summary>
+        /// Solve for PCA vectors and transformed geometry for a curve
+        /// </summary>
+        /// <param name="curve"></param>
+        /// <param name="align"></param>
+        /// <param name="n"></param>
+        /// <param name="pca_vectors"></param>
+        /// <param name="transformed_curve"></param>
+        public static void SolvePCA(Curve curve, bool align, int n, out Vector3d[] pca_vectors, out Point3d[] discretized_points, out Curve transformed_curve)
+        {
+            // sample points
+            discretized_points = Discretizer.DiscretizeCurve(curve, n);
+
+            // data of x, y, z points
+            double[][] positions = Discretizer.PositionMatrix(discretized_points);
+
+            // get PCA vecvtors
+            pca_vectors = PCAvectors(positions, align);
+
+            // get the Transformation object to align curve to global XYZ
+            Transform plane_transform = GetPlaneTransformer(pca_vectors, curve, discretized_points);
+
+            // apply to new curve
+            transformed_curve = curve.DuplicateCurve();
+            transformed_curve.Transform(plane_transform);
         }
     }
 }

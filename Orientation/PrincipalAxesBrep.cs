@@ -63,10 +63,10 @@ namespace DigitalCircularityToolkit.Orientation
             List<int> n_uv = PCA.AssignUV(sample_densities);
 
             // get approx evenly distributed points on surfaces
-            Point3d[] discretized_points = PCA.DiscretizeBrep(brep, n_uv);
+            Point3d[] discretized_points = Discretizer.DiscretizeBrep(brep, n_uv);
 
             // get PCA vectors
-            double[][] positions = PCA.PositionMatrix(discretized_points);
+            double[][] positions = Discretizer.PositionMatrix(discretized_points);
 
             // get PCA vecvtors
             Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
@@ -77,7 +77,7 @@ namespace DigitalCircularityToolkit.Orientation
 
 
             // transformation plane-to-plane
-            Transform plane_transform = PCA.Aligner(pca_vectors, props.Centroid);
+            Transform plane_transform = PCA.GetPlaneTransformer(pca_vectors, props.Centroid);
 
             // apply
             brep.Transform(plane_transform);

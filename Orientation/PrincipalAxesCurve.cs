@@ -74,27 +74,20 @@ namespace DigitalCircularityToolkit.Orientation
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "n < 10 may result in poor results");
             }
 
-            // sample points
-            Point3d[] discretized_points = PCA.DiscretizeCurve(curve, n);
+            // Initialize
+            Vector3d[] pca_vectors;
+            Point3d[] discretized_points;
+            Curve transformed_curve;
 
-            // data of x, y, z points
-            double[][] positions =PCA.PositionMatrix(discretized_points);
-
-            // get PCA vecvtors
-            Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
-
-            // get the Transformation object to align curve to global XYZ
-            Transform plane_transform = PCA.Aligner(pca_vectors, curve, discretized_points);
-
-            // Transform input curve
-            curve.Transform(plane_transform);
+            // solve
+            PCA.SolvePCA(curve, align, n, out pca_vectors, out discretized_points, out transformed_curve);
 
             // return
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
             DA.SetDataList(3, discretized_points);
-            DA.SetData(4, curve);
+            DA.SetData(4, transformed_curve);
         }
 
         /// <summary>
