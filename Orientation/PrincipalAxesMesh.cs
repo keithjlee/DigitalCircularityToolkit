@@ -35,7 +35,7 @@ namespace DigitalCircularityToolkit.Orientation
             pManager.AddVectorParameter("PCA1", "PCA1", "Principal Component 1", GH_ParamAccess.item);
             pManager.AddVectorParameter("PCA2", "PCA2", "Principal Component 2", GH_ParamAccess.item);
             pManager.AddVectorParameter("PCA3", "PCA3", "Principal Component 3", GH_ParamAccess.item);
-            pManager.AddPointParameter("Vertices", "V", "Mesh vertices points used for analysis", GH_ParamAccess.list);
+            pManager.AddPointParameter("Vertices", "V", "Mesh vertices used for analysis", GH_ParamAccess.list);
             pManager.AddMeshParameter("AlignedGeometry", "AlignedGeo", "Input geometry with PCA1 aligned with global X", GH_ParamAccess.item);
         }
 
@@ -53,26 +53,18 @@ namespace DigitalCircularityToolkit.Orientation
             if (!DA.GetData(0, ref mesh)) return;
             DA.GetData(1, ref align);
 
-            // Get mesh vertices
-            Point3d[] points = mesh.Vertices.ToPoint3dArray();
+            Vector3d[] pca_vectors;
+            Point3d[] points;
+            Mesh transformed_mesh = mesh.DuplicateMesh();
 
-            //get xyz data
-            double[][] positions = Discretizer.PositionMatrix(points);
-
-            // get PCA vecvtors
-            Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
-
-            // transform point set
-            Transform plane_transform = PCA.GetPlaneTransformer(pca_vectors, points.ToList());
-
-            mesh.Transform(plane_transform);
+            PCA.SolvePCA(mesh, align, out pca_vectors, out points, transformed_mesh);
 
             // return
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
             DA.SetDataList(3, points);
-            DA.SetData(4, mesh);
+            DA.SetData(4, transformed_mesh);
         }
 
     

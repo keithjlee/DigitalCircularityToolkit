@@ -7,12 +7,12 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class ObjectInformation : GH_Component
+    public class ObjectInformation_GH : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the ObjectInformation class.
         /// </summary>
-        public ObjectInformation()
+        public ObjectInformation_GH()
           : base("ObjectInformation", "ObjInfo",
               "Information about a design object",
               "DigitalCircularityToolkit", "Objects")

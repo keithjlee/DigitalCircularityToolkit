@@ -3,17 +3,18 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Rhino.Input.Custom;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class LinearElement : GH_Component
+    public class Object_GH : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the LinearElement class.
+        /// Initializes a new instance of the Object_GH class.
         /// </summary>
-        public LinearElement()
-          : base("LinearElement", "Stick",
-              "A linear element",
+        public Object_GH()
+          : base("Object_GH", "Obj",
+              "A design object",
               "DigitalCircularityToolkit", "Objects")
         {
         }
@@ -23,9 +24,8 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve", "Curve", "Closed polyline curve", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("NumSamples", "n", "Number of curve samples for PCA analysis", GH_ParamAccess.item, 15);
-            pManager.AddVectorParameter("PCAOverride", "PCA1", "Override vector for primary axis.", GH_ParamAccess.item, new Vector3d(0, 0, 0));
+            pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
         }
 
         /// <summary>
@@ -33,8 +33,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "LinearObject class", GH_ParamAccess.item) ;
-            pManager.AddBoxParameter("BoundingBox", "BB", "Bounding box of object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Object", "Obj", "Design object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -43,39 +42,35 @@ namespace DigitalCircularityToolkit.Objects
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Initialize
-            Curve curve = null;
-            int n = 0;
-            Vector3d pca_override = new Vector3d(0, 0, 0);
+            //GeometryBase geo = null;
+            List<GeometryBase> geos = null;
+            int n = 50;
 
-            // populate
-            if (!DA.GetData(0, ref curve)) return;
+            if (!DA.GetDataList(0, geos)) return;
             DA.GetData(1, ref n);
-            DA.GetData(2, ref pca_override);
 
-            // Check of local X axis is overriden by user
-            bool override_pca = false;
-            if (pca_override.Length > 0)
+            // convert to object
+            Object obj = new Object();
+
+            if (geos.Count == 1)
             {
-                override_pca = true;
+                GeometryBase geo = geos[0];
+
+                var curve = geo as Curve;
+                if (curve != null) obj = new Object(curve, n);
+
+                var brep = geo as Brep;
+                if (brep != null) obj = new Object(brep, n);
+
+                var mesh = geo as Mesh;
+                if (mesh != null) obj = new Object(mesh, n);
             }
+            
 
-            if (n < 1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "n must be greater than 1");
-            }
+            //var points = geo as List<Point3d>();
+            //if (points != null) obj = new Object(points, n);
 
-            if (n < 10)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "n < 10 may result in poor results");
-            }
-
-            // Instantiate
-            Object obj = new Object(curve, n);
-
-            // return
             DA.SetData(0, obj);
-
         }
 
         /// <summary>
@@ -96,7 +91,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("750C489F-8D4E-41CE-AC2B-2C4AD80916BE"); }
+            get { return new Guid("2A40404E-753E-4BE2-8183-3DAB27A28552"); }
         }
     }
 }

@@ -284,5 +284,57 @@ namespace DigitalCircularityToolkit.Orientation
             transformed_curve = curve.DuplicateCurve();
             transformed_curve.Transform(plane_transform);
         }
+
+        /// <summary>
+        /// Solve for PCA vectors and transformed geometry for a brep
+        /// </summary>
+        /// <param name="mesh"></param>
+        /// <param name="align"></param>
+        /// <param name="pca_vectors"></param>
+        /// <param name="discretized_points"></param>
+        public static void SolvePCA(Mesh mesh, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, Mesh transformed_mesh)
+        {
+            // Get mesh vertices
+            discretized_points = mesh.Vertices.ToPoint3dArray();
+
+            //get xyz data
+            double[][] positions = Discretizer.PositionMatrix(discretized_points);
+
+            // get PCA vecvtors
+            pca_vectors = PCAvectors(positions, align);
+
+            // transform point set
+            Transform plane_transform = GetPlaneTransformer(pca_vectors, discretized_points.ToList());
+
+            transformed_mesh.Transform(plane_transform);
+        }
+
+        public static void SolvePCA(Brep brep, int n, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, Brep transformed_brep)
+        {
+            // number of samples per face
+            List<int> sample_densities = AssignSampleDensity(brep, n);
+
+            // density of UV sampling per face
+            List<int> n_uv = AssignUV(sample_densities);
+
+            // get approx evenly distributed points on surfaces
+            discretized_points = Discretizer.DiscretizeBrep(brep, n_uv);
+
+            // get PCA vectors
+            double[][] positions = Discretizer.PositionMatrix(discretized_points);
+
+            // get PCA vecvtors
+            pca_vectors = PCAvectors(positions, align);
+
+            // transform point set
+            // get the centroid
+            VolumeMassProperties props = VolumeMassProperties.Compute(brep);
+
+            // transformation plane-to-plane
+            Transform plane_transform = GetPlaneTransformer(pca_vectors, props.Centroid);
+
+            // apply
+            brep.Transform(plane_transform);
+        }
     }
 }

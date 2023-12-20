@@ -56,38 +56,19 @@ namespace DigitalCircularityToolkit.Orientation
             DA.GetData(1, ref n);
             DA.GetData(2, ref align);
 
-            // number of samples per face
-            List<int> sample_densities = PCA.AssignSampleDensity(brep, n);
+            // Initialize
+            Point3d[] discretized_points;
+            Vector3d[] pca_vectors;
+            Brep transformed_brep = brep.DuplicateBrep();
 
-            // density of UV sampling per face
-            List<int> n_uv = PCA.AssignUV(sample_densities);
-
-            // get approx evenly distributed points on surfaces
-            Point3d[] discretized_points = Discretizer.DiscretizeBrep(brep, n_uv);
-
-            // get PCA vectors
-            double[][] positions = Discretizer.PositionMatrix(discretized_points);
-
-            // get PCA vecvtors
-            Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
-
-            // transform point set
-            // get the centroid
-            VolumeMassProperties props = VolumeMassProperties.Compute(brep);
-
-
-            // transformation plane-to-plane
-            Transform plane_transform = PCA.GetPlaneTransformer(pca_vectors, props.Centroid);
-
-            // apply
-            brep.Transform(plane_transform);
+            PCA.SolvePCA(brep, n, align, out pca_vectors, out discretized_points, transformed_brep);
 
             // return
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
             DA.SetDataList(3, discretized_points);
-            DA.SetData(4, brep);
+            DA.SetData(4, transformed_brep);
         }
 
         /// <summary>

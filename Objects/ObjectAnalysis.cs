@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rhino.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,34 @@ namespace DigitalCircularityToolkit.Objects
 {
     public static class ObjectAnalysis
     {
+        /// <summary>
+        /// Reorient the object with a local X axis pca
+        /// </summary>
+        /// <param name="PCA1_override"></param>
+        /// <param name="obj"></param>
+        public static void OverridePCA(Vector3d PCA1_override, Object obj)
+        {
+            // local plane
+            Plane plane = new Plane(Point3d.Origin, obj.PCA1, obj.PCA2);
+            Plane plane_vector_override = new Plane(Point3d.Origin, PCA1_override, obj.PCA2);
+
+            // global plane
+            Plane plane_override = new Plane(obj.Centroid, PCA1_override, obj.PCA2);
+
+            // Map the PCA XY plane to the world XY plane
+            Transform vector_transform = Transform.PlaneToPlane(plane, plane_vector_override);
+
+            // update PCAs
+            obj.PCA1.Transform(vector_transform);
+            obj.PCA2.Transform(vector_transform);
+            obj.PCA3.Transform(vector_transform);
+
+            // update local plane
+            obj.LocalPlane = plane_override;
+
+            // update bounding box
+            obj.Boundingbox = obj.Geometry.GetBoundingBox(obj.LocalPlane, out obj.Localbox);
+        }
+
     }
 }
