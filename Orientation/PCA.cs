@@ -334,7 +334,7 @@ namespace DigitalCircularityToolkit.Orientation
             Transform plane_transform = GetPlaneTransformer(pca_vectors, props.Centroid);
 
             // apply
-            brep.Transform(plane_transform);
+            transformed_brep.Transform(plane_transform);
         }
     }
 }

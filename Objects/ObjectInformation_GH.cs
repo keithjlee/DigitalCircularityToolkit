@@ -42,7 +42,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddBoxParameter("BoundingBox", "BB", "Bounding box", GH_ParamAccess.item);
             pManager.AddPlaneParameter("LocalPlane", "XY", "PCA XY plane", GH_ParamAccess.item);
             pManager.AddPointParameter("SampledPoints", "Pts", "Points used for PCA analysis", GH_ParamAccess.list);
-            pManager.AddGeometryParameter("AlignedGeometry", "AlignedGeo", "Object aligned to global axes", GH_ParamAccess.item);
+            pManager.AddGeometryParameter("AlignedGeometry", "AlignedGeo", "Object aligned to global axes", GH_ParamAccess.list);
 
             pManager.HideParameter(7);
             pManager.HideParameter(8);
@@ -72,7 +72,16 @@ namespace DigitalCircularityToolkit.Objects
             DA.SetData(7, obj.Localbox);
             DA.SetData(8, obj.LocalPlane);
             DA.SetDataList(9, obj.SampledPoints);
-            DA.SetData(10, obj.TransformedGeometry);
+
+            if (obj.TransformedGeometry is PointCloud)
+            {
+                DA.SetDataList(10, ((PointCloud)obj.TransformedGeometry).GetPoints());
+            }
+            else
+            {
+                DA.SetDataList(10, new List<GeometryBase> { obj.TransformedGeometry});
+            }
+            
         }
 
         /// <summary>

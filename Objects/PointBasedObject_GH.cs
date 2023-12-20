@@ -3,18 +3,17 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
-using Rhino.Input.Custom;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class Object_GH : GH_Component
+    public class PointBasedObject : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Object_GH class.
+        /// Initializes a new instance of the PointBasedObject class.
         /// </summary>
-        public Object_GH()
-          : base("Object", "Obj",
-              "A design object",
+        public PointBasedObject()
+          : base("PointBasedObject", "ObjPts",
+              "An object created from a collection of points",
               "DigitalCircularityToolkit", "Objects")
         {
         }
@@ -24,8 +23,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
+            pManager.AddPointParameter("Points", "Pts", "Points that define an object", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -42,28 +40,15 @@ namespace DigitalCircularityToolkit.Objects
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            GeometryBase geo = null;
-            int n = 50;
 
-            if (!DA.GetData(0, ref geo)) return;
-            DA.GetData(1, ref n);
+            //Initialized
+            List<Point3d> points = new List<Point3d> ();
 
-            // convert to object
-            Object obj = new Object();
+            //Populate
+            if (!DA.GetDataList(0, points)) return;
 
-
-            var curve = geo as Curve;
-            if (curve != null) obj = new Object(curve, n);
-
-            var brep = geo as Brep;
-            if (brep != null) obj = new Object(brep, n);
-
-            var mesh = geo as Mesh;
-            if (mesh != null) obj = new Object(mesh, n);
-
-
-            //var points = geo as List<Point3d>();
-            //if (points != null) obj = new Object(points, n);
+            //Make object
+            Object obj = new Object(points, 1);
 
             DA.SetData(0, obj);
         }
@@ -86,7 +71,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2A40404E-753E-4BE2-8183-3DAB27A28552"); }
+            get { return new Guid("3CE29286-6289-405F-8389-3754ADCF7A0B"); }
         }
     }
 }
