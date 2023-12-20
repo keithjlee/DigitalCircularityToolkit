@@ -7,7 +7,7 @@ using Accord.Statistics;
 using Accord.Statistics.Analysis;
 using Accord.Statistics.Models.Regression.Linear;
 
-namespace DigitalCircularityToolkit.Characterization
+namespace DigitalCircularityToolkit.Orientation
 {
     public class PrincipalAxesCurve : GH_Component
     {
@@ -21,7 +21,7 @@ namespace DigitalCircularityToolkit.Characterization
         public PrincipalAxesCurve()
           : base("PrincipalAxesCurve", "PCACurve",
             "Determine the principal axes of a curve object",
-            "DigitalCircularityToolkit", "Characterization")
+            "DigitalCircularityToolkit", "Orientation")
         {
         }
 

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace DigitalCircularityToolkit.Characterization
+namespace DigitalCircularityToolkit.Orientation
 {
-    public class PrincipalAxesPoints : GH_Component
+    public class PrincipalAxesMesh : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PrincipalAxesPoints class.
+        /// Initializes a new instance of the PrincipalAxesMesh class.
         /// </summary>
-        public PrincipalAxesPoints()
-          : base("PrincipalAxesPoints", "PCAPoints",
-              "Determine the principal axes for a collection of points",
-              "DigitalCircularityToolkit", "Characterization")
+        public PrincipalAxesMesh()
+          : base("PrincipalAxesMesh", "PCAMesh",
+              "Determine the principal axes for a Brep",
+              "DigitalCircularityToolkit", "Orientation")
         {
         }
 
@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Points", "Pts", "Collection of points", GH_ParamAccess.list);
+            pManager.AddMeshParameter("Geometry", "Geo", "Mesh to analyze", GH_ParamAccess.item);
             pManager.AddBooleanParameter("AlignY", "AlignY", "Orient PCA vectors such that local Y axis is aligned to global Y", GH_ParamAccess.item, true);
         }
 
@@ -35,7 +35,8 @@ namespace DigitalCircularityToolkit.Characterization
             pManager.AddVectorParameter("PCA1", "PCA1", "Principal Component 1", GH_ParamAccess.item);
             pManager.AddVectorParameter("PCA2", "PCA2", "Principal Component 2", GH_ParamAccess.item);
             pManager.AddVectorParameter("PCA3", "PCA3", "Principal Component 3", GH_ParamAccess.item);
-            pManager.AddPointParameter("AlignedPoints", "AlignedPts", "Input points with PCA1 aligned with global X", GH_ParamAccess.list);
+            pManager.AddPointParameter("Vertices", "V", "Mesh vertices points used for analysis", GH_ParamAccess.list);
+            pManager.AddMeshParameter("AlignedGeometry", "AlignedGeo", "Input geometry with PCA1 aligned with global X", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,12 +46,15 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Initialize
-            List<Point3d> points = new List<Point3d> { };
+            Mesh mesh = new Mesh();
             bool align = true;
 
             // Populate
-            if (!DA.GetDataList(0, points)) return;
+            if (!DA.GetData(0, ref mesh)) return;
             DA.GetData(1, ref align);
+
+            // Get mesh vertices
+            Point3d[] points = mesh.Vertices.ToPoint3dArray();
 
             //get xyz data
             double[][] positions = PCA.PositionMatrix(points);
@@ -59,20 +63,19 @@ namespace DigitalCircularityToolkit.Characterization
             Vector3d[] pca_vectors = PCA.PCAvectors(positions, align);
 
             // transform point set
-            Transform plane_transform = PCA.Aligner(pca_vectors, points);
+            Transform plane_transform = PCA.Aligner(pca_vectors, points.ToList());
 
-            // apply
-
-            PointCloud new_points = new PointCloud(points);
-            new_points.Transform(plane_transform);
+            mesh.Transform(plane_transform);
 
             // return
             DA.SetData(0, pca_vectors[0]);
             DA.SetData(1, pca_vectors[1]);
             DA.SetData(2, pca_vectors[2]);
-            DA.SetDataList(3, new_points.GetPoints());
-
+            DA.SetDataList(3, points);
+            DA.SetData(4, mesh);
         }
+
+    
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -92,7 +95,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("D87FAED7-8805-4572-A7A5-124A43459570"); }
+            get { return new Guid("E4220251-7A2F-4347-94B5-EAA9474A14CE"); }
         }
     }
 }

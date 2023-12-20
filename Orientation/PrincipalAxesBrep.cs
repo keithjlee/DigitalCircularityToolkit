@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace DigitalCircularityToolkit.Characterization
+namespace DigitalCircularityToolkit.Orientation
 {
     public class PrincipalAxesBrep : GH_Component
     {
@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Characterization
         public PrincipalAxesBrep()
           : base("PrincipalAxesBrep", "PCABrep",
               "Determine the principal axes for a Brep",
-              "DigitalCircularityToolkit", "Characterization")
+              "DigitalCircularityToolkit", "Orientation")
         {
         }
 

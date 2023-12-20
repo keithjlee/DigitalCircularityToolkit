@@ -10,7 +10,7 @@ using Accord.Statistics.Analysis;
 using Accord.Statistics.Models.Regression.Linear;
 using Rhino.Geometry.Collections;
 
-namespace DigitalCircularityToolkit.Characterization
+namespace DigitalCircularityToolkit.Orientation
 {
     /// <summary>
     /// PCA is a static class that performs PCA alignment for curves, solids, and points
