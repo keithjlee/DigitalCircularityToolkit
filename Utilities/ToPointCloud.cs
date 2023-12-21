@@ -19,7 +19,7 @@ namespace DigitalCircularityToolkit.Utilities
     public ToPointCloud()
       : base("ToPointCloud", "PointCloud",
         "Convert a collection of points into a Point Cloud",
-        "DigitalCircularityToolki", "Utilities")
+        "DigitalCircularityToolkit", "Utilities")
     {
     }
 

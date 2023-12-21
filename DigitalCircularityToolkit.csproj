@@ -7,6 +7,10 @@
     <Description>Description of DigitalCircularityToolkit</Description>
     <TargetExt>.gha</TargetExt>
   </PropertyGroup>
+	
+  <ItemGroup>
+    <Compile Remove="Objects\PointBasedObject_GH.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
