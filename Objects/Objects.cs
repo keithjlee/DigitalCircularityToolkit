@@ -66,8 +66,11 @@ namespace DigitalCircularityToolkit.Objects
         {
             Populate(curve, n);
 
-            PCA1_override.Unitize();
-            ObjectAnalysis.OverridePCA(PCA1_override, this);
+            if (PCA1_override.Length > 0)
+            {
+                PCA1_override.Unitize();
+                ObjectAnalysis.OverridePCA(PCA1_override, this);
+            }
         }
 
         /// <summary>
@@ -113,18 +116,12 @@ namespace DigitalCircularityToolkit.Objects
         public Object(List<Point3d> points, int n, Vector3d PCA1_override)
         {
             Populate(points);
-            if (PCA1_override.Length > 0) ObjectAnalysis.OverridePCA(PCA1_override, this);
-        }
 
-        public Object(PointCloud points, int n)
-        {
-            Populate(points.GetPoints().ToList());
-        }
-
-        public Object(PointCloud points, int n, Vector3d PCA1_override)
-        {
-            Populate(points.GetPoints().ToList());
-            ObjectAnalysis.OverridePCA(PCA1_override, this);
+            if (PCA1_override.Length > 0)
+            {
+                PCA1_override.Unitize();
+                ObjectAnalysis.OverridePCA(PCA1_override, this);
+            }
         }
 
         private void Populate(List<Point3d> points)
@@ -162,7 +159,12 @@ namespace DigitalCircularityToolkit.Objects
         public Object(Mesh mesh, int n, Vector3d PCA1_override)
         {
             Populate(mesh);
-            ObjectAnalysis.OverridePCA(PCA1_override, this);
+
+            if (PCA1_override.Length > 0)
+            {
+                PCA1_override.Unitize();
+                ObjectAnalysis.OverridePCA(PCA1_override, this);
+            }
         }
 
         private void Populate(Mesh mesh)
@@ -202,7 +204,12 @@ namespace DigitalCircularityToolkit.Objects
         public Object(Brep brep, int n, Vector3d PCA1_override)
         {
             Populate(brep, n);
-            ObjectAnalysis.OverridePCA(PCA1_override, this);
+
+            if (PCA1_override.Length > 0)
+            {
+                PCA1_override.Unitize();
+                ObjectAnalysis.OverridePCA(PCA1_override, this);
+            }
         }
 
         private void Populate(Brep brep, int n_target)
@@ -234,6 +241,40 @@ namespace DigitalCircularityToolkit.Objects
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
         }
 
+        public void Rotate(int axis, double deg)
+        {
+            Vector3d rotaxis = new Vector3d();
 
+            if (axis == 1)
+            {
+                rotaxis = this.PCA1;
+            }
+            else if (axis == 2)
+            {
+                rotaxis = this.PCA2;
+            }
+            else
+            {
+                rotaxis = this.PCA3;
+            }
+
+            // rotate the local plane
+            double rad = deg / 180 * Math.PI;
+            Transform rotater = Transform.Rotation(rad, rotaxis, this.Centroid);
+
+            // transform all relevant data
+            this.Geometry.Transform(rotater);
+            this.LocalPlane.Transform(rotater);
+            this.PCA1.Transform(rotater);
+            this.PCA2.Transform(rotater);
+            this.PCA3.Transform(rotater);
+            this.Localbox.Transform(rotater);
+
+            foreach (Point3d point in this.SampledPoints)
+            {
+                point.Transform(rotater);
+            }
+
+        }
     }
 }

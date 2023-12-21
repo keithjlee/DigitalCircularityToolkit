@@ -6,23 +6,16 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Utilities
 {
-    public class PointCloud : GH_Component
+    public class LineToVector : GH_Component
     {
-        private List<Point3d> points;
-
         /// <summary>
-        /// Initializes a new instance of the PointCloud class.
+        /// Initializes a new instance of the LineToVector class.
         /// </summary>
-        public PointCloud()
-          : base("PointCloud", "PtCloud",
-              "Convert a collection of points into a PointCloud object",
+        public LineToVector()
+          : base("LineToVector", "Line2Vec",
+              "Convert a line into a vector",
               "DigitalCircularityToolkit", "Utilities")
         {
-        }
-
-        public PointCloud(List<Point3d> points)
-        {
-            this.points = points;
         }
 
         /// <summary>
@@ -30,7 +23,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Points", "Pts", "Collection of points", GH_ParamAccess.list);
+            pManager.AddLineParameter("Line", "Line", "Line to convert", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -38,7 +31,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PointCloud", "PtCloud", "Point Cloud", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Vector", "Vec", "Vector", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -47,13 +40,13 @@ namespace DigitalCircularityToolkit.Utilities
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<Point3d> points = new List<Point3d>();
+            Line line = new Line();
 
-            if (!DA.GetDataList(0, points)) return;
+            if (!DA.GetData(0, ref line)) return;
 
-            PointCloud pointcloud = new PointCloud(points);
-
-            DA.SetData(0, pointcloud);
+            Vector3d vec = line.Direction;
+            
+            DA.SetData(0, vec);
         }
 
         /// <summary>
@@ -74,7 +67,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("400349B3-C3E7-4023-AC4C-98673F25BA8C"); }
+            get { return new Guid("F20448D7-D4E3-47D5-818C-717AEE923296"); }
         }
     }
 }

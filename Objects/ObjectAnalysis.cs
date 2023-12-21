@@ -25,6 +25,7 @@ namespace DigitalCircularityToolkit.Objects
 
             // Map the PCA XY plane to the world XY plane
             Transform vector_transform = Transform.PlaneToPlane(plane, plane_vector_override);
+            Transform plane_transform = Transform.PlaneToPlane(obj.LocalPlane, plane_override);
 
             // update PCAs
             obj.PCA1.Transform(vector_transform);
@@ -36,6 +37,9 @@ namespace DigitalCircularityToolkit.Objects
 
             // update bounding box
             obj.Boundingbox = obj.Geometry.GetBoundingBox(obj.LocalPlane, out obj.Localbox);
+
+            // update transformed geometry
+            obj.TransformedGeometry.Transform(plane_transform);
         }
 
     }

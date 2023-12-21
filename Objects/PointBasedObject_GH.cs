@@ -24,6 +24,7 @@ namespace DigitalCircularityToolkit.Objects
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddPointParameter("Points", "Pts", "Points that define an object", GH_ParamAccess.list);
+            pManager.AddVectorParameter("PCAOverride", "ForcePCA1", "Override the calculated PCA1 vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
         }
 
         /// <summary>
@@ -43,12 +44,14 @@ namespace DigitalCircularityToolkit.Objects
 
             //Initialized
             List<Point3d> points = new List<Point3d> ();
+            Vector3d pca_user = new Vector3d(0, 0, 0);
 
             //Populate
             if (!DA.GetDataList(0, points)) return;
+            DA.GetData(1, ref pca_user);
 
             //Make object
-            Object obj = new Object(points, 1);
+            Object obj = new Object(points, 1, pca_user);
 
             DA.SetData(0, obj);
         }
