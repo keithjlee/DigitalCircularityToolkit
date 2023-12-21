@@ -58,16 +58,16 @@ namespace DigitalCircularityToolkit.Utilities
             DA.GetData(1, ref axis);
             DA.GetData(2, ref deg);
 
-            obj.Rotate(axis, deg);
+            DigitalCircularityToolkit.Objects.Object rotated_object = obj.Rotate(axis, deg);
 
-            DA.SetData(0, obj);
+            DA.SetData(0, rotated_object);
             if (obj.Geometry is PointCloud)
             {
-                DA.SetDataList(1, ((PointCloud)obj.Geometry).GetPoints());
+                DA.SetDataList(1, ((PointCloud)rotated_object.Geometry).GetPoints());
             }
             else
             {
-                DA.SetDataList(1, new List<GeometryBase> { obj.Geometry });
+                DA.SetDataList(1, new List<GeometryBase> { rotated_object.Geometry });
             }
 
 

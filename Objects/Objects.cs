@@ -124,6 +124,10 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
 
+        public Object(PointCloud points, int n){
+            Populate(points.GetPoints().ToList());
+        }
+
         private void Populate(List<Point3d> points)
         {
             // Initialize
@@ -241,7 +245,7 @@ namespace DigitalCircularityToolkit.Objects
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
         }
 
-        public void Rotate(int axis, double deg)
+        public Object Rotate(int axis, double deg)
         {
             Vector3d rotaxis = new Vector3d();
 
@@ -263,18 +267,26 @@ namespace DigitalCircularityToolkit.Objects
             Transform rotater = Transform.Rotation(rad, rotaxis, this.Centroid);
 
             // transform all relevant data
-            this.Geometry.Transform(rotater);
-            this.LocalPlane.Transform(rotater);
-            this.PCA1.Transform(rotater);
-            this.PCA2.Transform(rotater);
-            this.PCA3.Transform(rotater);
-            this.Localbox.Transform(rotater);
+            var rotated_geo = Geometry.Duplicate();
+            rotated_geo.Transform(rotater);
 
-            foreach (Point3d point in this.SampledPoints)
-            {
-                point.Transform(rotater);
-            }
+            // figure out type and set
+            Object obj = new Object();
+            int n = NSamples;
 
+            var curve = rotated_geo as Curve;
+            if (curve != null) obj = new Object(curve, n);
+
+            var brep = rotated_geo as Brep;
+            if (brep != null) obj = new Object(brep, n);
+
+            var mesh = rotated_geo as Mesh;
+            if (mesh != null) obj = new Object(mesh, n);
+
+            var pointcloud = rotated_geo as PointCloud;
+            if (pointcloud != null) obj = new Object(pointcloud, n);
+
+            return obj;
         }
     }
 }
