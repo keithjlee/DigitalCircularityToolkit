@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using DigitalCircularityToolkit.Orientation;
+using DigitalCircularityToolkit.Utilities;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
@@ -78,7 +79,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         /// <param name="curve"></param>
         /// <param name="n"></param>
-        private void Populate(Curve curve, int n)
+        public void Populate(Curve curve, int n)
         {
             // Initialize
             Vector3d[] pca_vectors;
@@ -124,11 +125,23 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
 
-        public Object(PointCloud points, int n){
+        public Object(PointCloud points, int n)
+        {
             Populate(points.GetPoints().ToList());
         }
 
-        private void Populate(List<Point3d> points)
+        public Object(PointCloud points, int n, Vector3d PCA1_override)
+        {
+            Populate(points.GetPoints().ToList());
+
+            if (PCA1_override.Length > 0)
+            {
+                PCA1_override.Unitize();
+                ObjectAnalysis.OverridePCA(PCA1_override, this);
+            }
+        }
+
+        public void Populate(List<Point3d> points)
         {
             // Initialize
             Vector3d[] pca_vectors;
@@ -171,7 +184,7 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
 
-        private void Populate(Mesh mesh)
+        public void Populate(Mesh mesh)
         {
             // Initialize
             Vector3d[] pca_vectors;
@@ -216,7 +229,7 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
 
-        private void Populate(Brep brep, int n_target)
+        public void Populate(Brep brep, int n_target)
         {
             // Initialize
             Point3d[] discretized_points;

@@ -63,6 +63,9 @@ namespace DigitalCircularityToolkit.Objects
             var mesh = geo as Mesh;
             if (mesh != null) obj = new Object(mesh, n, pca_user);
 
+            var pointcloud = geo as PointCloud;
+            if (pointcloud != null) obj = new Object(pointcloud, n, pca_user);
+
             DA.SetData(0, obj);
         }
 
