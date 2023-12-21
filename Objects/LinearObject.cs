@@ -112,7 +112,7 @@ namespace DigitalCircularityToolkit.Objects
 
         private void GetCrossSectionPlane()
         {
-            CrossSectionPlane = new Plane(Centroid, PCA2, PCA3);
+            CrossSectionPlane = new Plane(Localbox.Center, PCA2, PCA3);
         }
 
         private void GetApproxArea()
