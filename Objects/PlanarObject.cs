@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class PlanarObject : Object
+    public class PlanarObject : DesignObject
     {
         public int Quantity;
         public double LengthBuffer;

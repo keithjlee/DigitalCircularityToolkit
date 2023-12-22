@@ -52,19 +52,19 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(2, ref pca_user);
 
             // convert to object
-            Object obj = new Object();
+            DesignObject obj = new DesignObject();
 
             var curve = geo as Curve;
-            if (curve != null) obj = new Object(curve, n, pca_user);
+            if (curve != null) obj = new DesignObject(curve, n, pca_user);
 
             var brep = geo as Brep;
-            if (brep != null) obj = new Object(brep, n, pca_user);
+            if (brep != null) obj = new DesignObject(brep, n, pca_user);
 
             var mesh = geo as Mesh;
-            if (mesh != null) obj = new Object(mesh, n, pca_user);
+            if (mesh != null) obj = new DesignObject(mesh, n, pca_user);
 
             var pointcloud = geo as PointCloud;
-            if (pointcloud != null) obj = new Object(pointcloud, n, pca_user);
+            if (pointcloud != null) obj = new DesignObject(pointcloud, n, pca_user);
 
             DA.SetData(0, obj);
         }
