@@ -50,11 +50,9 @@ namespace DigitalCircularityToolkit.Distance
     /// to store data in output parameters.</param>
     protected override void SolveInstance(IGH_DataAccess DA)
     {
-            GH_Structure<GH_Number> demands;
-            GH_Structure<GH_Number> supply;
 
-            if (!DA.GetDataTree(0, out demands)) return;
-            if (!DA.GetDataTree(1, out supply)) return;
+            if (!DA.GetDataTree(0, out GH_Structure<GH_Number> demands)) return;
+            if (!DA.GetDataTree(1, out GH_Structure<GH_Number> supply)) return;
 
             int n_demand = demands.Branches.Count;
             int n_supply = supply.Branches.Count;

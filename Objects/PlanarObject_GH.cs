@@ -26,8 +26,8 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddGenericParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.item);
             pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
             pManager.AddIntegerParameter("Quantity", "qty", "Quantity of object", GH_ParamAccess.item, 1);
-            pManager.AddNumberParameter("LengthBuffer", "Buffer1", "Reduce the effective length of the element by buffer * length", GH_ParamAccess.item, 1.0);
-            pManager.AddNumberParameter("WidthBuffer", "Buffer2", "Reduce the effective width of the element by buffer * width", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the plane length by fL", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("WidthBuffer", "fW", "Scale the plane width by fW", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Thickness", "Thickness", "Thickness of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
             pManager.AddVectorParameter("PCAOverride", "ForcePCA1", "Override the calculated PCA1 vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
         }

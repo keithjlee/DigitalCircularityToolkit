@@ -40,7 +40,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("RotatedObject", "ObjRotated", "New rotated object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("RotatedObject", "Obj", "New rotated object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("RotatedGeometry", "Geo", "Rotated geometry", GH_ParamAccess.list);
         }
 

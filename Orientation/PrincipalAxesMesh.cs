@@ -53,11 +53,9 @@ namespace DigitalCircularityToolkit.Orientation
             if (!DA.GetData(0, ref mesh)) return;
             DA.GetData(1, ref align);
 
-            Vector3d[] pca_vectors;
-            Point3d[] points;
             Mesh transformed_mesh = mesh.DuplicateMesh();
 
-            PCA.SolvePCA(mesh, align, out pca_vectors, out points, transformed_mesh);
+            PCA.SolvePCA(mesh, align, out Vector3d[] pca_vectors, out Point3d[] points, transformed_mesh);
 
             // return
             DA.SetData(0, pca_vectors[0]);

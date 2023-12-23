@@ -82,12 +82,9 @@ namespace DigitalCircularityToolkit.Objects
         public void Populate(Curve curve, int n)
         {
             // Initialize
-            Vector3d[] pca_vectors;
-            Point3d[] discretized_points;
-            Curve transformed_curve;
 
             // Solve
-            PCA.SolvePCA(curve, true, n, out pca_vectors, out discretized_points, out transformed_curve);
+            PCA.SolvePCA(curve, true, n, out Vector3d[] pca_vectors, out Point3d[] discretized_points, out Curve transformed_curve);
 
             // Populate
             NSamples = n;
@@ -109,12 +106,12 @@ namespace DigitalCircularityToolkit.Objects
 
         }
 
-        public DesignObject(List<Point3d> points, int n)
+        public DesignObject(List<Point3d> points, int _)
         {
             Populate(points);
         }
 
-        public DesignObject(List<Point3d> points, int n, Vector3d PCA1_override)
+        public DesignObject(List<Point3d> points, int _, Vector3d PCA1_override)
         {
             Populate(points);
 
@@ -125,12 +122,12 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
 
-        public DesignObject(PointCloud points, int n)
+        public DesignObject(PointCloud points, int _)
         {
             Populate(points.GetPoints().ToList());
         }
 
-        public DesignObject(PointCloud points, int n, Vector3d PCA1_override)
+        public DesignObject(PointCloud points, int _, Vector3d PCA1_override)
         {
             Populate(points.GetPoints().ToList());
 
@@ -144,11 +141,9 @@ namespace DigitalCircularityToolkit.Objects
         public void Populate(List<Point3d> points)
         {
             // Initialize
-            Vector3d[] pca_vectors;
-            Point3d[] transformed_points;
 
             // Solve
-            PCA.SolvePCA(points, true, out pca_vectors, out transformed_points);
+            PCA.SolvePCA(points, true, out Vector3d[] pca_vectors, out Point3d[] transformed_points);
 
             // Populate
             NSamples = points.Count;
@@ -168,12 +163,12 @@ namespace DigitalCircularityToolkit.Objects
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
         }
 
-        public DesignObject(Mesh mesh, int n)
+        public DesignObject(Mesh mesh, int _)
         {
             Populate(mesh);
         }
 
-        public DesignObject(Mesh mesh, int n, Vector3d PCA1_override)
+        public DesignObject(Mesh mesh, int _, Vector3d PCA1_override)
         {
             Populate(mesh);
 
@@ -187,12 +182,10 @@ namespace DigitalCircularityToolkit.Objects
         public void Populate(Mesh mesh)
         {
             // Initialize
-            Vector3d[] pca_vectors;
-            Point3d[] discretized_points;
             Mesh transformed_mesh = mesh.DuplicateMesh();
 
             // Solve
-            PCA.SolvePCA(mesh, true, out pca_vectors, out discretized_points, transformed_mesh);
+            PCA.SolvePCA(mesh, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, transformed_mesh);
 
             // Populate
             NSamples = mesh.Vertices.Count;
@@ -232,12 +225,10 @@ namespace DigitalCircularityToolkit.Objects
         public void Populate(Brep brep, int n_target)
         {
             // Initialize
-            Point3d[] discretized_points;
-            Vector3d[] pca_vectors;
             Brep transformed_brep = brep.DuplicateBrep();
 
             // Solve
-            PCA.SolvePCA(brep, n_target, true, out pca_vectors, out discretized_points, transformed_brep);
+            PCA.SolvePCA(brep, n_target, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, transformed_brep);
 
             // Populate
             NSamples = discretized_points.Length;
@@ -260,7 +251,7 @@ namespace DigitalCircularityToolkit.Objects
 
         public DesignObject Rotate(int axis, double deg)
         {
-            Vector3d rotaxis = new Vector3d();
+            Vector3d rotaxis;
 
             if (axis == 1)
             {
@@ -287,17 +278,13 @@ namespace DigitalCircularityToolkit.Objects
             DesignObject obj = new DesignObject();
             int n = NSamples;
 
-            var curve = rotated_geo as Curve;
-            if (curve != null) obj = new DesignObject(curve, n);
+            if (rotated_geo is Curve curve) obj = new DesignObject(curve, n);
 
-            var brep = rotated_geo as Brep;
-            if (brep != null) obj = new DesignObject(brep, n);
+            if (rotated_geo is Brep brep) obj = new DesignObject(brep, n);
 
-            var mesh = rotated_geo as Mesh;
-            if (mesh != null) obj = new DesignObject(mesh, n);
+            if (rotated_geo is Mesh mesh) obj = new DesignObject(mesh, n);
 
-            var pointcloud = rotated_geo as PointCloud;
-            if (pointcloud != null) obj = new DesignObject(pointcloud, n);
+            if (rotated_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, n);
 
             return obj;
         }

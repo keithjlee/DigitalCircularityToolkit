@@ -53,11 +53,9 @@ namespace DigitalCircularityToolkit.Orientation
             DA.GetData(1, ref align);
 
             // Initialize
-            Vector3d[] pca_vectors;
-            Point3d[] new_points;
 
             // Solve
-            PCA.SolvePCA(points, align, out pca_vectors, out new_points);
+            PCA.SolvePCA(points, align, out Vector3d[] pca_vectors, out Point3d[] new_points);
 
             // return
             DA.SetData(0, pca_vectors[0]);

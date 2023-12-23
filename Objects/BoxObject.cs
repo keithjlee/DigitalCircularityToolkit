@@ -11,18 +11,94 @@ namespace DigitalCircularityToolkit.Objects
     {
         public int Quantity;
         public double LengthBuffer;
-        public double WidthBuffer;
-        public double HeightBuffer;
-        public Box EffectiveBox
+        public double EffectiveLength
         {
             get
             {
-                return GetEffectiveBox();
+                return LengthBuffer * Length;
             }
         }
-        public double Volume
+        public double WidthBuffer;
+        public double EffectiveWidth
+        {
+            get
+            {
+                return WidthBuffer * Width;
+            }
+        }
+        public double HeightBuffer;
+        public double EffectiveHeight
+        {
+            get
+            {
+                return HeightBuffer * Height;
+            }
+        }
+        public Box EffectiveBox;
+        public double EffectiveVolume
         {
             get { return LengthBuffer * Length * WidthBuffer * Width * HeightBuffer * Height; }
+        }
+        public Plane Plane
+        {
+            get
+            {
+                return GetPlane();
+            }
+        }
+
+        public BoxObject() { }
+
+        public BoxObject(Curve curve, int n_samples, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
+        {
+            Populate(curve, n_samples);
+            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
+
+            Quantity = qty;
+            LengthBuffer = length_buffer;
+            WidthBuffer = width_buffer;
+            HeightBuffer = height_buffer;
+
+            EffectiveBox = GetEffectiveBox();
+        }
+
+        public BoxObject(Brep brep, int n_samples, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
+        {
+            Populate(brep, n_samples);
+            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
+
+            Quantity = qty;
+            LengthBuffer = length_buffer;
+            WidthBuffer = width_buffer;
+            HeightBuffer = height_buffer;
+
+            EffectiveBox = GetEffectiveBox();
+        }
+
+        public BoxObject(PointCloud points, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
+        {
+            Populate(points.GetPoints().ToList());
+            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
+
+            Quantity = qty;
+            LengthBuffer = length_buffer;
+            WidthBuffer = width_buffer;
+            HeightBuffer = height_buffer;
+
+            EffectiveBox = GetEffectiveBox();
+        }
+
+        public BoxObject(Mesh mesh, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
+        {
+            Populate(mesh);
+            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
+
+            Quantity = qty;
+            LengthBuffer = length_buffer;
+            WidthBuffer = width_buffer;
+            HeightBuffer = height_buffer;
+
+            EffectiveBox = GetEffectiveBox();
         }
 
         public Box GetEffectiveBox()
@@ -32,6 +108,11 @@ namespace DigitalCircularityToolkit.Objects
             Box box = new Box(Localbox);
             box.Transform(scaler);
             return box;
+        }
+
+        public Plane GetPlane()
+        {
+            return new Plane(Localbox.Center, PCA1, PCA2);
         }
     }
 }

@@ -75,12 +75,9 @@ namespace DigitalCircularityToolkit.Orientation
             }
 
             // Initialize
-            Vector3d[] pca_vectors;
-            Point3d[] discretized_points;
-            Curve transformed_curve;
 
             // solve
-            PCA.SolvePCA(curve, align, n, out pca_vectors, out discretized_points, out transformed_curve);
+            PCA.SolvePCA(curve, align, n, out Vector3d[] pca_vectors, out Point3d[] discretized_points, out Curve transformed_curve);
 
             // return
             DA.SetData(0, pca_vectors[0]);

@@ -57,11 +57,9 @@ namespace DigitalCircularityToolkit.Orientation
             DA.GetData(2, ref align);
 
             // Initialize
-            Point3d[] discretized_points;
-            Vector3d[] pca_vectors;
             Brep transformed_brep = brep.DuplicateBrep();
 
-            PCA.SolvePCA(brep, n, align, out pca_vectors, out discretized_points, transformed_brep);
+            PCA.SolvePCA(brep, n, align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, transformed_brep);
 
             // return
             DA.SetData(0, pca_vectors[0]);

@@ -12,7 +12,7 @@ using DigitalCircularityToolkit.Utilities;
 
 namespace DigitalCircularityToolkit.Assignment
 {
-  public class Hungarian : GH_Component
+  public class Hungarian_GH : GH_Component
   {
     /// <summary>
     /// Each implementation of GH_Component must provide a public 
@@ -21,7 +21,7 @@ namespace DigitalCircularityToolkit.Assignment
     /// Subcategory the panel. If you use non-existing tab or panel names, 
     /// new tabs/panels will automatically be created.
     /// </summary>
-    public Hungarian()
+    public Hungarian_GH()
       : base("Hungarian", "Hungarian",
         "Hungarian description",
         "DigitalCircularityToolkit", "Assignment")
