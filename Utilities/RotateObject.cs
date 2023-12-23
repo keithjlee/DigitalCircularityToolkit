@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// Initializes a new instance of the RotateObject class.
         /// </summary>
         public RotateObject()
-          : base("RotateObject", "Rotate",
+          : base("RotatePCA", "RotatePCA",
               "Rotate an object about one of its PCAs",
               "DigitalCircularityToolkit", "Utilities")
         {

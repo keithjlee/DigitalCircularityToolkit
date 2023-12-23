@@ -307,22 +307,23 @@ namespace DigitalCircularityToolkit.Objects
             return obj;
         }
 
-        public void TransformObject(Transform t)
+        public DesignObject TransformObject(Transform t)
         {
-            Centroid.Transform(t);
-            PCA1.Transform(t);
-            PCA2.Transform(t);
-            PCA3.Transform(t);
-            Localbox.Transform(t);
-            LocalPlane.Transform(t);
 
-            Geometry.Transform(t);
-            TransformedGeometry.Transform(t);
+            var transformed_geo = Geometry.Duplicate();
+            transformed_geo.Transform(t);
 
-            foreach (Point3d point in SampledPoints)
-            {
-                point.Transform(t);
-            }
+            DesignObject obj = new DesignObject();
+
+            if (transformed_geo is Curve curve) obj = new DesignObject(curve, NSamples);
+
+            if (transformed_geo is Brep brep) obj = new DesignObject(brep, NSamples);
+
+            if (transformed_geo is Mesh mesh) obj = new DesignObject(mesh, NSamples);
+
+            if (transformed_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
+
+            return obj;
         }
     }
 }
