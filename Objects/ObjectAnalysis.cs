@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         /// <param name="PCA1_override"></param>
         /// <param name="obj"></param>
-        public static void OverridePCA(Vector3d PCA1_override, Object obj)
+        public static void OverridePCA(Vector3d PCA1_override, DesignObject obj)
         {
             // local plane
             Plane plane = new Plane(Point3d.Origin, obj.PCA1, obj.PCA2);

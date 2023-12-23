@@ -6,7 +6,7 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
 {
-	public class LinearObject : Object
+	public class LinearObject : DesignObject
 	{
 		public int Quantity;
         public double LengthBuffer;

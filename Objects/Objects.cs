@@ -10,7 +10,7 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class Object
+    public class DesignObject
     {
         public Point3d Centroid;
         public int NSamples;
@@ -45,14 +45,14 @@ namespace DigitalCircularityToolkit.Objects
         public GeometryBase Geometry;
         public GeometryBase TransformedGeometry;
 
-        public Object() { }
+        public DesignObject() { }
 
         /// <summary>
         /// A linear object
         /// </summary>
         /// <param name="curve"></param>
         /// <param name="n"></param>
-        public Object(Curve curve, int n)
+        public DesignObject(Curve curve, int n)
         {
             Populate(curve, n);
         }
@@ -63,7 +63,7 @@ namespace DigitalCircularityToolkit.Objects
         /// <param name="curve"></param>
         /// <param name="n"></param>
         /// <param name="PCA1_override"></param>
-        public Object(Curve curve, int n, Vector3d PCA1_override)
+        public DesignObject(Curve curve, int n, Vector3d PCA1_override)
         {
             Populate(curve, n);
 
@@ -109,12 +109,12 @@ namespace DigitalCircularityToolkit.Objects
 
         }
 
-        public Object(List<Point3d> points, int n)
+        public DesignObject(List<Point3d> points, int n)
         {
             Populate(points);
         }
 
-        public Object(List<Point3d> points, int n, Vector3d PCA1_override)
+        public DesignObject(List<Point3d> points, int n, Vector3d PCA1_override)
         {
             Populate(points);
 
@@ -125,12 +125,12 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
 
-        public Object(PointCloud points, int n)
+        public DesignObject(PointCloud points, int n)
         {
             Populate(points.GetPoints().ToList());
         }
 
-        public Object(PointCloud points, int n, Vector3d PCA1_override)
+        public DesignObject(PointCloud points, int n, Vector3d PCA1_override)
         {
             Populate(points.GetPoints().ToList());
 
@@ -168,12 +168,12 @@ namespace DigitalCircularityToolkit.Objects
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
         }
 
-        public Object(Mesh mesh, int n)
+        public DesignObject(Mesh mesh, int n)
         {
             Populate(mesh);
         }
 
-        public Object(Mesh mesh, int n, Vector3d PCA1_override)
+        public DesignObject(Mesh mesh, int n, Vector3d PCA1_override)
         {
             Populate(mesh);
 
@@ -213,12 +213,12 @@ namespace DigitalCircularityToolkit.Objects
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
         }
 
-        public Object(Brep brep, int n)
+        public DesignObject(Brep brep, int n)
         {
             Populate(brep, n);
         }
 
-        public Object(Brep brep, int n, Vector3d PCA1_override)
+        public DesignObject(Brep brep, int n, Vector3d PCA1_override)
         {
             Populate(brep, n);
 
@@ -258,7 +258,7 @@ namespace DigitalCircularityToolkit.Objects
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
         }
 
-        public Object Rotate(int axis, double deg)
+        public DesignObject Rotate(int axis, double deg)
         {
             Vector3d rotaxis = new Vector3d();
 
@@ -284,20 +284,20 @@ namespace DigitalCircularityToolkit.Objects
             rotated_geo.Transform(rotater);
 
             // figure out type and set
-            Object obj = new Object();
+            DesignObject obj = new DesignObject();
             int n = NSamples;
 
             var curve = rotated_geo as Curve;
-            if (curve != null) obj = new Object(curve, n);
+            if (curve != null) obj = new DesignObject(curve, n);
 
             var brep = rotated_geo as Brep;
-            if (brep != null) obj = new Object(brep, n);
+            if (brep != null) obj = new DesignObject(brep, n);
 
             var mesh = rotated_geo as Mesh;
-            if (mesh != null) obj = new Object(mesh, n);
+            if (mesh != null) obj = new DesignObject(mesh, n);
 
             var pointcloud = rotated_geo as PointCloud;
-            if (pointcloud != null) obj = new Object(pointcloud, n);
+            if (pointcloud != null) obj = new DesignObject(pointcloud, n);
 
             return obj;
         }
