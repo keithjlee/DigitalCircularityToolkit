@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Distance
 {
-    public class CostMatrix_GH : GH_Component
+    public class Euclidean_GH : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the CostMatrix_GH class.
         /// </summary>
-        public CostMatrix_GH()
-          : base("DistanceMatrix_GH", "DM",
-              "Generate a cost matrix between two sets",
+        public Euclidean_GH()
+          : base("EuclideanDistance", "DMEuclidean",
+              "Generate a cost matrix of Euclidean distances between two feature vector sets",
               "DigitalCircularityToolkit", "Distance")
         {
         }
@@ -32,7 +34,8 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Distance Matrix", "DM", "Distance matrix where row[i,j]", GH_ParamAccess.tree);
+            pManager.AddGenericParameter("DistanceMatrix", "DM", "Distance matrix (with padded row/cols to form square)", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Data", "Data", "Distance matrix data where row[i,j] is cost from demand[i] to supply[j]", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -41,6 +44,17 @@ namespace DigitalCircularityToolkit.Distance
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            if (!DA.GetDataTree(0, out GH_Structure<GH_Number> demands)) return;
+            if (!DA.GetDataTree(1, out GH_Structure<GH_Number> supply)) return;
+
+            List<double[]> demand_data = Utilities.Tree2List(demands);
+            List<double[]> supply_data = Utilities.Tree2List(supply);
+
+            int[,] cost_matrix = Euclidean.EuclideanCostMatrix(demand_data, supply_data);
+            GH_Structure<GH_Integer> cost_data = Utilities.CostMatrix2CostTree(cost_matrix, demand_data.Count, supply_data.Count);
+
+            DA.SetData(0, cost_matrix);
+            DA.SetDataTree(1, cost_data);
         }
 
         /// <summary>

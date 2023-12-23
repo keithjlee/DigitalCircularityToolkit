@@ -49,6 +49,27 @@ namespace DigitalCircularityToolkit.Objects
 
         public BoxObject() { }
 
+        public BoxObject(DesignObject obj)
+        {
+            this.Centroid = obj.Centroid;
+            this.NSamples = obj.NSamples;
+            this.SampledPoints = obj.SampledPoints;
+            this.PCA1 = obj.PCA1;
+            this.PCA2 = obj.PCA2;
+            this.PCA3 = obj.PCA3;
+            this.Localbox = obj.Localbox;
+            this.LocalPlane = obj.LocalPlane;
+            this.Boundingbox = obj.Boundingbox;
+            this.Geometry = obj.Geometry;
+            this.TransformedGeometry = obj.TransformedGeometry;
+
+            Quantity = 1;
+            LengthBuffer = 1;
+            WidthBuffer = 1;
+            HeightBuffer = 1;
+            EffectiveBox = GetEffectiveBox();
+        }
+
         public BoxObject(Curve curve, int n_samples, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
         {
             Populate(curve, n_samples);

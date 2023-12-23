@@ -66,7 +66,7 @@ namespace DigitalCircularityToolkit.Assignment
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "|Demand| must be <= |Supply|");
             }
 
-            int[,] cost_matrix = Cost.DiffBoxCostMatrix(demands, supply);
+            int[,] cost_matrix = DiffBox.DiffBoxCostMatrix(demands, supply);
 
             // convert to gh tree to output
             GH_Structure<GH_Integer> cost_matrix_tree = new GH_Structure<GH_Integer>();

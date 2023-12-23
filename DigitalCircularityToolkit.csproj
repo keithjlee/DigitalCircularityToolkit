@@ -22,7 +22,6 @@
   <ItemGroup>
     <Folder Include="Characterization\" />
     <Folder Include="Analysis\" />
-    <Folder Include="Distance\" />
   </ItemGroup>
   
   <ItemGroup>

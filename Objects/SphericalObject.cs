@@ -36,6 +36,25 @@ namespace DigitalCircularityToolkit.Objects
 
         public SphericalObject() { }
 
+        public SphericalObject(DesignObject obj)
+        {
+            this.Centroid = obj.Centroid;
+            this.NSamples = obj.NSamples;
+            this.SampledPoints = obj.SampledPoints;
+            this.PCA1 = obj.PCA1;
+            this.PCA2 = obj.PCA2;
+            this.PCA3 = obj.PCA3;
+            this.Localbox = obj.Localbox;
+            this.LocalPlane = obj.LocalPlane;
+            this.Boundingbox = obj.Boundingbox;
+            this.Geometry = obj.Geometry;
+            this.TransformedGeometry = obj.TransformedGeometry;
+
+            Quantity = 1;
+            Radius = GetTrueRadius();
+            RadiusBuffer = 1;
+        }
+
         public SphericalObject(Curve curve, int n_samples, int qty, double radius_buffer, Vector3d pca_override)
         {
             Populate(curve, n_samples);

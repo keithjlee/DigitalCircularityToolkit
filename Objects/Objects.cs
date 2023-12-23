@@ -47,6 +47,21 @@ namespace DigitalCircularityToolkit.Objects
 
         public DesignObject() { }
 
+        public DesignObject(DesignObject other)
+        {
+            this.Centroid= other.Centroid;
+            this.NSamples= other.NSamples;
+            this.SampledPoints= other.SampledPoints;
+            this.PCA1= other.PCA1;
+            this.PCA2= other.PCA2;
+            this.PCA3= other.PCA3;
+            this.Localbox= other.Localbox;
+            this.LocalPlane= other.LocalPlane;
+            this.Boundingbox= other.Boundingbox;
+            this.Geometry= other.Geometry;
+            this.TransformedGeometry = other.TransformedGeometry;
+        }
+
         /// <summary>
         /// A linear object
         /// </summary>
@@ -276,15 +291,14 @@ namespace DigitalCircularityToolkit.Objects
 
             // figure out type and set
             DesignObject obj = new DesignObject();
-            int n = NSamples;
 
-            if (rotated_geo is Curve curve) obj = new DesignObject(curve, n);
+            if (rotated_geo is Curve curve) obj = new DesignObject(curve, NSamples);
 
-            if (rotated_geo is Brep brep) obj = new DesignObject(brep, n);
+            if (rotated_geo is Brep brep) obj = new DesignObject(brep, NSamples);
 
-            if (rotated_geo is Mesh mesh) obj = new DesignObject(mesh, n);
+            if (rotated_geo is Mesh mesh) obj = new DesignObject(mesh, NSamples);
 
-            if (rotated_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, n);
+            if (rotated_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
 
             return obj;
         }
