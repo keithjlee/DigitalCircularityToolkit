@@ -123,20 +123,22 @@ namespace DigitalCircularityToolkit.Characterization
     public IGH_Param CreateParameter(GH_ParameterSide side, int index)
     {
 
-        // Has to return a parameter object!
-        Param_GenericObject param = new Param_GenericObject();
+            // Has to return a parameter object!
+            Param_GenericObject param = new Param_GenericObject();
 
-        int count = 0;
-        for (int i = 0; i < Params.Input.Count; i++)
-        {
-            count += i;
-        }
+            int count = 0;
+            for (int i = 0; i < Params.Input.Count; i++)
+            {
+                count += i;
+            }
 
-        param.Name = "X" + (count + 2).ToString();
-        param.NickName = param.Name;
-        param.Description = "Object property";
-        param.Optional = true;
-        return param;
+            param.Name = "X" + (count + 2).ToString();
+            param.NickName = param.Name;
+            param.Description = "Object property";
+            param.Optional = true;
+            param.Access = GH_ParamAccess.list;
+
+            return param;
     }
 
 

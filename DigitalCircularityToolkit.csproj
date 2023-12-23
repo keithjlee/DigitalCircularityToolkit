@@ -9,12 +9,12 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <Compile Remove="Assignment\LSAP.cs" />
     <Compile Remove="Objects\PointBasedObject_GH.cs" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
-    <PackageReference Include="Google.OrTools" Version="9.8.3296" />
     <PackageReference Include="Grasshopper" Version="7.13.21348.13001" IncludeAssets="compile;build" />
     <PackageReference Include="HungarianAlgorithm" Version="2.2.10" />
   </ItemGroup>

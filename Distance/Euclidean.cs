@@ -21,7 +21,7 @@ namespace DigitalCircularityToolkit.Distance
     public Euclidean()
       : base("Euclidean", "Euclidean",
         "Euclidean distance cost matrix",
-        "DigitalCircularityToolit", "Distance")
+        "DigitalCircularityToolkit", "Distance")
     {
     }
 
@@ -50,8 +50,8 @@ namespace DigitalCircularityToolkit.Distance
     /// to store data in output parameters.</param>
     protected override void SolveInstance(IGH_DataAccess DA)
     {
-            GH_Structure<GH_Number> demands = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> supply = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> demands;
+            GH_Structure<GH_Number> supply;
 
             if (!DA.GetDataTree(0, out demands)) return;
             if (!DA.GetDataTree(1, out supply)) return;

@@ -81,13 +81,13 @@ namespace DigitalCircularityToolkit.Assignment
             }
 
             int[] supply_to_demand_expanded = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
-            int[] assignment_indices = demand_to_supply(supply_to_demand_expanded, demands.Count);
+            int[] assignment_indices = DemandToSupply(supply_to_demand_expanded, demands.Count);
 
             DA.SetDataList(0, assignment_indices);
             DA.SetDataTree(1, cost_matrix_tree);
     }
 
-    private int[] demand_to_supply(int[] supply_to_demand, int n_demand)
+    private int[] DemandToSupply(int[] supply_to_demand, int n_demand)
         {
             int[] demand_to_supply = new int[n_demand];
 
