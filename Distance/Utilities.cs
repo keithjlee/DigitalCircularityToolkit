@@ -52,6 +52,39 @@ namespace DigitalCircularityToolkit.Distance
             return tree;
         }
 
+        public static int[,] CostTree2CostMatrix(GH_Structure<GH_Integer> tree)
+        {
+            int n_demand = tree.PathCount;
+            int n_supply = tree.get_Branch(0).Count;
+
+            int[,] cost_matrix = new int[n_demand, n_supply];
+
+            for (int i = 0; i < n_demand; i++)
+            {
+                GH_Path path = tree.get_Path(i);
+                for (int j = 0; j < n_supply; j++)
+                {
+                    cost_matrix[i, j] = tree.get_DataItem(path, j).Value;
+                }
+            }
+
+            if (n_demand != n_supply)
+            {
+                if (n_demand < n_supply)
+                {
+                    return PadRows(cost_matrix);
+                }
+                else
+                {
+                    return PadCols(cost_matrix);
+                }
+            }
+            else
+            {
+                return cost_matrix;
+            }
+        }
+
         public static List<int[]> Tree2List(GH_Structure<GH_Integer> tree)
         {
             List<int[]> list_data = new List<int[]>();
@@ -144,5 +177,25 @@ namespace DigitalCircularityToolkit.Distance
             return sq_costs;
         }
 
+        public static int[] AssignmentIndices(int[] init_assignments, int n_demand, int n_supply)
+        {
+            int[] assignments = new int[n_demand];
+
+            for (int i = 0; i < n_demand; i++)
+            {
+                int assignment = init_assignments[i];
+
+                if (assignment >= n_supply)
+                {
+                    assignments[i] = -1;
+                }
+                else
+                {
+                    assignments[i] = assignment;
+                }
+            }
+
+            return assignments;
+        }
     }
 }

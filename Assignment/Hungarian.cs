@@ -6,17 +6,17 @@ using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace DigitalCircularityToolkit.Distance
+namespace DigitalCircularityToolkit.Assignment
 {
-    public class Euclidean_GH : GH_Component
+    public class Hungarian : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the CostMatrix_GH class.
+        /// Initializes a new instance of the Hungarian class.
         /// </summary>
-        public Euclidean_GH()
-          : base("EuclideanDistance", "DMEuclidean",
-              "Generate a cost matrix of Euclidean distances between two feature vector sets",
-              "DigitalCircularityToolkit", "Distance")
+        public Hungarian()
+          : base("Hungarian", "Hungarian",
+              "Hungarian matching algorithm",
+              "DigitalCircularityToolkit", "Assignment")
         {
         }
 
@@ -25,8 +25,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Demand", "D", "Distance from", GH_ParamAccess.tree);
-            pManager.AddNumberParameter("Supply", "S", "Distance to", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("DistanceMatrix", "DM", "Distance matrix as tree: number of branches = number of demand; count in each branch = number of supply. If assignment = -1, no real assigment occurred.", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Data", "Data", "Distance matrix data where row[i,j] is cost from demand[i] to supply[j]", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Assignment", "A", "Assignment indices. A[i] = j: assign inventory element j to demand element i", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -43,12 +42,17 @@ namespace DigitalCircularityToolkit.Distance
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            if (!DA.GetDataTree(0, out GH_Structure<GH_Number> demands)) return;
-            if (!DA.GetDataTree(1, out GH_Structure<GH_Number> supply)) return;
+            if (!DA.GetDataTree(0, out GH_Structure<GH_Integer> dm)) return;
 
-            GH_Structure<GH_Integer> cost_data = Euclidean.EuclideanCostTree(demands, supply);
+            int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
+            int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
 
-            DA.SetDataTree(0, cost_data);
+            int n_demand = dm.PathCount;
+            int n_supply = dm.get_Branch(0).Count;
+
+            int[] assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
+
+            DA.SetDataList(0, assignments);
         }
 
         /// <summary>
@@ -69,7 +73,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1D4C7587-5D12-44AF-B21B-F4168018BB7B"); }
+            get { return new Guid("D93D70FA-F26F-4ED8-A35D-9FFE58E460D4"); }
         }
     }
 }
