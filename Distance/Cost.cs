@@ -33,7 +33,7 @@ namespace DigitalCircularityToolkit.Distance
 
 			if (n_demand != n_supply)
 			{
-				return Utilities.Utilities.SquareCostMatrix(cost_matrix);
+				return SquareCostMatrix(cost_matrix);
 			}
 
 			return cost_matrix;
@@ -47,6 +47,35 @@ namespace DigitalCircularityToolkit.Distance
 
 			return Math.Sqrt(dL + dW + dH);
 		}
-	}
+
+        public static int[,] SquareCostMatrix(int[,] cost_matrix)
+        {
+
+            // m >= n
+            int m = cost_matrix.GetLength(0); // m is the number of supply (rows)
+            int n = cost_matrix.GetLength(1); // n is the number of demand (cols) 
+
+            // generate the cost matrix
+            int[,] costs = new int[m, m];
+
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (j >= n)
+                    {
+                        // fill the matrix to be square
+                        costs[i, j] = (int)Int32.MaxValue;
+                    }
+                    else
+                    {
+                        costs[i, j] = cost_matrix[i, j];
+                    }
+                }
+            }
+
+            return costs;
+        }
+    }
 }
 
