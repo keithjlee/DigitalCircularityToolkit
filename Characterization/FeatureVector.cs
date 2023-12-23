@@ -132,7 +132,7 @@ namespace DigitalCircularityToolkit.Characterization
             count += i;
         }
 
-        param.Name = "X" + count.ToString();
+        param.Name = "X" + (count + 2).ToString();
         param.NickName = param.Name;
         param.Description = "Object property";
         param.Optional = true;

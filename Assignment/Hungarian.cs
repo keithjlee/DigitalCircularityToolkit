@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DigitalCircularityToolkit.Objects;
+using DigitalCircularityToolkit.Distance;
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;

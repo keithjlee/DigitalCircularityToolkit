@@ -6,7 +6,7 @@ using DigitalCircularityToolkit.Utilities;
 using Grasshopper;
 using Grasshopper.Kernel;
 
-namespace DigitalCircularityToolkit.Assignment
+namespace DigitalCircularityToolkit.Distance
 {
 	public static class Cost
 	{
