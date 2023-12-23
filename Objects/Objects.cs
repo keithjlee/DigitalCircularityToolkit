@@ -118,6 +118,7 @@ namespace DigitalCircularityToolkit.Objects
 
             // Get Bounding Box
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
+            LocalPlane.Origin = Localbox.Center;
 
         }
 
@@ -176,6 +177,7 @@ namespace DigitalCircularityToolkit.Objects
 
             // Get Bounding Box
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
+            LocalPlane.Origin = Localbox.Center;
         }
 
         public DesignObject(Mesh mesh, int _)
@@ -219,6 +221,7 @@ namespace DigitalCircularityToolkit.Objects
 
             // Get Bounding Box
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
+            LocalPlane.Origin = Localbox.Center;
         }
 
         public DesignObject(Brep brep, int n)
@@ -262,6 +265,7 @@ namespace DigitalCircularityToolkit.Objects
 
             // Get Bounding Box
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
+            LocalPlane.Origin = Localbox.Center;
         }
 
         public DesignObject Rotate(int axis, double deg)
@@ -301,6 +305,24 @@ namespace DigitalCircularityToolkit.Objects
             if (rotated_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
 
             return obj;
+        }
+
+        public void TransformObject(Transform t)
+        {
+            Centroid.Transform(t);
+            PCA1.Transform(t);
+            PCA2.Transform(t);
+            PCA3.Transform(t);
+            Localbox.Transform(t);
+            LocalPlane.Transform(t);
+
+            Geometry.Transform(t);
+            TransformedGeometry.Transform(t);
+
+            foreach (Point3d point in SampledPoints)
+            {
+                point.Transform(t);
+            }
         }
     }
 }

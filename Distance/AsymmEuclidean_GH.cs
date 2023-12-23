@@ -8,14 +8,14 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Distance
 {
-    public class Euclidean_GH : GH_Component
+    public class AsymmEuclidean_GH : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the CostMatrix_GH class.
+        /// Initializes a new instance of the AsymmEuclidean_GH class.
         /// </summary>
-        public Euclidean_GH()
-          : base("EuclideanDistance", "DMEuclidean",
-              "Generate a distance matrix of Euclidean distances between two feature vector sets",
+        public AsymmEuclidean_GH()
+          : base("AsymmEuclideanDistance", "DMAsymm",
+              "Generate a distance matrix of asymmetric Euclidean distances between two feature vector sets",
               "DigitalCircularityToolkit", "Distance")
         {
         }
@@ -27,7 +27,8 @@ namespace DigitalCircularityToolkit.Distance
         {
             pManager.AddNumberParameter("Demand", "D", "Distance from", GH_ParamAccess.tree);
             pManager.AddNumberParameter("Supply", "S", "Distance to", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Power", "p", "Power factor for distance", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("Power1", "p", "Power factor for valid directional distances", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("Power2", "q", "Power factor for invalid directional distances", GH_ParamAccess.item, 2);
         }
 
         /// <summary>
@@ -52,20 +53,29 @@ namespace DigitalCircularityToolkit.Distance
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Demand and supply feature vectors must be of same dimension");
             }
 
-            int pow = 1;
-            DA.GetData(2, ref pow);
+            int p = 1;
+            int q = 2;
+            DA.GetData(2, ref p);
+            DA.GetData(3, ref q);
 
-            if (pow <= 0)
+            if (p <= 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Are you sure you want a power <= 0?");
             }
 
-            GH_Structure<GH_Integer> cost_data = Euclidean.EuclideanCostTree(demands, supply, pow);
+            if (q < p)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "q should be greater than p if penalizing negative components");
+            }
+
+
+            GH_Structure<GH_Integer> cost_data = Euclidean.AsymmEuclideanCostTree(demands, supply, p, q);
 
             DA.SetDataTree(0, cost_data);
         }
 
 
+        
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
@@ -84,7 +94,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1D4C7587-5D12-44AF-B21B-F4168018BB7B"); }
+            get { return new Guid("669170C3-521E-47A6-8CAC-82E5D9CAE3A0"); }
         }
     }
 }

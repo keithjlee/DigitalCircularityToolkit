@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using DigitalCircularityToolkit.Objects;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace DigitalCircularityToolkit.Assignment
+namespace DigitalCircularityToolkit.Matching
 {
-    public class Hungarian : GH_Component
+    public class Align_GH : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Hungarian class.
+        /// Initializes a new instance of the Align_GH class.
         /// </summary>
-        public Hungarian()
-          : base("Hungarian", "Hungarian",
-              "Hungarian matching algorithm",
-              "DigitalCircularityToolkit", "Assignment")
+        public Align_GH()
+          : base("Align", "Align",
+              "Align an object to another",
+              "DigitalCircularityToolkit", "Matching")
         {
         }
 
@@ -25,7 +23,8 @@ namespace DigitalCircularityToolkit.Assignment
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("DistanceMatrix", "DM", "Distance matrix as tree: number of branches = number of demand; count in each branch = number of supply. If assignment = -1, no real assigment occurred.", GH_ParamAccess.tree);
+            pManager.AddGenericParameter("SourceObject", "Source", "Source object to align", GH_ParamAccess.item);
+            pManager.AddGenericParameter("TargetObject", "Target", "Object to align to", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,7 +32,8 @@ namespace DigitalCircularityToolkit.Assignment
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Assignment", "A", "Assignment indices. A[i] = j: assign inventory element j to demand element i", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Object", "Obj", "Aligned object", GH_ParamAccess.item);
+            pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of aligned object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,17 +42,13 @@ namespace DigitalCircularityToolkit.Assignment
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            if (!DA.GetDataTree(0, out GH_Structure<GH_Integer> dm)) return;
+            DesignObject source = new DesignObject();
+            DesignObject target = new DesignObject();
 
-            int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
-            int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
+            if (!DA.GetData(0, ref source)) return;
+            if (!DA.GetData(1, ref target)) return;
 
-            int n_demand = dm.PathCount;
-            int n_supply = dm.get_Branch(0).Count;
 
-            int[] assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
-
-            DA.SetDataList(0, assignments);
         }
 
         /// <summary>
@@ -73,7 +69,7 @@ namespace DigitalCircularityToolkit.Assignment
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("D93D70FA-F26F-4ED8-A35D-9FFE58E460D4"); }
+            get { return new Guid("F4E526F8-F0F9-4EA0-988A-2044DE529A97"); }
         }
     }
 }

@@ -9,7 +9,7 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <Compile Remove="Assignment\LSAP.cs" />
+    <Compile Remove="Matching\LSAP.cs" />
     <Compile Remove="Objects\PointBasedObject_GH.cs" />
   </ItemGroup>
   

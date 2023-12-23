@@ -18,13 +18,13 @@ namespace DigitalCircularityToolkit.Objects
         {
             // local plane
             Plane plane = new Plane(Point3d.Origin, obj.PCA1, obj.PCA2);
-            Plane plane_vector_override = new Plane(Point3d.Origin, PCA1_override, obj.PCA2);
+            Plane vector_override = new Plane(Point3d.Origin, PCA1_override, obj.PCA2);
 
             // global plane
-            Plane plane_override = new Plane(obj.Centroid, PCA1_override, obj.PCA2);
+            Plane plane_override = new Plane(obj.LocalPlane.Origin, PCA1_override, obj.PCA2);
 
             // Map the PCA XY plane to the world XY plane
-            Transform vector_transform = Transform.PlaneToPlane(plane, plane_vector_override);
+            Transform vector_transform = Transform.PlaneToPlane(plane, vector_override);
             Transform plane_transform = Transform.PlaneToPlane(obj.LocalPlane, plane_override);
 
             // update PCAs

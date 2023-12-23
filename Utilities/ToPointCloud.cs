@@ -38,7 +38,7 @@ namespace DigitalCircularityToolkit.Utilities
     {
             pManager.AddGenericParameter("PointCloud", "PointCloud", "PointCloud object", GH_ParamAccess.item);
     }
-
+        
     /// <summary>
     /// This is the method that actually does the work.
     /// </summary>

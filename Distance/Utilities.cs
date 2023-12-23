@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel.Data;
+﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using System;
 using System.Collections.Generic;
@@ -196,6 +197,21 @@ namespace DigitalCircularityToolkit.Distance
             }
 
             return assignments;
+        }
+
+        public static bool CheckDims(GH_Structure<GH_Number> dem, GH_Structure<GH_Number> sup)
+        {
+            int d1 = dem.Branches[0].Count;
+            int d2 = sup.Branches[0].Count;
+
+            if (d1 != d2)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

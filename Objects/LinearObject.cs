@@ -10,7 +10,10 @@ namespace DigitalCircularityToolkit.Objects
 	{
 		public int Quantity;
         public double LengthBuffer;
-        public Line EffectiveLine;
+        public Line EffectiveLine
+        {
+            get { return GetEffectiveLine(); }
+        }
         public double EffectiveLength
         {
             get
@@ -19,7 +22,10 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
         public double Area;
-        public Plane CrossSectionPlane;
+        public Plane CrossSectionPlane
+        {
+            get { return GetCrossSectionPlane(); }
+        }
 
 		public LinearObject()
 		{
@@ -42,8 +48,6 @@ namespace DigitalCircularityToolkit.Objects
             Quantity = 1;
             LengthBuffer = 1;
             GetApproxArea();
-            GetCrossSectionPlane();
-            GetEffectiveLine();
         }
 
         public LinearObject(Curve curve, int n_samples, int qty, double buffer, double area, Vector3d pca_override)
@@ -63,8 +67,6 @@ namespace DigitalCircularityToolkit.Objects
                 Area = area;
             }
 
-            GetCrossSectionPlane();
-            GetEffectiveLine();
         }
 
         public LinearObject(Brep brep, int n_samples, int qty, double buffer, double area, Vector3d pca_override)
@@ -84,8 +86,6 @@ namespace DigitalCircularityToolkit.Objects
                 Area = area;
             }
 
-            GetCrossSectionPlane();
-            GetEffectiveLine();
         }
 
         public LinearObject(PointCloud points, int qty, double buffer, double area, Vector3d pca_override)
@@ -105,8 +105,6 @@ namespace DigitalCircularityToolkit.Objects
                 Area = area;
             }
 
-            GetCrossSectionPlane();
-            GetEffectiveLine();
         }
 
         public LinearObject(Mesh mesh, int qty, double buffer, double area, Vector3d pca_override)
@@ -126,14 +124,11 @@ namespace DigitalCircularityToolkit.Objects
                 Area = area;
             }
 
-            GetCrossSectionPlane();
-            GetEffectiveLine();
-
         }
 
-        private void GetCrossSectionPlane()
+        private Plane GetCrossSectionPlane()
         {
-            CrossSectionPlane = new Plane(Localbox.Center, PCA2, PCA3);
+            return new Plane(Localbox.Center, PCA2, PCA3);
         }
 
         private void GetApproxArea()
@@ -141,12 +136,12 @@ namespace DigitalCircularityToolkit.Objects
             Area = Width * Height;
         }
 
-        private void GetEffectiveLine()
+        private Line GetEffectiveLine()
         {
             Point3d point_at_start = Localbox.Center - PCA1 * EffectiveLength / 2;
             Point3d point_at_end = Localbox.Center + PCA1 * EffectiveLength / 2;
 
-            EffectiveLine = new Line(point_at_start, point_at_end);
+            return new Line(point_at_start, point_at_end);
         }
 	}
 }

@@ -34,7 +34,10 @@ namespace DigitalCircularityToolkit.Objects
                 return HeightBuffer * Height;
             }
         }
-        public Box EffectiveBox;
+        public Box EffectiveBox
+        {
+            get { return GetEffectiveBox(); }
+        }
         public double EffectiveVolume
         {
             get { return LengthBuffer * Length * WidthBuffer * Width * HeightBuffer * Height; }
@@ -67,7 +70,6 @@ namespace DigitalCircularityToolkit.Objects
             LengthBuffer = 1;
             WidthBuffer = 1;
             HeightBuffer = 1;
-            EffectiveBox = GetEffectiveBox();
         }
 
         public BoxObject(Curve curve, int n_samples, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
@@ -80,7 +82,6 @@ namespace DigitalCircularityToolkit.Objects
             WidthBuffer = width_buffer;
             HeightBuffer = height_buffer;
 
-            EffectiveBox = GetEffectiveBox();
         }
 
         public BoxObject(Brep brep, int n_samples, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
@@ -93,7 +94,6 @@ namespace DigitalCircularityToolkit.Objects
             WidthBuffer = width_buffer;
             HeightBuffer = height_buffer;
 
-            EffectiveBox = GetEffectiveBox();
         }
 
         public BoxObject(PointCloud points, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
@@ -106,7 +106,6 @@ namespace DigitalCircularityToolkit.Objects
             WidthBuffer = width_buffer;
             HeightBuffer = height_buffer;
 
-            EffectiveBox = GetEffectiveBox();
         }
 
         public BoxObject(Mesh mesh, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
@@ -119,7 +118,6 @@ namespace DigitalCircularityToolkit.Objects
             WidthBuffer = width_buffer;
             HeightBuffer = height_buffer;
 
-            EffectiveBox = GetEffectiveBox();
         }
 
         public Box GetEffectiveBox()
