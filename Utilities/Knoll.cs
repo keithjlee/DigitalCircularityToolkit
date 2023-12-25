@@ -30,9 +30,9 @@ namespace DigitalCircularityToolkit.Utilities
     {
             pManager.AddGenericParameter("Objects", "Objs", "Collection of objects to knoll", GH_ParamAccess.list);
             pManager.AddPlaneParameter("OriginPlane", "Plane", "Plane that defines the starting origin of grid", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddIntegerParameter("NumColumn", "nCols", "Number of columns in knoll", GH_ParamAccess.item);
-            pManager.AddNumberParameter("ColSpacing", "dCol", "Spacing of columns", GH_ParamAccess.item);
-            pManager.AddNumberParameter("RowSpacing", "dRow", "Spacing of rows", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("NumColumn", "nCols", "Number of columns in knoll", GH_ParamAccess.item, 10);
+            pManager.AddNumberParameter("ColSpacing", "dCol", "Spacing of columns", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("RowSpacing", "dRow", "Spacing of rows", GH_ParamAccess.item, 1);
     }
 
     /// <summary>
