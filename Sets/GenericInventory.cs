@@ -39,6 +39,7 @@ namespace DigitalCircularityToolkit.Sets
             pManager.AddNumberParameter("Width", "W", "Width (PCA2)", GH_ParamAccess.list);
             pManager.AddNumberParameter("Height", "H", "Height (PCA3)", GH_ParamAccess.list);
             pManager.AddBoxParameter("BoundingBox", "BB", "Bounding box", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Objects", "Obj", "Collected objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -80,6 +81,7 @@ namespace DigitalCircularityToolkit.Sets
             DA.SetDataList(5, widths);
             DA.SetDataList(6, heights);
             DA.SetDataList(7, boxes);
+            DA.SetDataList(8, objs);
         }
 
         /// <summary>

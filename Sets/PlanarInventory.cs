@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Security.Cryptography;
+using DigitalCircularityToolkit.Objects;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
@@ -23,7 +24,7 @@ namespace DigitalCircularityToolkit.Sets
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Objects", "Obj", "Set of objects that form an inventory", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Objects", "PlanarObjs", "Set of objects that form an inventory", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -31,6 +32,15 @@ namespace DigitalCircularityToolkit.Sets
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddSurfaceParameter("EffectivePlane", "PlaneSurface", "Representative plane of object", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "Plane", "Representative plane centered on object", GH_ParamAccess.list);
+            pManager.AddNumberParameter("EffectiveLength", "L", "Length of plane (PCA1)", GH_ParamAccess.list);
+            pManager.AddNumberParameter("EffectiveWidth", "W", "Width of plane (PCA2)", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Thickness", "t", "Thickness of plane", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Indexer", "Inds", "Index of output with respect to input (when there are objects with more than one quantity)", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Objects", "Obj", "Collected objects", GH_ParamAccess.list);
+            pManager.AddPointParameter("Centroids", "Centroid", "Object centroids", GH_ParamAccess.list);
+
         }
 
         /// <summary>
@@ -39,6 +49,42 @@ namespace DigitalCircularityToolkit.Sets
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            List<PlanarObject> objs = new List<PlanarObject>();
+            if (!DA.GetDataList(0, objs)) return;
+
+            // collectors
+            List<PlaneSurface> surfs = new List<PlaneSurface>();
+            List<Plane> planes = new List<Plane>();
+            List<double> lengths = new List<double>();
+            List<double> widths = new List<double>();
+            List<double> thicknesses = new List<double>();
+            List<int> indices = new List<int>();
+            List<Point3d> centroids = new List<Point3d>();
+
+            for (int i = 0; i < objs.Count; i++)
+            {
+                int qty = objs[i].Quantity;
+
+                for (int j = 0; j < qty; j++)
+                {
+                    surfs.Add(objs[i].EffectivePlane);
+                    planes.Add(objs[i].Plane);
+                    lengths.Add(objs[i].Dimension1);
+                    widths.Add(objs[i].Dimension2);
+                    thicknesses.Add(objs[i].Thickness);
+                    indices.Add(i);
+                    centroids.Add(objs[i].Localbox.Center);
+                }
+            }
+
+            DA.SetDataList(0, surfs);
+            DA.SetDataList(1, planes);
+            DA.SetDataList(2, lengths);
+            DA.SetDataList(3, widths);
+            DA.SetDataList(4, thicknesses);
+            DA.SetDataList(5, indices);
+            DA.SetDataList(6, objs);
+            DA.SetDataList(7, centroids);
         }
 
         /// <summary>

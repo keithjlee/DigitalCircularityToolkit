@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Sets
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Objects", "Obj", "Set of objects that form an inventory", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Objects", "LinearObjs", "Set of objects that form an inventory", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -36,6 +36,8 @@ namespace DigitalCircularityToolkit.Sets
             pManager.AddNumberParameter("Area", "A", "Cross-section area of object", GH_ParamAccess.list);
             pManager.AddPlaneParameter("CentroidPlane", "Plane", "Plane centered at middle of line with Z axis parallel to PCA1", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Indexer", "Inds", "Index of output with respect to input (when there are objects with more than one quantity)", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Objects", "Obj", "Collected objects", GH_ParamAccess.list);
+            pManager.AddPointParameter("Centroids", "Centroid", "Object centroids", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -53,6 +55,7 @@ namespace DigitalCircularityToolkit.Sets
             List<double> areas = new List<double>();
             List<Plane> planes = new List<Plane>();
             List<int> indices = new List<int>();
+            List<Point3d> centroids = new List<Point3d>();
 
             for (int i = 0; i < objs.Count; i++)
             {
@@ -61,10 +64,11 @@ namespace DigitalCircularityToolkit.Sets
                 for (int j = 0; j < qty; j++)
                 {
                     lines.Add(objs[i].EffectiveLine);
-                    lengths.Add(objs[i].Length);
+                    lengths.Add(objs[i].EffectiveLength);
                     areas.Add(objs[i].Area);
                     planes.Add(objs[i].CrossSectionPlane);
                     indices.Add(i);
+                    centroids.Add(objs[i].Localbox.Center);
                 }
             }
 
@@ -73,6 +77,8 @@ namespace DigitalCircularityToolkit.Sets
             DA.SetDataList(2, areas);
             DA.SetDataList(3, planes);
             DA.SetDataList(4, indices);
+            DA.SetDataList(5, objs);
+            DA.SetDataList(6, centroids);
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace DigitalCircularityToolkit.Utilities
     {
             pManager.AddGenericParameter("Objects", "Objs", "Collection of objects to knoll", GH_ParamAccess.list);
             pManager.AddPlaneParameter("OriginPlane", "Plane", "Plane that defines the starting origin of grid", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddIntegerParameter("NumColumn", "nCols", "Number of columns in knoll", GH_ParamAccess.item, 10);
+            pManager.AddIntegerParameter("NumColumn", "nCols", "Number of columns in knoll", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("ColSpacing", "dCol", "Spacing of columns", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RowSpacing", "dRow", "Spacing of rows", GH_ParamAccess.item, 1);
     }
@@ -53,7 +53,7 @@ namespace DigitalCircularityToolkit.Utilities
     {
       List<DesignObject> objs = new List<DesignObject>();
       Plane plane = Plane.WorldXY;
-      int nCols = 10;
+      int nCols = 1;
       double dCol = 1;
       double dRow = 1;
 
@@ -81,9 +81,10 @@ namespace DigitalCircularityToolkit.Utilities
 
     public List<DesignObject> KnollObjects(List<DesignObject> objs, Plane plane, int nCols, double dCol, double dRow){
 
-      int count = 0;
+      int count = -1;
 
       List<DesignObject> new_objects = new List<DesignObject>();
+
       double y_offset = 0;
 
       while (count < objs.Count){
@@ -91,28 +92,29 @@ namespace DigitalCircularityToolkit.Utilities
         double x_offset = 0;
         double y_max = 0;
 
-        for (int j = 0; j < nCols; j++){
-          Plane target_plane = plane.Clone();
-          var obj = objs[count];
+        for (int j = 0; j < nCols; j++)
+        {
+            count++;
+            if (count >= objs.Count) { break; }
+            Plane target_plane = plane.Clone();
+            var obj = objs[count];
 
-          var x = x_offset + obj.Width / 2 + dCol;
-          var y = y_offset + obj.Length / 2 + dRow;
+            var x = x_offset + obj.Length / 2 + dCol;
+            var y = y_offset + obj.Width / 2 + dRow;
 
-          target_plane.Origin = plane.Origin + plane.XAxis * x + plane.YAxis * y;
+            target_plane.Origin = plane.Origin + plane.XAxis * x + plane.YAxis * y;
 
-          Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, target_plane);
+            Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, target_plane);
 
-          var new_obj = obj.TransformObject(transformer);
+            var new_obj = obj.TransformObject(transformer);
 
-          new_objects.Add(new_obj);
+            new_objects.Add(new_obj);
 
-          if (obj.Length > y_max) y_max = obj.Length;
-          x_offset += obj.Width;
-
-          count++;
+            if (obj.Width > y_max) y_max = obj.Width;
+            x_offset += obj.Length + dCol;
         }
 
-        y_offset += y_max;
+        y_offset += y_max + dRow;
 
       }
 

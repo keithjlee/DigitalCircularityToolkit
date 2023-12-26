@@ -34,7 +34,7 @@ namespace DigitalCircularityToolkit.Matching
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddIntegerParameter("Assignment", "A", "Assignment indices. A[i] = j: assign inventory element j to demand element i", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("Cost", "C", "Total cost of assingment", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Cost", "C", "Total cost of assingment", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace DigitalCircularityToolkit.Matching
             int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
             int[] assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
 
-            int total_cost = 0;
+            double total_cost = 0;
 
             for (int i = 0; i < n_demand; i++)
             {

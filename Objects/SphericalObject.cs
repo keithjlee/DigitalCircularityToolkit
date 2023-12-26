@@ -19,13 +19,7 @@ namespace DigitalCircularityToolkit.Objects
                 return Radius * RadiusBuffer;
             }
         }
-        public Sphere EffectiveSphere
-        {
-            get
-            {
-                return new Sphere(Localbox.Center, EffectiveRadius);
-            }
-        }
+        public Sphere EffectiveSphere;
         public Plane Plane
         {
             get
@@ -63,6 +57,7 @@ namespace DigitalCircularityToolkit.Objects
             Quantity = qty;
             Radius = GetTrueRadius();
             RadiusBuffer = radius_buffer;
+            EffectiveSphere = new Sphere(Localbox.Center, Radius * RadiusBuffer);
         }
 
         public SphericalObject(Brep brep, int n_samples, int qty, double radius_buffer, Vector3d pca_override)
@@ -73,6 +68,7 @@ namespace DigitalCircularityToolkit.Objects
             Quantity = qty;
             Radius = GetTrueRadius();
             RadiusBuffer = radius_buffer;
+            EffectiveSphere = new Sphere(Localbox.Center, Radius * RadiusBuffer);
         }
 
         public SphericalObject(PointCloud points, int qty, double radius_buffer, Vector3d pca_override)
@@ -83,6 +79,7 @@ namespace DigitalCircularityToolkit.Objects
             Quantity = qty;
             Radius = GetTrueRadius();
             RadiusBuffer = radius_buffer;
+            EffectiveSphere = new Sphere(Localbox.Center, Radius * RadiusBuffer);
         }
 
         public SphericalObject(Mesh mesh, int qty, double radius_buffer, Vector3d pca_override)
@@ -93,6 +90,7 @@ namespace DigitalCircularityToolkit.Objects
             Quantity = qty;
             Radius = GetTrueRadius();
             RadiusBuffer = radius_buffer;
+            EffectiveSphere = new Sphere(Localbox.Center, Radius * RadiusBuffer);
         }
 
 
@@ -101,7 +99,7 @@ namespace DigitalCircularityToolkit.Objects
             double r = 0;
             for (int i = 0; i < NSamples; i++)
             {
-                double dist = Localbox.Center.DistanceTo(SampledPoints[i]);
+                double dist = Localbox.Center.DistanceTo(Localbox.GetCorners()[0]);
                 if (dist > r) r = dist;
             }
 

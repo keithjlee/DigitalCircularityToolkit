@@ -127,8 +127,6 @@ namespace DigitalCircularityToolkit.Objects
 
         public PlaneSurface GetEffectivePlane()
         {
-            Vector3d offset_vector = new Vector3d(Dimension1 / 2 * PCA1 + Dimension2 / 2 * PCA2);
-
             return new PlaneSurface(Plane, new Interval(-Dimension1/2, Dimension1/2), new Interval(-Dimension2/2, Dimension2/2));
         }
     }

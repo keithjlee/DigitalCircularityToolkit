@@ -204,7 +204,7 @@ namespace DigitalCircularityToolkit.Distance
             int d1 = dem.Branches[0].Count;
             int d2 = sup.Branches[0].Count;
 
-            if (d1 != d2)
+            if (d1 == d2)
             {
                 return false;
             }
