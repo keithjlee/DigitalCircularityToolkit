@@ -53,6 +53,7 @@ namespace DigitalCircularityToolkit.Matching
             }
 
             int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
+            int[,] cost_matrix_clone = (int[,])cost_matrix.Clone();
             int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
             int[] assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
 
@@ -60,7 +61,7 @@ namespace DigitalCircularityToolkit.Matching
 
             for (int i = 0; i < n_demand; i++)
             {
-                total_cost += cost_matrix[i, assignments[i]];
+                total_cost += cost_matrix_clone[i, assignments[i]];
             }
 
             DA.SetDataList(0, assignments);
