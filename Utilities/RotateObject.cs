@@ -50,7 +50,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DigitalCircularityToolkit.Objects.DesignObject obj = new DigitalCircularityToolkit.Objects.DesignObject();
+            DesignObject obj = new DesignObject();
             int axis = 1;
             double deg = 0;
 
@@ -58,7 +58,7 @@ namespace DigitalCircularityToolkit.Utilities
             DA.GetData(1, ref axis);
             DA.GetData(2, ref deg);
 
-            DigitalCircularityToolkit.Objects.DesignObject rotated_object = obj.Rotate(axis, deg);
+            DesignObject rotated_object = obj.Rotate(axis, deg);
 
             DA.SetData(0, rotated_object);
             if (obj.Geometry is PointCloud)

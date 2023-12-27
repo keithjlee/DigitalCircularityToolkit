@@ -52,7 +52,7 @@ namespace DigitalCircularityToolkit.Utilities
     protected override void SolveInstance(IGH_DataAccess DA)
     {
       List<DesignObject> objs = new List<DesignObject>();
-      Plane plane = Plane.WorldXY;
+      Plane plane = new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.XAxis);
       int nCols = 1;
       double dCol = 1;
       double dRow = 1;
