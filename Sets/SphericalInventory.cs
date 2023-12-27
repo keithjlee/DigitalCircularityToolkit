@@ -37,6 +37,10 @@ namespace DigitalCircularityToolkit.Sets
             pManager.AddIntegerParameter("Indexer", "Inds", "Index of output with respect to input (when there are objects with more than one quantity)", GH_ParamAccess.list);
             pManager.AddGenericParameter("Objects", "Obj", "Collected objects", GH_ParamAccess.list);
             pManager.AddPointParameter("Centroids", "Centroid", "Object centroids", GH_ParamAccess.list);
+            pManager.AddMeshParameter("Hulls", "Hulls", "Object hulls", GH_ParamAccess.list);
+
+            pManager.HideParameter(5);
+            pManager.HideParameter(6);
         }
 
         /// <summary>
@@ -53,6 +57,7 @@ namespace DigitalCircularityToolkit.Sets
             List<double> radii = new List<double>();
             List<int> indices = new List<int>();
             List<Point3d> centroids = new List<Point3d>();
+            List<Mesh> hulls = new List<Mesh>();
 
             for (int i = 0; i < objs.Count; i++)
             {
@@ -65,6 +70,7 @@ namespace DigitalCircularityToolkit.Sets
                     radii.Add(objs[i].EffectiveRadius);
                     indices.Add(i);
                     centroids.Add(objs[i].Localbox.Center);
+                    hulls.Add(objs[i].Hull);
                 }
             }
 
@@ -74,6 +80,7 @@ namespace DigitalCircularityToolkit.Sets
             DA.SetDataList(3, indices);
             DA.SetDataList(4, objs);
             DA.SetDataList(5, centroids);
+            DA.SetDataList(6, hulls);
         }
 
         /// <summary>

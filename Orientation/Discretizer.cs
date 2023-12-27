@@ -35,7 +35,9 @@ namespace DigitalCircularityToolkit.Orientation
                 n_total += (int)Math.Pow(n, 2);
             }
 
-            Point3d[] surface_points = new Point3d[n_total];
+            Point3d[] vertex_points = brep.DuplicateVertices();
+
+            Point3d[] sample_points = new Point3d[n_total+vertex_points.Length];
 
             // get the actual local width (u) and height (v) distances
             //double increment_u;
@@ -60,13 +62,19 @@ namespace DigitalCircularityToolkit.Orientation
                 {
                     for (int k = 1; k <= n_uv; k++)
                     {
-                        surface_points[counter] = face.PointAt(j * increment, k * increment);
+                        sample_points[counter] = face.PointAt(j * increment, k * increment);
                         counter += 1;
                     }
                 }
             }
 
-            return surface_points;
+            for (int i = 0; i < vertex_points.Length; i++)
+            {
+                sample_points[counter] = vertex_points[i];
+                counter += 1;
+            }
+
+            return sample_points;
         }
 
         /// <summary>

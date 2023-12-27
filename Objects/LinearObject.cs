@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using DigitalCircularityToolkit.GeometryProcessing;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
@@ -25,6 +26,13 @@ namespace DigitalCircularityToolkit.Objects
         public Plane CrossSectionPlane
         {
             get { return GetCrossSectionPlane(); }
+        }
+        public Polyline Hull
+        {
+            get
+            {
+                return Hulls.MakeHull2d(SampledPoints, LocalPlane);
+            }
         }
 
 		public LinearObject()

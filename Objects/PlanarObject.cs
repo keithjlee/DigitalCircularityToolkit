@@ -1,4 +1,5 @@
-﻿using Rhino.Geometry;
+﻿using DigitalCircularityToolkit.GeometryProcessing;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,14 @@ namespace DigitalCircularityToolkit.Objects
         public PlaneSurface EffectivePlane
         {
             get { return GetEffectivePlane(); }
+        }
+
+        public Polyline Hull
+        {
+            get
+            {
+                return Hulls.MakeHull2d(SampledPoints, LocalPlane);
+            }
         }
 
         public PlanarObject() { }

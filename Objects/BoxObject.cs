@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalCircularityToolkit.GeometryProcessing;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
@@ -47,6 +48,13 @@ namespace DigitalCircularityToolkit.Objects
             get
             {
                 return GetPlane();
+            }
+        }
+        public Mesh Hull
+        {
+            get
+            {
+                return Hulls.MakeHull(SampledPoints);
             }
         }
 

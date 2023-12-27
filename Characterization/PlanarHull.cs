@@ -41,6 +41,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddBrepParameter("Hull", "Hull", "Planar hull", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Plane", "Plane", "Projection plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -60,11 +61,12 @@ namespace DigitalCircularityToolkit.Characterization
             Polyline hull = Hulls.MakeHull2d(obj.SampledPoints, plane);
 
             DA.SetData(0, Brep.CreatePlanarBreps(hull.ToNurbsCurve(), 1e-6)[0]);
+            DA.SetData(1, plane);
         }
 
         private Plane GetReferencePlane(DesignObject obj, int iplane)
         {
-            Plane plane = new Plane();
+            Plane plane;
 
             if (iplane == 1)
             {

@@ -1,4 +1,5 @@
-﻿using Rhino.Geometry;
+﻿using DigitalCircularityToolkit.GeometryProcessing;
+using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,13 @@ namespace DigitalCircularityToolkit.Objects
             get
             {
                 return GetPlane();
+            }
+        }
+        public Mesh Hull
+        {
+            get
+            {
+                return Hulls.MakeHull(SampledPoints);
             }
         }
 
@@ -99,7 +107,7 @@ namespace DigitalCircularityToolkit.Objects
             double r = 0;
             for (int i = 0; i < NSamples; i++)
             {
-                double dist = Localbox.Center.DistanceTo(Localbox.GetCorners()[0]);
+                double dist = Localbox.Center.DistanceTo(SampledPoints[i]);
                 if (dist > r) r = dist;
             }
 
