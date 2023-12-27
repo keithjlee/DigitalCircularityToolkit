@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using DigitalCircularityToolkit.Orientation;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
-using Rhino.Input.Custom;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class Object_GH : GH_Component
+    public class OverridePCA : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Object_GH class.
+        /// Initializes a new instance of the OverridePCA class.
         /// </summary>
-        public Object_GH()
-          : base("Object", "Obj",
-              "A design object",
+        public OverridePCA()
+          : base("OverridePCA", "OverridePCA",
+              "Override the calculated principal axis PCA1",
               "DigitalCircularityToolkit", "Objects")
         {
         }
@@ -24,8 +23,8 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
+            pManager.AddGenericParameter("Object", "Obj", "Object to modify", GH_ParamAccess.item);
+            pManager.AddVectorParameter("PrincipalAxisVector", "PCAVec", "New vector that represents principal axis", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Design object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Object", "Obj", "Object with overriden principal component", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,27 +41,18 @@ namespace DigitalCircularityToolkit.Objects
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            GeometryBase geo = null;
-            int n = 50;
-            Vector3d pca_user = new Vector3d(0, 0, 0);
-
-            if (!DA.GetData(0, ref geo)) return;
-            DA.GetData(1, ref n);
-
-            // convert to object
             DesignObject obj = new DesignObject();
+            Vector3d vec = new Vector3d();
 
-            var curve = geo as Curve;
-            if (curve != null) obj = new DesignObject(curve, n, pca_user);
+            if (!DA.GetData(0, ref obj)) return;
+            if (!DA.GetData(1, ref vec)) return;
 
-            var brep = geo as Brep;
-            if (brep != null) obj = new DesignObject(brep, n, pca_user);
+            if (obj is LinearObject) obj = new LinearObject(obj);
+            if (obj is PlanarObject) obj = new PlanarObject(obj);
+            if (obj is BoxObject) obj = new BoxObject(obj);
+            if (obj is SphericalObject) obj = new SphericalObject(obj);
 
-            var mesh = geo as Mesh;
-            if (mesh != null) obj = new DesignObject(mesh, n, pca_user);
-
-            var pointcloud = geo as PointCloud;
-            if (pointcloud != null) obj = new DesignObject(pointcloud, n, pca_user);
+            ObjectAnalysis.OverridePCA(vec, obj);
 
             DA.SetData(0, obj);
         }
@@ -85,7 +75,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2A40404E-753E-4BE2-8183-3DAB27A28552"); }
+            get { return new Guid("FC6588C8-8DDF-4B65-B001-C3DD861CEED6"); }
         }
     }
 }

@@ -34,6 +34,7 @@ namespace DigitalCircularityToolkit.Matching
         {
             pManager.AddGenericParameter("Object", "Obj", "Aligned object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of aligned object", GH_ParamAccess.item);
+            pManager.AddTransformParameter("Transform", "T", "Transformation used to align object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -54,6 +55,7 @@ namespace DigitalCircularityToolkit.Matching
 
             DA.SetData(0, newobject);
             DA.SetData(1, newobject.Geometry);
+            DA.SetData(2, transformer);
         }
 
         /// <summary>

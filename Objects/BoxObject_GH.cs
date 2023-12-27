@@ -29,7 +29,6 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the box length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("WidthBuffer", "fW", "Scale the box width by fW", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("HeightBuffer", "fH", "Scale the box height by fH", GH_ParamAccess.item, 1.0);
-            pManager.AddVectorParameter("PCAOverride", "ForcePCA1", "Override the calculated PCA1 vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
         }
 
         /// <summary>
@@ -63,7 +62,6 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(3, ref buffer1);
             DA.GetData(4, ref buffer2);
             DA.GetData(5, ref buffer3);
-            DA.GetData(6, ref pca_user);
 
             if (buffer1 <= 0 || buffer2 <= 0 || buffer3 <= 0)
             {

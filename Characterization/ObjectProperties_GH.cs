@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using DigitalCircularityToolkit.Objects;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace DigitalCircularityToolkit.Objects
+namespace DigitalCircularityToolkit.Characterization
 {
-    public class ObjectInformation_GH : GH_Component
+    public class ObjectProperties_GH : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the ObjectInformation class.
         /// </summary>
-        public ObjectInformation_GH()
-          : base("ObjectInformation", "ObjInfo",
-              "Information about a design object",
+        public ObjectProperties_GH()
+          : base("ObjectProperties", "ObjProps",
+              "Properties of a design object",
               "DigitalCircularityToolkit", "Objects")
         {
         }
@@ -22,7 +22,7 @@ namespace DigitalCircularityToolkit.Objects
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to analyze", GH_ParamAccess.item);
         }
@@ -30,7 +30,7 @@ namespace DigitalCircularityToolkit.Objects
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("Centroid", "Centroid", "Centroid of object", GH_ParamAccess.item);
             pManager.AddVectorParameter("PCA1", "PCA1", "Principal component vector 1", GH_ParamAccess.item);
@@ -79,9 +79,9 @@ namespace DigitalCircularityToolkit.Objects
             }
             else
             {
-                DA.SetDataList(10, new List<GeometryBase> { obj.TransformedGeometry});
+                DA.SetDataList(10, new List<GeometryBase> { obj.TransformedGeometry });
             }
-            
+
         }
 
         /// <summary>
