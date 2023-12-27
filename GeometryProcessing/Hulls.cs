@@ -15,16 +15,9 @@ namespace DigitalCircularityToolkit.GeometryProcessing
     {
         public static Mesh MakeHull(IEnumerable<Point3d> pts)
         {
-            //List<double[]> point_data = new List<double[]>();
-
-            //foreach(Point3d pt in pts)
-            //{
-            //    point_data.Add(new double[] {pt.X, pt.Y, pt.Z});
-            //}
-
             List<double[]> point_data = pts.Select(pt => new double[] { pt.X, pt.Y, pt.Z }).ToList();
 
-            var hull = MIConvexHull.ConvexHull.Create(point_data);
+            var hull = ConvexHull.Create(point_data);
 
             Mesh hullmesh = new Mesh();
 
@@ -65,7 +58,6 @@ namespace DigitalCircularityToolkit.GeometryProcessing
 
             //project to global XY plane
             ptlist.Transform(world_coords);
-
 
             Grasshopper.Kernel.Geometry.Node2List planar_points = new Grasshopper.Kernel.Geometry.Node2List(ptlist);
 

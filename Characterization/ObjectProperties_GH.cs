@@ -15,7 +15,7 @@ namespace DigitalCircularityToolkit.Characterization
         public ObjectProperties_GH()
           : base("ObjectProperties", "ObjProps",
               "Properties of a design object",
-              "DigitalCircularityToolkit", "Objects")
+              "DigitalCircularityToolkit", "Characterization")
         {
         }
 
