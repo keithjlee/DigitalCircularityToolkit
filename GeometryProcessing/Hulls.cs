@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Accord.Math.Distances;
 using MIConvexHull;
 using Rhino.Geometry;
+using Grasshopper.Kernel;
+using Rhino.Collections;
 
 namespace DigitalCircularityToolkit.GeometryProcessing
 {
@@ -47,5 +49,36 @@ namespace DigitalCircularityToolkit.GeometryProcessing
 
             return hullmesh;
         }
+
+        public static Polyline MakeHull2d(IEnumerable<Point3d> pts)
+        {
+            var reduced_points = new Grasshopper.Kernel.Geometry.Node2List(pts);
+            Polyline hull = Grasshopper.Kernel.Geometry.ConvexHull.Solver.ComputeHull(reduced_points);
+
+            return hull;
+        }
+
+        public static Polyline MakeHull2d(IEnumerable<Point3d> pts, Plane plane)
+        {
+            Point3dList ptlist = new Point3dList(pts);
+            Transform world_coords = Transform.PlaneToPlane(plane, Plane.WorldXY);
+
+            //project to global XY plane
+            ptlist.Transform(world_coords);
+
+
+            Grasshopper.Kernel.Geometry.Node2List planar_points = new Grasshopper.Kernel.Geometry.Node2List(ptlist);
+
+            Polyline hull_global = Grasshopper.Kernel.Geometry.ConvexHull.Solver.ComputeHull(planar_points);
+
+            //project 
+            Transform local_coords = Transform.PlaneToPlane(Plane.WorldXY, plane);
+
+            hull_global.Transform(local_coords);
+
+            return hull_global;
+        }
+
+
     }
 }
