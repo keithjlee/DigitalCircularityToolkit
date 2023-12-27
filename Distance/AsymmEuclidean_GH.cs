@@ -27,8 +27,8 @@ namespace DigitalCircularityToolkit.Distance
         {
             pManager.AddNumberParameter("Demand", "D", "Distance from", GH_ParamAccess.tree);
             pManager.AddNumberParameter("Supply", "S", "Distance to", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Power1", "p", "Power factor for valid directional distances", GH_ParamAccess.item, 1);
-            pManager.AddIntegerParameter("Power2", "q", "Power factor for invalid directional distances", GH_ParamAccess.item, 2);
+            pManager.AddIntegerParameter("Power1", "p", "Power factor for positive differences", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("Power2", "q", "Power factor for negative differences", GH_ParamAccess.item, 2);
         }
 
         /// <summary>
@@ -61,11 +61,6 @@ namespace DigitalCircularityToolkit.Distance
             if (p <= 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Are you sure you want a power <= 0?");
-            }
-
-            if (q < p)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "q should be greater than p if penalizing negative components");
             }
 
 
