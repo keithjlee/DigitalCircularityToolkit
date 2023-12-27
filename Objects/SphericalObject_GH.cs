@@ -27,7 +27,6 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
             pManager.AddIntegerParameter("Quantity", "qty", "Quantity of object", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RadiusBuffer", "fR", "Scale the sphere radius by fR", GH_ParamAccess.item, 1.0);
-            pManager.AddVectorParameter("PCAOverride", "ForcePCA1", "Override the calculated PCA1 vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
         }
 
         /// <summary>
@@ -57,7 +56,6 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(1, ref n);
             DA.GetData(2, ref qty);
             DA.GetData(3, ref buffer);
-            DA.GetData(4, ref pca_user);
 
             if (buffer <= 0)
             {

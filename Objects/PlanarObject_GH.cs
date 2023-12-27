@@ -29,7 +29,6 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the plane length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("WidthBuffer", "fW", "Scale the plane width by fW", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Thickness", "Thickness", "Thickness of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
-            pManager.AddVectorParameter("PCAOverride", "ForcePCA1", "Override the calculated PCA1 vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
         }
 
         /// <summary>
@@ -63,7 +62,6 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(3, ref buffer1);
             DA.GetData(4, ref buffer2);
             DA.GetData(5, ref thickness);
-            DA.GetData(6, ref pca_user);
 
             if (buffer1 <= 0 || buffer2 <= 0)
             {

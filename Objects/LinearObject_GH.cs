@@ -28,7 +28,6 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddIntegerParameter("Quantity", "qty", "Quantity of object", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the plane length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Area", "Area", "Area of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
-            pManager.AddVectorParameter("PCAOverride", "ForcePCA1", "Override the calculated PCA1 vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
         }
 
         /// <summary>
@@ -60,7 +59,6 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(2, ref qty);
             DA.GetData(3, ref buffer);
             DA.GetData(4, ref area);
-            DA.GetData(5, ref pca_user);
 
             if (buffer <= 0)
             {
