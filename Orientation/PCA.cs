@@ -312,13 +312,13 @@ namespace DigitalCircularityToolkit.Orientation
         public static void SolvePCA(Brep brep, int n, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, Brep transformed_brep)
         {
             // number of samples per face
-            List<int> sample_densities = AssignSampleDensity(brep, n);
+            //List<int> sample_densities = AssignSampleDensity(brep, n);
 
             // density of UV sampling per face
-            List<int> n_uv = AssignUV(sample_densities);
+            //List<int> n_uv = AssignUV(sample_densities);
 
             // get approx evenly distributed points on surfaces
-            discretized_points = Discretizer.DiscretizeBrep(brep, n_uv);
+            discretized_points = Discretizer.DiscretizeBrep(brep, n).ToArray();
 
             // get PCA vectors
             double[][] positions = Discretizer.PositionMatrix(discretized_points);
