@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using DigitalCircularityToolkit.GeometryProcessing;
 using DigitalCircularityToolkit.Orientation;
 using DigitalCircularityToolkit.Utilities;
 using Rhino.Geometry;
@@ -41,6 +42,8 @@ namespace DigitalCircularityToolkit.Objects
                 return Boundingbox.Corner(true, true, true).DistanceTo(Boundingbox.Corner(true, true, false));
             }
         }
+        public Polyline Hull2D;
+        public Mesh Hull3D;
         public Box Localbox;
         public GeometryBase Geometry;
         public GeometryBase TransformedGeometry;
@@ -120,6 +123,8 @@ namespace DigitalCircularityToolkit.Objects
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
             LocalPlane.Origin = Localbox.Center;
 
+            Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
+            Hull3D = Hulls.MakeHull(SampledPoints);
         }
 
         public DesignObject(List<Point3d> points, int _)
@@ -178,6 +183,9 @@ namespace DigitalCircularityToolkit.Objects
             // Get Bounding Box
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
             LocalPlane.Origin = Localbox.Center;
+
+            Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
+            Hull3D = Hulls.MakeHull(SampledPoints);
         }
 
         public DesignObject(Mesh mesh, int _)
@@ -222,6 +230,9 @@ namespace DigitalCircularityToolkit.Objects
             // Get Bounding Box
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
             LocalPlane.Origin = Localbox.Center;
+
+            Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
+            Hull3D = Hulls.MakeHull(SampledPoints);
         }
 
         public DesignObject(Brep brep, int n)
@@ -266,6 +277,9 @@ namespace DigitalCircularityToolkit.Objects
             // Get Bounding Box
             Boundingbox = Geometry.GetBoundingBox(LocalPlane, out Localbox);
             LocalPlane.Origin = Localbox.Center;
+
+            Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
+            Hull3D = Hulls.MakeHull(SampledPoints);
         }
 
         public DesignObject Rotate(int axis, double deg)

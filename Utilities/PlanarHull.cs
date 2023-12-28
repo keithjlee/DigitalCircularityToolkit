@@ -6,7 +6,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Rhino.Geometry;
 
-namespace DigitalCircularityToolkit.Characterization
+namespace DigitalCircularityToolkit.Utilities
 {
     public class PlanarHull : GH_Component
     {
@@ -16,14 +16,14 @@ namespace DigitalCircularityToolkit.Characterization
         public PlanarHull()
           : base("PlanarHull", "Hull2D",
               "Get the planar convex hull of an object",
-              "DigitalCircularityToolkit", "Characterization")
+              "DigitalCircularityToolkit", "Utilities")
         {
         }
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to analyze", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Plane", "Plane", "PCA Plane to project to", GH_ParamAccess.item, 1);
@@ -38,7 +38,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddBrepParameter("Hull", "Hull", "Planar hull", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Plane", "Plane", "Projection plane", GH_ParamAccess.item);
@@ -57,7 +57,7 @@ namespace DigitalCircularityToolkit.Characterization
             DA.GetData(1, ref iplane);
 
             Plane plane = GetReferencePlane(obj, iplane);
-            
+
             Polyline hull = Hulls.MakeHull2d(obj.SampledPoints, plane);
 
             DA.SetData(0, Brep.CreatePlanarBreps(hull.ToNurbsCurve(), 1e-6)[0]);

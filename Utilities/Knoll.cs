@@ -29,10 +29,10 @@ namespace DigitalCircularityToolkit.Utilities
     protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
     {
             pManager.AddGenericParameter("Objects", "Objs", "Collection of objects to knoll", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("OriginPlane", "Plane", "Plane that defines the starting origin of grid", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddIntegerParameter("NumColumn", "nCols", "Number of columns in knoll", GH_ParamAccess.item, 1);
-            pManager.AddNumberParameter("ColSpacing", "dCol", "Spacing of columns", GH_ParamAccess.item, 1);
+            pManager.AddPlaneParameter("OriginPlane", "Plane", "Plane that defines the starting origin of grid", GH_ParamAccess.item, new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.XAxis));
+            pManager.AddIntegerParameter("NumRows", "nRows", "Number of rows in knoll", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RowSpacing", "dRow", "Spacing of rows", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("ColSpacing", "dCol", "Spacing of columns", GH_ParamAccess.item, 1);
     }
 
     /// <summary>

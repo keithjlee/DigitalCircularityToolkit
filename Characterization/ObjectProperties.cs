@@ -41,14 +41,16 @@ namespace DigitalCircularityToolkit.Characterization
             pManager.AddNumberParameter("Height", "H", "Height (PCA3)", GH_ParamAccess.item);
             pManager.AddBoxParameter("BoundingBox", "BB", "Bounding box", GH_ParamAccess.item);
             pManager.AddPlaneParameter("LocalPlane", "XY", "PCA XY plane", GH_ParamAccess.item);
+            pManager.AddCurveParameter("PlanarHull", "Hull2D", "Convex hull on local XY plane", GH_ParamAccess.item);
+            pManager.AddMeshParameter("VolumeHull", "Hull3D", "Volumetric convex hull", GH_ParamAccess.item);
             pManager.AddPointParameter("SampledPoints", "Pts", "Points used for PCA analysis", GH_ParamAccess.list);
-            pManager.AddGeometryParameter("AlignedGeometry", "AlignedGeo", "Object aligned to global axes", GH_ParamAccess.list);
 
             pManager.HideParameter(0);
             pManager.HideParameter(7);
             pManager.HideParameter(8);
             pManager.HideParameter(9);
             pManager.HideParameter(10);
+            pManager.HideParameter(11);
         }
 
         /// <summary>
@@ -72,16 +74,9 @@ namespace DigitalCircularityToolkit.Characterization
             DA.SetData(6, obj.Height);
             DA.SetData(7, obj.Localbox);
             DA.SetData(8, obj.LocalPlane);
-            DA.SetDataList(9, obj.SampledPoints);
-
-            if (obj.TransformedGeometry is PointCloud)
-            {
-                DA.SetDataList(10, ((PointCloud)obj.TransformedGeometry).GetPoints());
-            }
-            else
-            {
-                DA.SetDataList(10, new List<GeometryBase> { obj.TransformedGeometry });
-            }
+            DA.SetData(9, obj.Hull2D);
+            DA.SetData(10, obj.Hull3D);
+            DA.SetDataList(11, obj.SampledPoints);
 
         }
 
