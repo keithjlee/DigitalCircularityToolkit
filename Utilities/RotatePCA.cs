@@ -8,12 +8,12 @@ using DigitalCircularityToolkit.Objects;
 
 namespace DigitalCircularityToolkit.Utilities
 {
-    public class RotateObject : GH_Component
+    public class RotatePCA : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the RotateObject class.
         /// </summary>
-        public RotateObject()
+        public RotatePCA()
           : base("RotatePCA", "RotatePCA",
               "Rotate an object about one of its PCAs",
               "DigitalCircularityToolkit", "Utilities")

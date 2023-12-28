@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using DigitalCircularityToolkit.Objects;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Distance
 {
-    public class HullDifference_GH : GH_Component
+    public class HullDifference3D_GH : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the HullDifference class.
+        /// Initializes a new instance of the HullDifference3D_GH class.
         /// </summary>
-        public HullDifference_GH()
-          : base("HullDifference", "DMHull",
-              "Get the difference between two aligned hulls",
+        public HullDifference3D_GH()
+          : base("HullDifference3D_GH", "DMHull3D",
+              "Get the difference between two aligned volumetric hulls",
               "DigitalCircularityToolkit", "Distance")
         {
         }
@@ -24,7 +26,7 @@ namespace DigitalCircularityToolkit.Distance
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Demand", "D", "Demand objects", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Supply", "S", "Inventory objects", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Supply", "S", "Supply objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -47,7 +49,9 @@ namespace DigitalCircularityToolkit.Distance
             if (!DA.GetDataList(0, demand)) return;
             if (!DA.GetDataList(1, supply)) return;
 
+            GH_Structure<GH_Integer> dm = HullDifference.HullDiff3DCostTree(demand, supply);
 
+            DA.SetDataTree(0, dm);
         }
 
         /// <summary>
@@ -68,7 +72,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("725A9E44-A95A-4347-8B65-D721137EB7ED"); }
+            get { return new Guid("D13BF45C-B440-494F-B82F-A5F212C4C3A3"); }
         }
     }
 }

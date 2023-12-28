@@ -64,7 +64,8 @@ namespace DigitalCircularityToolkit.Utilities
       DA.GetData(4, ref dRow);
 
       if (nCols > objs.Count){
-        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Number of columns specified > number of objects; reduce nCols");
+        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Number of columns specified > number of objects; nCols reduce to total number of objects");
+                nCols = objs.Count;
       }
 
       List<DesignObject> new_objs = KnollObjects(objs, plane, nCols, dCol, dRow);
