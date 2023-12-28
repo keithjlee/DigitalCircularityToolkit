@@ -44,6 +44,7 @@ namespace DigitalCircularityToolkit.Characterization
             pManager.AddPointParameter("SampledPoints", "Pts", "Points used for PCA analysis", GH_ParamAccess.list);
             pManager.AddGeometryParameter("AlignedGeometry", "AlignedGeo", "Object aligned to global axes", GH_ParamAccess.list);
 
+            pManager.HideParameter(0);
             pManager.HideParameter(7);
             pManager.HideParameter(8);
             pManager.HideParameter(9);

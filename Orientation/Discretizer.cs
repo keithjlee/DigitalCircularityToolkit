@@ -82,7 +82,7 @@ namespace DigitalCircularityToolkit.Orientation
             // total number of sample points
 
             // array of curves that represent wireframe of object
-            Curve[] wireframes = brep.GetWireframe(5);
+            Curve[] wireframes = brep.GetWireframe(1);
 
             // proportion discretization by length of curve
             double total_length = 0;
@@ -109,11 +109,13 @@ namespace DigitalCircularityToolkit.Orientation
             for (int i = 0; i < lengths.Count; i++)
             {
                 int n_sections = n_discrete[i];
+                if (n_sections < 2) n_sections = 2;
 
                 Point3d[] pointset;
-                wireframes[i].DivideByCount(n_sections, true, out pointset);
+                wireframes[i].DivideByCount(n_sections, false, out pointset);
 
                 foreach (Point3d point in pointset) sample_points.Add(point);
+
             }
 
             //merge into sample_points
