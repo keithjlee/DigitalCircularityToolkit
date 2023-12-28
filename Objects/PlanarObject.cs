@@ -39,7 +39,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Hulls.MakeHull2d(SampledPoints, LocalPlane);
+                return Hull2D;
             }
         }
 

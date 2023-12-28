@@ -54,7 +54,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Hulls.MakeHull(SampledPoints);
+                return Hull3D;
             }
         }
 
