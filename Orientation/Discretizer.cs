@@ -77,6 +77,50 @@ namespace DigitalCircularityToolkit.Orientation
             return sample_points;
         }
 
+        public static List<Point3d> DiscretizeBrep(Brep brep, int n)
+        {
+            // total number of sample points
+
+            // array of curves that represent wireframe of object
+            Curve[] wireframes = brep.GetWireframe(5);
+
+            // proportion discretization by length of curve
+            double total_length = 0;
+
+            List<double> lengths = new List<double>();
+            foreach (Curve wire in wireframes)
+            {
+                double len = wire.GetLength();
+                total_length += len;
+                lengths.Add(len);
+            }
+
+            List<int> n_discrete = new List<int>();
+            foreach (double len in lengths)
+            {
+                int count = (int)Math.Ceiling(n / total_length * len);
+                n_discrete.Add(count);
+            }
+
+            // initial points include all sharp vertices
+            List<Point3d> sample_points = brep.DuplicateVertices().ToList();
+
+            // populate
+            for (int i = 0; i < lengths.Count; i++)
+            {
+                int n_sections = n_discrete[i];
+
+                Point3d[] pointset;
+                wireframes[i].DivideByCount(n_sections, true, out pointset);
+
+                foreach (Point3d point in pointset) sample_points.Add(point);
+            }
+
+            //merge into sample_points
+
+            return sample_points;
+        }
+
         /// <summary>
         /// Convert an array of Point3ds to a jagged array positions[][] = [[X,Y,Z], [X,Y,Z],...]
         /// </summary>
