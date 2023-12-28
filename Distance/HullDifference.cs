@@ -67,26 +67,41 @@ namespace DigitalCircularityToolkit.Distance
 
             var intersect = Mesh.CreateBooleanIntersection(new List<Mesh> { hull_demand }, new List<Mesh> { transformed_supply });
 
+            double v_demand = hull_demand.Volume();
+            double v_supply = hull_supply.Volume();
+
             double cost;
 
-            try
+            if (intersect != null && intersect.Length != 0)
             {
                 double v_intersect = 0;
                 foreach (Mesh intersection in intersect) v_intersect += intersection.Volume();
 
-                double v_excess = 0;
-                var differences = Mesh.CreateBooleanDifference(new List<Mesh> { transformed_supply }, new List<Mesh> { hull_demand });
+                var vdiff1 = Math.Abs(v_intersect - v_demand);
+                var vdiff2 = Math.Abs(v_intersect - v_supply);
 
-                foreach (Mesh diff in differences) v_excess += diff.Volume();
+                if (vdiff1 < 1e-3 || vdiff2 < 1e-3)
+                {
+                    cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
+                }
+                else
+                {
+                    double v_excess = 0;
+                    var differences = Mesh.CreateBooleanDifference(new List<Mesh> { transformed_supply }, new List<Mesh> { hull_demand });
 
-                cost = hull_demand.Volume() - v_intersect + v_excess;
+                    foreach (Mesh diff in differences) v_excess += diff.Volume();
+
+                    cost = Math.Abs(hull_demand.Volume() - v_intersect + v_excess);
+                }
+                
             }
-            catch
+            else
             {
-                cost = hull_demand.Volume() - hull_supply.Volume();
+                cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
             }
 
-            return Math.Abs(cost);
+            cost = cost < Int32.MaxValue ? cost : Int32.MaxValue;
+            return cost;
         }
 
         public static double HullDiff2D(Polyline hull_demand, Plane plane_demand, Polyline hull_supply, Plane plane_supply)
@@ -102,7 +117,7 @@ namespace DigitalCircularityToolkit.Distance
             var intersect = Brep.CreatePlanarIntersection(brep_demand, brep_supply, plane_demand, 1e-5);
 
             double cost;
-            try
+            if (intersect.Length != 0)
             {
                 double v_intersect = 0;
                 foreach (Brep intersection in intersect) v_intersect += intersection.GetArea();
@@ -112,14 +127,15 @@ namespace DigitalCircularityToolkit.Distance
 
                 foreach (Brep diff in differences) v_excess += diff.GetArea();
 
-                cost = brep_demand.GetArea() - v_intersect + v_excess;
+                cost = Math.Abs(brep_demand.GetArea() - v_intersect + v_excess);
             }
-            catch
+            else
             {
-                cost = brep_demand.GetArea() - brep_supply.GetArea();
+                cost = Math.Abs(brep_demand.GetArea() - brep_supply.GetArea());
             }
 
-            return Math.Abs(cost);
+            cost = cost < Int32.MaxValue ? cost : Int32.MaxValue;
+            return cost;
         }
 
     }

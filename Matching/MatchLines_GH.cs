@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Matching
 {
-    public class MatchLines : GH_Component
+    public class MatchLines_GH : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MatchLines class.
         /// </summary>
-        public MatchLines()
+        public MatchLines_GH()
           : base("MatchLines", "MatchLines",
               "Get the lines that connect supply-demand assignments",
               "DigitalCircularityToolkit", "Matching")
