@@ -3,11 +3,14 @@ using DigitalCircularityToolkit.Objects;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Commands;
+using Rhino.FileIO;
 using Rhino.Geometry;
+using Rhino.Geometry.Intersect;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DigitalCircularityToolkit.Distance
@@ -29,7 +32,7 @@ namespace DigitalCircularityToolkit.Distance
                     var dem = demand[i];
                     var sup = supply[j];
 
-                    double dist = Math.Ceiling(HullDiff3D(dem.Hull3D, dem.LocalPlane, sup.Hull3D, sup.LocalPlane));
+                    double dist = HullDiff3D(dem.Hull3D, dem.LocalPlane, sup.Hull3D, sup.LocalPlane);
                     cost_tree.Append(new GH_Integer((int)dist), path);
                 }
             }
@@ -62,46 +65,42 @@ namespace DigitalCircularityToolkit.Distance
         {
             Transform transformer = Transform.PlaneToPlane(plane_supply, plane_demand);
             
-            var transformed_supply = hull_supply.Duplicate() as Mesh;
+            Mesh transformed_supply = (Mesh)hull_supply.Duplicate();
             transformed_supply.Transform(transformer);
-
-            var intersect = Mesh.CreateBooleanIntersection(new List<Mesh> { hull_demand }, new List<Mesh> { transformed_supply });
 
             double v_demand = hull_demand.Volume();
             double v_supply = hull_supply.Volume();
 
-            double cost;
+            //CancellationToken ctoken = new CancellationToken();
+            //bool success = Intersection.MeshMesh(new List<Mesh> { hull_demand, transformed_supply }, 1e-6, out _, false, out _, true, out Mesh intermesh, null, ctoken, null);
 
-            if (intersect != null && intersect.Length != 0)
-            {
-                double v_intersect = 0;
-                foreach (Mesh intersection in intersect) v_intersect += intersection.Volume();
+            //double cost;
 
-                var vdiff1 = Math.Abs(v_intersect - v_demand);
-                var vdiff2 = Math.Abs(v_intersect - v_supply);
+            //if (success)
+            //{
+            //    try
+            //    {
+            //        double v_intersect = intermesh.Volume();
 
-                if (vdiff1 < 1e-3 || vdiff2 < 1e-3)
-                {
-                    cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
-                }
-                else
-                {
-                    double v_excess = 0;
-                    var differences = Mesh.CreateBooleanDifference(new List<Mesh> { transformed_supply }, new List<Mesh> { hull_demand });
+            //        var vdiff1 = Math.Abs(v_intersect - v_demand);
+            //        var vdiff2 = Math.Abs(v_intersect - v_supply);
 
-                    foreach (Mesh diff in differences) v_excess += diff.Volume();
-
-                    cost = Math.Abs(hull_demand.Volume() - v_intersect + v_excess);
-                }
+            //        cost = vdiff1 + vdiff2;
+            //    }
+            //    catch
+            //    {
+            //        cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
+            //    }
                 
-            }
-            else
-            {
-                cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
-            }
-
-            cost = cost < Int32.MaxValue ? cost : Int32.MaxValue;
-            return cost;
+            //}
+            //else
+            //{
+            //    cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
+            //}
+            
+            double cost = Math.Abs(v_demand - v_supply);
+            //cost = cost < Int32.MaxValue ? cost : Int32.MaxValue;
+            return Math.Ceiling(cost);
         }
 
         public static double HullDiff2D(Polyline hull_demand, Plane plane_demand, Polyline hull_supply, Plane plane_supply)

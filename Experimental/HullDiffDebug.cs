@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using DigitalCircularityToolkit.Objects;
+using DigitalCircularityToolkit.Distance;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Experimental
 {
-    public class ProjectToPlane : GH_Component
+    public class HullDiffDebug : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the ProjectToPlane class.
+        /// Initializes a new instance of the HullDiffDebug class.
         /// </summary>
-        public ProjectToPlane()
-          : base("ProjectToPlane", "ProjToPlane",
-              "Project the image of an object to a plane",
+        public HullDiffDebug()
+          : base("HullDiffDebug", "HullDiffDebug",
+              "Debugging hulldiff3d",
               "DigitalCircularityToolkit", "Experimental")
         {
         }
@@ -23,8 +26,8 @@ namespace DigitalCircularityToolkit.Experimental
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to project", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Plane", "Plane", "Plane to project to. Plane origin is at centroid of object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Demand", "D", "Demand objects", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Supply", "S", "Supply objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace DigitalCircularityToolkit.Experimental
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGeometryParameter("Geometry", "Geo", "Projected geometry", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("DistanceMatrix", "DM", "Distance matrix data where row [i,j] is distance between demand[i] and supply[j]", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -41,21 +44,15 @@ namespace DigitalCircularityToolkit.Experimental
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject obj = new DesignObject();
-            Plane plane = new Plane();
+            List<DesignObject> demand = new List<DesignObject>();
+            List<DesignObject> supply = new List<DesignObject>();
 
-            if (!DA.GetData(0, ref obj)) return;
-            if (!DA.GetData(1, ref plane)) return;
+            if (!DA.GetDataList(0, demand)) return;
+            if (!DA.GetDataList(1, supply)) return;
 
-            // assert that plane is centered on object
-            plane.Origin = obj.Localbox.Center;
+            GH_Structure<GH_Integer> dm = HullDifference.HullDiff3DCostTree(demand, supply);
 
-            Transform projection = Transform.PlanarProjection(plane);
-
-            GeometryBase planar_geo = obj.Geometry.Duplicate();
-            planar_geo.Transform(projection);
-
-            DA.SetData(0, planar_geo);
+            DA.SetDataTree(0, dm);
         }
 
         /// <summary>
@@ -76,7 +73,7 @@ namespace DigitalCircularityToolkit.Experimental
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("DCF8EC97-FC96-4C4D-A14E-D064B2D1FD3F"); }
+            get { return new Guid("B0E07F77-599E-47DA-A751-9AA67B70F3B3"); }
         }
     }
 }
