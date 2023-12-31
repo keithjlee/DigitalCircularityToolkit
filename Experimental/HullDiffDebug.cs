@@ -35,12 +35,12 @@ namespace DigitalCircularityToolkit.Experimental
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddMeshParameter("HullDemand", "HullDemand", "Convex hull of demand object", GH_ParamAccess.item);
-            pManager.AddNumberParameter("VDemand", "Vdemand", "Volume of demand hull", GH_ParamAccess.item);
-            pManager.AddMeshParameter("HullSupply", "HullSupply", "Convex hull of supply object", GH_ParamAccess.item);
-            pManager.AddNumberParameter("VSupply", "Vsupply", "Volume of supply hull", GH_ParamAccess.item);
+            pManager.AddBrepParameter("HullDemand", "HullDemand", "Convex hull of demand object", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Ademand", "Ademand", "Area of demand hull", GH_ParamAccess.item);
+            pManager.AddBrepParameter("HullSupply", "HullSupply", "Convex hull of supply object", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Asupply", "Asupply", "Area of supply hull", GH_ParamAccess.item);
             pManager.AddNumberParameter("Distance", "d(D,S)", "Distance between demand and supply", GH_ParamAccess.item);
-            pManager.AddMeshParameter("Intersection", "Intersect", "Intersection mesh", GH_ParamAccess.list);
+            pManager.AddBrepParameter("Intersection", "Intersect", "Intersection mesh", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -55,46 +55,47 @@ namespace DigitalCircularityToolkit.Experimental
             if (!DA.GetData(0, ref demand)) return;
             if (!DA.GetData(1, ref supply)) return;
 
-            Mesh hull_demand = demand.Hull3D;
-            Mesh hull_supply = supply.Hull3D;
+            Polyline hull_demand = demand.Hull2D;
+            Polyline hull_supply = supply.Hull2D;
 
             Transform transformer = Transform.PlaneToPlane(supply.LocalPlane, demand.LocalPlane);
 
-            hull_supply = (Mesh)hull_supply.Duplicate();
+
+            hull_supply = hull_supply.Duplicate();
             hull_supply.Transform(transformer);
 
-            double v_demand = hull_demand.Volume();
-            double v_supply = hull_supply.Volume();
+            Brep brep_demand = Brep.CreatePlanarBreps(hull_demand.ToNurbsCurve(), 1e-5)[0];
+            double a_demand = brep_demand.GetArea();
 
-            // intersection
-            Mesh[] intersections = Mesh.CreateBooleanIntersection(new List<Mesh> { hull_demand}, new List<Mesh> { hull_supply });
+            Brep brep_supply = Brep.CreatePlanarBreps(hull_supply.ToNurbsCurve(), 1e-5)[0];
+            double a_supply = brep_supply.GetArea();
 
-            double dist = 0;
+            Brep[] intersections = Brep.CreatePlanarIntersection(brep_demand, brep_supply, demand.LocalPlane, 1e-5);
 
+            double dist;
             if (intersections == null || intersections.Length == 0)
             {
-                double ratio = v_demand > v_supply ? v_supply / v_demand : v_demand / v_supply;
+                double ratio = a_demand > a_supply ? a_supply / a_demand : a_demand / a_supply;
 
                 dist = 1 - ratio;
             }
             else
             {
-                double v_intersection = 0;
-                foreach (Mesh intersect in intersections) v_intersection += intersect.Volume();
+                double a_intersection = 0;
+                foreach (Brep intersection in intersections) a_intersection += intersection.GetArea();
 
-                //dist = v_supply + v_demand - 2 * v_intersection;
-                double alpha_demand = v_demand / (v_demand + v_supply);
+                double alpha_demand = a_demand / (a_demand + a_supply);
                 double alpha_supply = 1 - alpha_demand;
 
-                dist = alpha_demand * (1 - v_intersection / v_demand) + alpha_supply * (1 - v_intersection / v_supply);
+                dist = alpha_demand * (1 - a_intersection / a_demand) + alpha_supply * (1 - a_intersection / a_supply);
 
                 DA.SetDataList(5, intersections);
             }
 
             DA.SetData(0, hull_demand);
-            DA.SetData(1, v_demand);
+            DA.SetData(1, a_demand);
             DA.SetData(2, hull_supply);
-            DA.SetData(3, v_supply);
+            DA.SetData(3, a_supply);
             DA.SetData(4, dist);
         }
 

@@ -17,7 +17,7 @@ namespace DigitalCircularityToolkit.Distance
 {
     internal static class HullDifference
     {
-        public static GH_Structure<GH_Integer> HullDiff3DCostTree(List<DesignObject> demand, List<DesignObject> supply)
+        public static GH_Structure<GH_Integer> HullDiff3DCostTree(List<DesignObject> demand, List<DesignObject> supply, double factor)
         {
             int n_demand = demand.Count;
             int n_supply = supply.Count;
@@ -32,14 +32,14 @@ namespace DigitalCircularityToolkit.Distance
                     var dem = demand[i];
                     var sup = supply[j];
 
-                    double dist = HullDiff3D(dem.Hull3D, dem.LocalPlane, sup.Hull3D, sup.LocalPlane);
+                    double dist = HullDiff3D(dem.Hull3D, dem.LocalPlane, sup.Hull3D, sup.LocalPlane, factor);
                     cost_tree.Append(new GH_Integer((int)dist), path);
                 }
             }
             return cost_tree;
         }
 
-        public static GH_Structure<GH_Integer> HullDiff2DCostTree(List<DesignObject> demand, List<DesignObject> supply)
+        public static GH_Structure<GH_Integer> HullDiff2DCostTree(List<DesignObject> demand, List<DesignObject> supply, double factor)
         {
             int n_demand = demand.Count;
             int n_supply = supply.Count;
@@ -54,87 +54,100 @@ namespace DigitalCircularityToolkit.Distance
                     var dem = demand[i];
                     var sup = supply[j];
 
-                    double dist = Math.Ceiling(HullDiff2D(dem.Hull2D, dem.LocalPlane, sup.Hull2D, sup.LocalPlane));
+                    double dist = HullDiff2D(dem.Hull2D, dem.LocalPlane, sup.Hull2D, sup.LocalPlane, factor);
                     cost_tree.Append(new GH_Integer((int)dist), path);
                 }
             }
             return cost_tree;
         }
 
-        public static double HullDiff3D(Mesh hull_demand, Plane plane_demand, Mesh hull_supply, Plane plane_supply)
+        /// <summary>
+        /// Get the distance in aligned 3D hulls between two objects. 0 = perfect match, 1 = no match at all
+        /// </summary>
+        /// <param name="hull_demand"></param>
+        /// <param name="plane_demand"></param>
+        /// <param name="hull_supply"></param>
+        /// <param name="plane_supply"></param>
+        /// <param name="factor"></param>
+        /// <returns></returns>
+        public static double HullDiff3D(Mesh hull_demand, Plane plane_demand, Mesh hull_supply, Plane plane_supply, double factor)
         {
             Transform transformer = Transform.PlaneToPlane(plane_supply, plane_demand);
-            
-            Mesh transformed_supply = (Mesh)hull_supply.Duplicate();
-            transformed_supply.Transform(transformer);
+
+            hull_supply = (Mesh)hull_supply.Duplicate();
+            hull_supply.Transform(transformer);
 
             double v_demand = hull_demand.Volume();
             double v_supply = hull_supply.Volume();
 
-            //CancellationToken ctoken = new CancellationToken();
-            //bool success = Intersection.MeshMesh(new List<Mesh> { hull_demand, transformed_supply }, 1e-6, out _, false, out _, true, out Mesh intermesh, null, ctoken, null);
+            // intersection
+            Mesh[] intersections = Mesh.CreateBooleanIntersection(new List<Mesh> { hull_demand }, new List<Mesh> { hull_supply });
 
-            //double cost;
+            double dist;
 
-            //if (success)
-            //{
-            //    try
-            //    {
-            //        double v_intersect = intermesh.Volume();
-
-            //        var vdiff1 = Math.Abs(v_intersect - v_demand);
-            //        var vdiff2 = Math.Abs(v_intersect - v_supply);
-
-            //        cost = vdiff1 + vdiff2;
-            //    }
-            //    catch
-            //    {
-            //        cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
-            //    }
-                
-            //}
-            //else
-            //{
-            //    cost = Math.Abs(hull_demand.Volume() - hull_supply.Volume());
-            //}
-            
-            double cost = Math.Abs(v_demand - v_supply);
-            //cost = cost < Int32.MaxValue ? cost : Int32.MaxValue;
-            return Math.Ceiling(cost);
-        }
-
-        public static double HullDiff2D(Polyline hull_demand, Plane plane_demand, Polyline hull_supply, Plane plane_supply)
-        {
-            Transform transformer = Transform.PlaneToPlane(plane_supply, plane_demand);
-
-            var transformed_supply = hull_supply.Duplicate();
-            transformed_supply.Transform(transformer);
-
-            Brep brep_demand = Brep.CreatePlanarBreps(hull_demand.ToNurbsCurve(), 1e-5)[0];
-            Brep brep_supply = Brep.CreatePlanarBreps(transformed_supply.ToNurbsCurve(), 1e-5)[0];
-
-            var intersect = Brep.CreatePlanarIntersection(brep_demand, brep_supply, plane_demand, 1e-5);
-
-            double cost;
-            if (intersect.Length != 0)
+            if (intersections == null || intersections.Length == 0)
             {
-                double v_intersect = 0;
-                foreach (Brep intersection in intersect) v_intersect += intersection.GetArea();
+                double ratio = v_demand > v_supply ? v_supply / v_demand : v_demand / v_supply;
 
-                double v_excess = 0;
-                var differences = Brep.CreateBooleanDifference(brep_supply, brep_demand, 1e-5);
-
-                foreach (Brep diff in differences) v_excess += diff.GetArea();
-
-                cost = Math.Abs(brep_demand.GetArea() - v_intersect + v_excess);
+                dist = 1 - ratio;
             }
             else
             {
-                cost = Math.Abs(brep_demand.GetArea() - brep_supply.GetArea());
+                double v_intersection = 0;
+                foreach (Mesh intersect in intersections) v_intersection += intersect.Volume();
+
+                double alpha_demand = v_demand / (v_demand + v_supply);
+                double alpha_supply = 1 - alpha_demand;
+
+                dist = alpha_demand * (1 - v_intersection / v_demand) + alpha_supply * (1 - v_intersection / v_supply);
+
+            }
+            return Math.Ceiling(dist * factor);
+        }
+
+        /// <summary>
+        /// Get the distance in aligned planar 2D hulls. 0 = perfect match; 1 = zero match
+        /// </summary>
+        /// <param name="hull_demand"></param>
+        /// <param name="plane_demand"></param>
+        /// <param name="hull_supply"></param>
+        /// <param name="plane_supply"></param>
+        /// <param name="factor"></param>
+        /// <returns></returns>
+        public static double HullDiff2D(Polyline hull_demand, Plane plane_demand, Polyline hull_supply, Plane plane_supply, double factor)
+        {
+            Transform transformer = Transform.PlaneToPlane(plane_supply, plane_demand);
+
+            hull_supply = hull_supply.Duplicate();
+            hull_supply.Transform(transformer);
+
+            Brep brep_demand = Brep.CreatePlanarBreps(hull_demand.ToNurbsCurve(), 1e-5)[0];
+            double a_demand = brep_demand.GetArea();
+
+            Brep brep_supply = Brep.CreatePlanarBreps(hull_supply.ToNurbsCurve(), 1e-5)[0];
+            double a_supply = brep_supply.GetArea();
+
+            Brep[] intersections = Brep.CreatePlanarIntersection(brep_demand, brep_supply, plane_demand, 1e-5);
+
+            double dist;
+            if (intersections == null || intersections.Length == 0)
+            {
+                double ratio = a_demand > a_supply ? a_supply / a_demand : a_demand / a_supply;
+
+                dist = 1 - ratio;
+            }
+            else
+            {
+                double a_intersection = 0;
+                foreach (Brep intersection in intersections) a_intersection += intersection.GetArea();
+
+                double alpha_demand = a_demand / (a_demand + a_supply);
+                double alpha_supply = 1 - alpha_demand;
+
+                dist = alpha_demand * (1 - a_intersection / a_demand) + alpha_supply * (1 - a_intersection / a_supply);
             }
 
-            cost = cost < Int32.MaxValue ? cost : Int32.MaxValue;
-            return cost;
+            return Math.Ceiling(dist * factor);
         }
 
     }

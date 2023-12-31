@@ -27,6 +27,7 @@ namespace DigitalCircularityToolkit.Distance
         {
             pManager.AddGenericParameter("Demand", "D", "Demand objects", GH_ParamAccess.list);
             pManager.AddGenericParameter("Supply", "S", "Supply objects", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Factor", "F", "Scale factor for distance, must be >= 100", GH_ParamAccess.item, 100);
         }
 
         /// <summary>
@@ -49,7 +50,15 @@ namespace DigitalCircularityToolkit.Distance
             if (!DA.GetDataList(0, demand)) return;
             if (!DA.GetDataList(1, supply)) return;
 
-            GH_Structure<GH_Integer> dm = HullDifference.HullDiff3DCostTree(demand, supply);
+            double factor = 100;
+            DA.GetData(2, ref factor);
+
+            if (factor < 100)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Factor must be at least 100 to provide meaningful integer distances. Input has been ignored.");
+            }
+
+            GH_Structure<GH_Integer> dm = HullDifference.HullDiff3DCostTree(demand, supply, factor);
 
             DA.SetDataTree(0, dm);
         }
