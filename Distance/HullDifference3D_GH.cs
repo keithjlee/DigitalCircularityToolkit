@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Distance
         /// Initializes a new instance of the HullDifference3D_GH class.
         /// </summary>
         public HullDifference3D_GH()
-          : base("HullDifference3D_GH", "DMHull3D",
+          : base("HullDifference3D", "DMHull3D",
               "Get the difference between two aligned volumetric hulls",
               "DigitalCircularityToolkit", "Distance")
         {

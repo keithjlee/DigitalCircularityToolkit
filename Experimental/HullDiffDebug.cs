@@ -26,8 +26,8 @@ namespace DigitalCircularityToolkit.Experimental
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Demand", "D", "Demand objects", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Supply", "S", "Supply objects", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Demand", "D", "Demand objects", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Supply", "S", "Supply objects", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -35,7 +35,12 @@ namespace DigitalCircularityToolkit.Experimental
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("DistanceMatrix", "DM", "Distance matrix data where row [i,j] is distance between demand[i] and supply[j]", GH_ParamAccess.tree);
+            pManager.AddMeshParameter("HullDemand", "HullDemand", "Convex hull of demand object", GH_ParamAccess.item);
+            pManager.AddNumberParameter("VDemand", "Vdemand", "Volume of demand hull", GH_ParamAccess.item);
+            pManager.AddMeshParameter("HullSupply", "HullSupply", "Convex hull of supply object", GH_ParamAccess.item);
+            pManager.AddNumberParameter("VSupply", "Vsupply", "Volume of supply hull", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Distance", "d(D,S)", "Distance between demand and supply", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Intersection", "Intersect", "Intersection mesh", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -44,15 +49,53 @@ namespace DigitalCircularityToolkit.Experimental
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<DesignObject> demand = new List<DesignObject>();
-            List<DesignObject> supply = new List<DesignObject>();
+            DesignObject demand = new DesignObject();
+            DesignObject supply = new DesignObject();
 
-            if (!DA.GetDataList(0, demand)) return;
-            if (!DA.GetDataList(1, supply)) return;
+            if (!DA.GetData(0, ref demand)) return;
+            if (!DA.GetData(1, ref supply)) return;
 
-            GH_Structure<GH_Integer> dm = HullDifference.HullDiff3DCostTree(demand, supply);
+            Mesh hull_demand = demand.Hull3D;
+            Mesh hull_supply = supply.Hull3D;
 
-            DA.SetDataTree(0, dm);
+            Transform transformer = Transform.PlaneToPlane(supply.LocalPlane, demand.LocalPlane);
+
+            hull_supply = (Mesh)hull_supply.Duplicate();
+            hull_supply.Transform(transformer);
+
+            double v_demand = hull_demand.Volume();
+            double v_supply = hull_supply.Volume();
+
+            // intersection
+            Mesh[] intersections = Mesh.CreateBooleanIntersection(new List<Mesh> { hull_demand}, new List<Mesh> { hull_supply });
+
+            double dist = 0;
+
+            if (intersections == null || intersections.Length == 0)
+            {
+                double ratio = v_demand > v_supply ? v_supply / v_demand : v_demand / v_supply;
+
+                dist = 1 - ratio;
+            }
+            else
+            {
+                double v_intersection = 0;
+                foreach (Mesh intersect in intersections) v_intersection += intersect.Volume();
+
+                //dist = v_supply + v_demand - 2 * v_intersection;
+                double alpha_demand = v_demand / (v_demand + v_supply);
+                double alpha_supply = 1 - alpha_demand;
+
+                dist = alpha_demand * (1 - v_intersection / v_demand) + alpha_supply * (1 - v_intersection / v_supply);
+
+                DA.SetDataList(5, intersections);
+            }
+
+            DA.SetData(0, hull_demand);
+            DA.SetData(1, v_demand);
+            DA.SetData(2, hull_supply);
+            DA.SetData(3, v_supply);
+            DA.SetData(4, dist);
         }
 
         /// <summary>
