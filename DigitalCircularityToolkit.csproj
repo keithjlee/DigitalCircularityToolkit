@@ -9,6 +9,7 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <Compile Remove="Experimental\HullDiffDebug.cs" />
     <Compile Remove="Matching\LSAP.cs" />
     <Compile Remove="Objects\PointBasedObject_GH.cs" />
   </ItemGroup>
@@ -21,6 +22,7 @@
   
   <ItemGroup>
     <Folder Include="Analysis\" />
+    <Folder Include="Experimental\" />
   </ItemGroup>
   
   <ItemGroup>
