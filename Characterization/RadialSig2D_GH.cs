@@ -5,8 +5,9 @@ using DigitalCircularityToolkit.Objects;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 using Rhino.Geometry.Intersect;
+using MathNet.Numerics.IntegralTransforms;
 
-namespace DigitalCircularityToolkit.Utilities
+namespace DigitalCircularityToolkit.Characterization
 {
     public class RadialSig2D_GH : GH_Component
     {
@@ -38,6 +39,7 @@ namespace DigitalCircularityToolkit.Utilities
             pManager.AddPointParameter("SampledPoints", "Points", "Sampled points for analysis", GH_ParamAccess.list);
             pManager.AddCurveParameter("Hull", "Hull", "Hull", GH_ParamAccess.item);
             pManager.AddPointParameter("StartPoint", "StartPoint", "start point", GH_ParamAccess.item);
+            pManager.AddNumberParameter("FFT", "FFT", "FFT", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -81,6 +83,10 @@ namespace DigitalCircularityToolkit.Utilities
             DA.SetDataList(1, sample_points);
             DA.SetData(2, hull);
             DA.SetData(3, start_point);
+
+            double[] fft = RadialSignature.Harmonic2D(obj, n);
+
+            DA.SetDataList(4, fft);
         }
 
         /// <summary>
