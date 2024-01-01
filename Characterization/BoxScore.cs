@@ -24,6 +24,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("BoxObject", "BoxObj", "Object to measure", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Factor", "F", "Scale factor for distance, must be >= 100", GH_ParamAccess.item, 100);
         }
 
         /// <summary>
@@ -43,10 +44,13 @@ namespace DigitalCircularityToolkit.Characterization
             BoxObject obj = new BoxObject();
             if (!DA.GetData(0, ref obj)) return;
 
+            double factor = 100;
+            DA.GetData(1, ref factor);
+
             double vbox = obj.EffectiveBox.Volume;
             double vhull = obj.Hull.Volume();
 
-            double score = (vbox - vhull) / vbox;
+            double score = (vbox - vhull) / vbox * factor;
 
             DA.SetData(0, Math.Abs(score));
         }

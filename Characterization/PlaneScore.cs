@@ -24,6 +24,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to measure", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Factor", "F", "Scale factor for distance, must be >= 100", GH_ParamAccess.item, 100);
         }
 
         /// <summary>
@@ -43,16 +44,19 @@ namespace DigitalCircularityToolkit.Characterization
             DesignObject obj = new DesignObject();
             if (!DA.GetData(0, ref obj)) return;
 
+            double factor = 100;
+            DA.GetData(1, ref factor);
+
             double ratio1 = obj.Height / obj.Length;
             double ratio2 = obj.Height / obj.Width;
 
             if (ratio1 > ratio2)
             {
-                DA.SetData(0, ratio1);
+                DA.SetData(0, ratio1 * factor);
             }
             else
             {
-                DA.SetData(0, ratio2);
+                DA.SetData(0, ratio2 * factor);
             }
         }
 

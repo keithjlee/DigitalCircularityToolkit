@@ -6,14 +6,14 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Characterization
 {
-    public class HarmonicAnalysis_GH : GH_Component
+    public class HarmonicAnalysisComplex_GH : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the HarmonicAnalysis_GH class.
         /// </summary>
-        public HarmonicAnalysis_GH()
-          : base("HarmonicAnalysis", "Harmonics",
-              "Get the 2D Fourier shape descriptor of a radial signature",
+        public HarmonicAnalysisComplex_GH()
+          : base("HarmonicAnalysisComplex", "HarmonicsComplex",
+              "Get the 2D Fourier shape descriptor of a complex signature",
               "DigitalCircularityToolkit", "Characterization")
         {
         }
@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Signature", "Sig", "Shape signature as either a list of complex numbers or list of real numbers (ComplexSig or DistSig)", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Signature", "ComplexSig", "Shape signature as a list of complex numbers", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -41,22 +41,10 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             List<System.Numerics.Complex> sig_complex = new List<System.Numerics.Complex>();
-            List<double> sig_real = new List<double>();
 
-            if (DA.GetDataList(0, sig_complex))
-            {
-                double[] descriptor = HarmonicAnalysis.Harmonic(sig_complex.ToArray());
-                DA.SetDataList(0, descriptor);
-            }
-            else if (DA.GetDataList(0, sig_real))
-            {
-                double[] descriptor = HarmonicAnalysis.Harmonic(sig_real.ToArray());
-                DA.SetDataList(0, descriptor);
-            }
-            else
-            {
-                return;
-            }
+            if (DA.GetDataList(0, sig_complex)) return;
+            double[] descriptor = HarmonicAnalysis.Harmonic(sig_complex.ToArray());
+            DA.SetDataList(0, descriptor);
         }
 
         /// <summary>

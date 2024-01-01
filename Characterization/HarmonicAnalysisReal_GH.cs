@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using DigitalCircularityToolkit.Objects;
+
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Characterization
 {
-    public class SphereScore : GH_Component
+    public class HarmonicAnalysisReal_GH : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the SphereScore class.
+        /// Initializes a new instance of the HarmonicAnalysisReal_GH class.
         /// </summary>
-        public SphereScore()
-          : base("SphereScore", "SphereScore",
-              "Measure how well a sphere abstracts an input object",
+        public HarmonicAnalysisReal_GH()
+          : base("HarmonicAnalysisReal", "HarmonicsReal",
+              "Get the 2D Fourier shape descriptor of a real-valued signature",
               "DigitalCircularityToolkit", "Characterization")
         {
         }
@@ -23,8 +23,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SphericalObject", "SphereObj", "Object to measure", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Factor", "F", "Scale factor for distance, must be >= 100", GH_ParamAccess.item, 100);
+            pManager.AddNumberParameter("Signature", "DistSig", "Shape signature as a list of real-valued numbers", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("SphereScore", "Score", "Sphere score. Optimal value is 0.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("HarmonicFeatureVector", "FV", "Invariant harmonic feature vector", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -41,18 +40,11 @@ namespace DigitalCircularityToolkit.Characterization
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            SphericalObject obj = new SphericalObject();
-            if (!DA.GetData(0, ref obj)) return;
+            List<double> sig = new List<double>();
 
-            double factor = 100;
-            DA.GetData(1, ref factor);
-
-            double vsphere = Math.PI * Math.Pow(obj.EffectiveRadius, 2);
-            double vhull = obj.Hull.Volume();
-
-            double score = (vsphere - vhull) / vsphere * factor;
-
-            DA.SetData(0, Math.Abs(score));
+            if (!DA.GetDataList(0, sig)) return;
+            double[] descriptor = HarmonicAnalysis.Harmonic(sig.ToArray());
+            DA.SetDataList(0, descriptor);
         }
 
         /// <summary>
@@ -73,7 +65,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("4FEEA68B-24CB-4186-BD12-120CBCD9AB6B"); }
+            get { return new Guid("0A5ADC36-9E00-4DE2-B1DC-784EEE5E89A8"); }
         }
     }
 }
