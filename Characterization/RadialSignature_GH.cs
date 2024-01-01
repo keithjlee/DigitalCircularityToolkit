@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using Accord.Math;
-using DigitalCircularityToolkit.Objects;
+
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using Rhino.Geometry.Intersect;
-using MathNet.Numerics.IntegralTransforms;
 
 namespace DigitalCircularityToolkit.Characterization
 {
     public class RadialSignature_GH : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Radial class.
+        /// Initializes a new instance of the RadialSignatureComplex_GH class.
         /// </summary>
         public RadialSignature_GH()
           : base("RadialSignature", "RadialSig",
-              "Get the radial signature of a curve",
+              "Perform a radial signature analysis on a curve.",
               "DigitalCircularityToolkit", "Characterization")
         {
         }
@@ -24,18 +22,23 @@ namespace DigitalCircularityToolkit.Characterization
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Curve", "Curve", "Curve to analyze", GH_ParamAccess.item);
             pManager.AddIntegerParameter("NumSamples", "n", "Number of radial samples to take", GH_ParamAccess.item, 20);
+            pManager.AddPlaneParameter("Plane", "Plane", "Analysis plane. If not supplied, auto-fit will occur", GH_ParamAccess.item);
+
+            pManager[2].Optional = true;
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("Signature", "Sig", "Radial distance signature", GH_ParamAccess.list);
+            pManager.AddGenericParameter("ComplexSignature", "ComplexSig", "Curve signature where planar coordinates [u, v] is converted to complex number u + iv", GH_ParamAccess.list);
+            pManager.AddNumberParameter("DistanceSignature", "DistSig", "Curve signature that captures ordered distance from planar project point to curve centroid", GH_ParamAccess.list);
+            pManager.AddCurveParameter("ProjectedCurve", "ProjCurve", "Planar projection of curve", GH_ParamAccess.item);
             pManager.AddLineParameter("Rays", "Rays", "Rays used in analysis", GH_ParamAccess.list);
         }
 
@@ -51,10 +54,34 @@ namespace DigitalCircularityToolkit.Characterization
             int n = 20;
             DA.GetData(1, ref n);
 
-            double[] signature = HarmonicAnalysis.HullSignature2D(curve, n, out Line[] rays);
+            Plane plane = new Plane();
 
+            // divide curve and extract points
+            curve.DivideByCount(n, true, out Point3d[] points);
+
+            if (!DA.GetData(2, ref plane))
+            {
+                // auto fit plane
+                Plane.FitPlaneToPoints(points, out plane);
+            }
+
+            var centroid = LengthMassProperties.Compute(curve).Centroid;
+            plane.Origin = centroid;
+
+            System.Numerics.Complex[] signature = HarmonicAnalysis.RadialSignature2DComplex(points, centroid, plane, out Line[] rays, out double[] lengths);
+
+            // signature
             DA.SetDataList(0, signature);
-            DA.SetDataList(1, rays);
+            DA.SetDataList(1, lengths);
+
+            // projected curve
+            Transform projection = Transform.PlanarProjection(plane);
+            Curve projcurve = (Curve)curve.Duplicate();
+            projcurve.Transform(projection);
+            DA.SetData(2, projcurve);
+
+            // analysis rays
+            DA.SetDataList(3, rays);
         }
 
         /// <summary>
@@ -75,7 +102,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("80025530-E9D2-4333-9B30-3D183BCCCDA8"); }
+            get { return new Guid("2AE7FB99-C011-461F-870C-2C7A86055F2A"); }
         }
     }
 }
