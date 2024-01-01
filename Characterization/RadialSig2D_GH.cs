@@ -17,7 +17,7 @@ namespace DigitalCircularityToolkit.Characterization
         public RadialSig2D_GH()
           : base("RadialSig2D", "Radial2D",
               "Get the radial signature of the 2D convex hull",
-              "DigitalCircularityToolkit", "Utilities")
+              "DigitalCircularityToolkit", "Characterization")
         {
         }
 
@@ -36,10 +36,6 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddNumberParameter("Signature", "Sig", "Radial distance signature", GH_ParamAccess.list);
-            pManager.AddPointParameter("SampledPoints", "Points", "Sampled points for analysis", GH_ParamAccess.list);
-            pManager.AddCurveParameter("Hull", "Hull", "Hull", GH_ParamAccess.item);
-            pManager.AddPointParameter("StartPoint", "StartPoint", "start point", GH_ParamAccess.item);
-            pManager.AddNumberParameter("FFT", "FFT", "FFT", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -54,39 +50,10 @@ namespace DigitalCircularityToolkit.Characterization
             int n = 20;
             DA.GetData(1, ref n);
 
-            // extract planar hull
-            PolylineCurve hull = obj.Hull2D.ToPolylineCurve();
+            //double[] fft = RadialSignature.Harmonic2D(obj, n);
+            double[] fft = RadialSignature.Harmonic2DReal(obj, n);
 
-            // orient the start of curve to intersect with the local plane positive X axis
-            Line local_x = new Line(obj.LocalPlane.Origin, obj.LocalPlane.XAxis);
-
-            // find intersection
-            CurveIntersections intersections = Intersection.CurveLine(hull, local_x, 1e-6, 1e-6);
-            Point3d start_point = intersections[0].PointA;
-
-            // set curve start to start_point
-            hull.SetStartPoint(start_point);
-
-            // Iterate over hull
-            List<Point3d> sample_points = new List<Point3d>();
-            double[] radial_distances = new double[n];
-            double increment = 1 / (double)n;
-
-            for (int i = 0; i < n; i++)
-            {
-                var point = hull.PointAtNormalizedLength(increment * i);
-                radial_distances[i] = point.DistanceTo(obj.LocalPlane.Origin);
-                sample_points.Add(point);
-            }
-
-            DA.SetDataList(0, radial_distances);
-            DA.SetDataList(1, sample_points);
-            DA.SetData(2, hull);
-            DA.SetData(3, start_point);
-
-            double[] fft = RadialSignature.Harmonic2D(obj, n);
-
-            DA.SetDataList(4, fft);
+            DA.SetDataList(0, fft);
         }
 
         /// <summary>

@@ -15,6 +15,17 @@ namespace DigitalCircularityToolkit.Characterization
 {
     internal static class RadialSignature
     {
+        public static double[] Harmonic2DReal (DesignObject obj, int n)
+        {
+            double[] signature = HullSignature2D(obj, n);
+
+            int ns = n % 2 == 0 ? n - 2 : n - 1;
+
+            Fourier.ForwardReal(signature, ns);
+            
+            return signature;
+        }
+
         public static double[] Harmonic2D(DesignObject obj, int n)
         {
             System.Numerics.Complex[] signature = HullSignature2DComplex(obj, n);
