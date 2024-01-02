@@ -24,7 +24,7 @@ namespace DigitalCircularityToolkit.Utilities
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddNumberParameter("Values", "Vals", "Values to normalize", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Factor", "F", "Factor to multiply after normalization", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Factor", "F", "Factor to multiply after normalization", GH_ParamAccess.item, 100);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace DigitalCircularityToolkit.Utilities
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             List<double> vals = new List<double>();
-            double fac = 1;
+            double fac = 100;
 
             if (!DA.GetDataList(0, vals)) return;
             DA.GetData(1, ref fac);

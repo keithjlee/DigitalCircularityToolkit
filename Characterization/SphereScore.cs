@@ -47,8 +47,10 @@ namespace DigitalCircularityToolkit.Characterization
             double factor = 100;
             DA.GetData(1, ref factor);
 
-            double vsphere = Math.PI * Math.Pow(obj.EffectiveRadius, 2);
+            double vsphere = 4 / 3 * Math.PI * Math.Pow(obj.EffectiveRadius, 3);
+
             double vhull = obj.Hull.Volume();
+            if (vhull > vsphere) vhull = 0;
 
             double score = (vsphere - vhull) / vsphere * factor;
 
