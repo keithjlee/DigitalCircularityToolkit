@@ -339,5 +339,23 @@ namespace DigitalCircularityToolkit.Objects
 
             return obj;
         }
+
+        public void Repopulate(Plane plane)
+        {
+            // new planes
+            LocalPlane = plane;
+            PCA1 = plane.XAxis; PCA2 = plane.YAxis; PCA3 = plane.ZAxis;
+
+            // transformed geometry
+            Plane plane_global = new Plane(plane.Origin, Vector3d.XAxis, Vector3d.YAxis);
+            Transform plane_transform = Transform.PlaneToPlane(plane, plane_global);
+            TransformedGeometry = Geometry.Duplicate();
+            TransformedGeometry.Transform(plane_transform);
+            Boundingbox = Geometry.GetBoundingBox(plane, out Localbox);
+
+            //new hull
+            Hull2D = Hulls.MakeHull2d(SampledPoints, plane);
+
+        }
     }
 }

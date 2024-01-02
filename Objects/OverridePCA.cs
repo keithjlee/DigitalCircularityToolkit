@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         public OverridePCA()
           : base("OverridePCA", "OverridePCA",
-              "Override the calculated principal axis PCA1",
+              "Override the calculated principal components with a plane whose X,Y components = PCA1, PCA2",
               "DigitalCircularityToolkit", "Objects")
         {
         }
@@ -24,7 +24,7 @@ namespace DigitalCircularityToolkit.Objects
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to modify", GH_ParamAccess.item);
-            pManager.AddVectorParameter("PrincipalAxisVector", "PCAVec", "New vector that represents principal axis", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("PrincipalPlane", "XYPCA", "A plane that whose X,Y components represent the overriding PCA1, PCA2", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,17 +42,20 @@ namespace DigitalCircularityToolkit.Objects
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             DesignObject obj = new DesignObject();
-            Vector3d vec = new Vector3d();
+            Plane plane = new Plane();
 
             if (!DA.GetData(0, ref obj)) return;
-            if (!DA.GetData(1, ref vec)) return;
+            if (!DA.GetData(1, ref plane)) return;
 
             if (obj is LinearObject) obj = new LinearObject(obj);
             if (obj is PlanarObject) obj = new PlanarObject(obj);
             if (obj is BoxObject) obj = new BoxObject(obj);
             if (obj is SphericalObject) obj = new SphericalObject(obj);
 
-            ObjectAnalysis.OverridePCA(vec, obj);
+            // assert that plane origin is centered
+            plane.Origin = obj.Localbox.Center;
+
+            obj.Repopulate(plane);
 
             DA.SetData(0, obj);
         }

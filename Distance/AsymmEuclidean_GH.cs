@@ -25,8 +25,8 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Demand", "D", "Distance from", GH_ParamAccess.tree);
-            pManager.AddNumberParameter("Supply", "S", "Distance to", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Demand", "FVdemand", "Distance from", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Supply", "FVsupply", "Distance to", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Power1", "p", "Power factor for positive differences", GH_ParamAccess.item, 1);
             pManager.AddIntegerParameter("Power2", "q", "Power factor for negative differences", GH_ParamAccess.item, 2);
         }
