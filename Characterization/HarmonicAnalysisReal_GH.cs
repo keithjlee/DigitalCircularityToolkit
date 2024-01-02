@@ -24,6 +24,9 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddNumberParameter("Signature", "DistSig", "Shape signature as a list of real-valued numbers", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("FVLength", "|FV|", "Length of feature vector", GH_ParamAccess.item);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -44,7 +47,22 @@ namespace DigitalCircularityToolkit.Characterization
 
             if (!DA.GetDataList(0, sig)) return;
             double[] descriptor = HarmonicAnalysis.Harmonic(sig.ToArray());
-            DA.SetDataList(0, descriptor);
+
+            int n_dimensions = descriptor.Length;
+            int n = n_dimensions;
+            DA.GetData(1, ref n);
+
+            if (n > n_dimensions)
+            {
+                DA.SetDataList(0, descriptor);
+            }
+            else
+            {
+                List<double> FV = new List<double>();
+
+                for (int i = 0; i < n; i++) FV.Add(descriptor[i]);
+                DA.SetDataList(0, FV);
+            }
         }
 
         /// <summary>

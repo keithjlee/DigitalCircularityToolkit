@@ -24,6 +24,9 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Signature", "ComplexSig", "Shape signature as a list of complex numbers", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("FVLength", "|FV|", "Length of feature vector", GH_ParamAccess.item);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("HarmonicFeatureVector", "FV", "Invariant harmonic feature vector", GH_ParamAccess.list);
+            pManager.AddNumberParameter("HarmonicFeatureVector", "FV", "Fourier shape descriptor", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -44,7 +47,24 @@ namespace DigitalCircularityToolkit.Characterization
 
             if (!DA.GetDataList(0, sig_complex)) return;
             double[] descriptor = HarmonicAnalysis.Harmonic(sig_complex.ToArray());
-            DA.SetDataList(0, descriptor);
+
+            int n_dimensions = descriptor.Length;
+            int n = n_dimensions;
+            DA.GetData(1, ref n);
+
+            if (n > n_dimensions)
+            {
+                DA.SetDataList(0, descriptor);
+            }
+            else
+            {
+                List<double> FV = new List<double>();
+
+                for (int i = 0; i < n; i++) FV.Add(descriptor[i]);
+                DA.SetDataList(0, FV);
+            }
+
+            
         }
 
         /// <summary>

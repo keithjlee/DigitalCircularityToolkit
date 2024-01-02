@@ -37,7 +37,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddCurveParameter("Project", "Proj", "Projected outline of object geometry", GH_ParamAccess.item);
+            pManager.AddCurveParameter("ProjectedCurve", "Curve", "Projected outline of object geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -104,15 +104,6 @@ namespace DigitalCircularityToolkit.Utilities
             }
 
             return GetShadow(brep_mesh, plane);
-
-            //Transform projection = Transform.PlanarProjection(plane);
-            //var proj_geo = (Brep)geo.Duplicate();
-            //proj_geo.Transform(projection);
-
-            //Curve[] edges = proj_geo.DuplicateEdgeCurves();
-            //Curve shadow = Curve.JoinCurves(edges)[0];
-
-            //return shadow;
         }
 
         private Curve GetShadow(Mesh geo, Plane plane)

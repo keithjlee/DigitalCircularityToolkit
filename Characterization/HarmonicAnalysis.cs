@@ -24,24 +24,24 @@ namespace DigitalCircularityToolkit.Characterization
 
             Fourier.ForwardReal(signature, ns);
 
-            double[] descriptor = new double[ns/2 - 1];
+            double[] descriptor = new double[ns/2-1];
 
             for (int i = 1; i < ns/2; i++)
             {
-                descriptor[i - 1] = Math.Abs(signature[i]);
+                descriptor[i-1] = Math.Abs(signature[i]);
             }
 
-            return signature;
+            return descriptor;
         }
         public static double[] Harmonic(System.Numerics.Complex[] signature)
         {
             Fourier.Forward(signature);
 
-            double[] descriptor = new double[signature.Length];
+            double[] descriptor = new double[signature.Length-1];
 
-            for (int i = 0; i < signature.Length; i++)
+            for (int i = 1; i < signature.Length; i++)
             {
-                descriptor[i] = signature[i].Magnitude;
+                descriptor[i-1] = signature[i].Magnitude;
             }
 
             return descriptor;

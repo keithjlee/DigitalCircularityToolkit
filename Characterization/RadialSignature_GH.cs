@@ -38,7 +38,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             pManager.AddGenericParameter("ComplexSignature", "ComplexSig", "Curve signature where planar coordinates [u, v] is converted to complex number u + iv", GH_ParamAccess.list);
             pManager.AddNumberParameter("DistanceSignature", "DistSig", "Curve signature that captures ordered distance from planar project point to curve centroid", GH_ParamAccess.list);
-            pManager.AddCurveParameter("ProjectedCurve", "ProjCurve", "Planar projection of curve", GH_ParamAccess.item);
+            pManager.AddCurveParameter("ProjectedCurve", "Curve", "Planar projection of curve", GH_ParamAccess.item);
             pManager.AddLineParameter("Rays", "Rays", "Rays used in analysis", GH_ParamAccess.list);
         }
 
