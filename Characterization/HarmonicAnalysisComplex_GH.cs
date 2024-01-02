@@ -42,7 +42,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             List<System.Numerics.Complex> sig_complex = new List<System.Numerics.Complex>();
 
-            if (DA.GetDataList(0, sig_complex)) return;
+            if (!DA.GetDataList(0, sig_complex)) return;
             double[] descriptor = HarmonicAnalysis.Harmonic(sig_complex.ToArray());
             DA.SetDataList(0, descriptor);
         }
