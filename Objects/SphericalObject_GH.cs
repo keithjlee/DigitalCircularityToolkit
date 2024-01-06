@@ -89,7 +89,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.SphericalObject_zoomed;
+                return Properties.Resources.SphericalObject;
             }
         }
 

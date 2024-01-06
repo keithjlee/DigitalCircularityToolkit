@@ -92,7 +92,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.LinearObjectZoomed;
+                return Properties.Resources.LinearObject;
             }
         }
 

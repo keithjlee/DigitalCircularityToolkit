@@ -63,9 +63,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BoxObject_zoomed {
+        internal static System.Drawing.Bitmap AlignToObject {
             get {
-                object obj = ResourceManager.GetObject("BoxObject-zoomed", resourceCulture);
+                object obj = ResourceManager.GetObject("AlignToObject", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LinearObjectZoomed {
+        internal static System.Drawing.Bitmap AlignToPlane {
             get {
-                object obj = ResourceManager.GetObject("LinearObjectZoomed", resourceCulture);
+                object obj = ResourceManager.GetObject("AlignToPlane", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Object_zoomed {
+        internal static System.Drawing.Bitmap BoxObject {
             get {
-                object obj = ResourceManager.GetObject("Object-zoomed", resourceCulture);
+                object obj = ResourceManager.GetObject("BoxObject", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PCA_zoomed {
+        internal static System.Drawing.Bitmap BoxScore {
             get {
-                object obj = ResourceManager.GetObject("PCA-zoomed", resourceCulture);
+                object obj = ResourceManager.GetObject("BoxScore", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlanarObject_zoomed {
+        internal static System.Drawing.Bitmap BoxSet {
             get {
-                object obj = ResourceManager.GetObject("PlanarObject-zoomed", resourceCulture);
+                object obj = ResourceManager.GetObject("BoxSet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,309 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SphericalObject_zoomed {
+        internal static System.Drawing.Bitmap EuclideanAsymm {
             get {
-                object obj = ResourceManager.GetObject("SphericalObject-zoomed", resourceCulture);
+                object obj = ResourceManager.GetObject("EuclideanAsymm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EuclideanSymm {
+            get {
+                object obj = ResourceManager.GetObject("EuclideanSymm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FeatureVector {
+            get {
+                object obj = ResourceManager.GetObject("FeatureVector", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HarmonicAnalysisComplex {
+            get {
+                object obj = ResourceManager.GetObject("HarmonicAnalysisComplex", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HarmonicAnalysisReal {
+            get {
+                object obj = ResourceManager.GetObject("HarmonicAnalysisReal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Hungarian {
+            get {
+                object obj = ResourceManager.GetObject("Hungarian", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Knoll {
+            get {
+                object obj = ResourceManager.GetObject("Knoll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LinearObject {
+            get {
+                object obj = ResourceManager.GetObject("LinearObject", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LinearSet {
+            get {
+                object obj = ResourceManager.GetObject("LinearSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LineScore {
+            get {
+                object obj = ResourceManager.GetObject("LineScore", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LineToVector {
+            get {
+                object obj = ResourceManager.GetObject("LineToVector", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MatchLines {
+            get {
+                object obj = ResourceManager.GetObject("MatchLines", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Normalize {
+            get {
+                object obj = ResourceManager.GetObject("Normalize", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Object {
+            get {
+                object obj = ResourceManager.GetObject("Object", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ObjectProperties {
+            get {
+                object obj = ResourceManager.GetObject("ObjectProperties", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OverridePCA {
+            get {
+                object obj = ResourceManager.GetObject("OverridePCA", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PCABrep {
+            get {
+                object obj = ResourceManager.GetObject("PCABrep", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PCACurve {
+            get {
+                object obj = ResourceManager.GetObject("PCACurve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PCAMesh {
+            get {
+                object obj = ResourceManager.GetObject("PCAMesh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PCAPointCloud {
+            get {
+                object obj = ResourceManager.GetObject("PCAPointCloud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlanarHull {
+            get {
+                object obj = ResourceManager.GetObject("PlanarHull", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlanarObject {
+            get {
+                object obj = ResourceManager.GetObject("PlanarObject", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlanarOutline {
+            get {
+                object obj = ResourceManager.GetObject("PlanarOutline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlanarSet {
+            get {
+                object obj = ResourceManager.GetObject("PlanarSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlaneScore {
+            get {
+                object obj = ResourceManager.GetObject("PlaneScore", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RadialSignature {
+            get {
+                object obj = ResourceManager.GetObject("RadialSignature", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RotatePCA {
+            get {
+                object obj = ResourceManager.GetObject("RotatePCA", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SphereScore {
+            get {
+                object obj = ResourceManager.GetObject("SphereScore", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SphereSet {
+            get {
+                object obj = ResourceManager.GetObject("SphereSet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SphericalObject {
+            get {
+                object obj = ResourceManager.GetObject("SphericalObject", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ToPointCloud {
+            get {
+                object obj = ResourceManager.GetObject("ToPointCloud", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

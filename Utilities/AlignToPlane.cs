@@ -51,10 +51,10 @@ namespace DigitalCircularityToolkit.Utilities
 
             Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, pl);
 
-            DesignObject newobject = obj.TransformObject(transformer);
+            obj = obj.TransformObject(transformer);
 
-            DA.SetData(0, newobject);
-            DA.SetData(1, newobject.Geometry);
+            DA.SetData(0, obj);
+            DA.SetData(1, obj.Geometry);
             DA.SetData(2, transformer);
         }
 
@@ -65,9 +65,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return null;
+                return Properties.Resources.AlignToPlane;
             }
         }
 

@@ -94,7 +94,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.BoxObject_zoomed;
+                return Properties.Resources.BoxObject;
             }
         }
 

@@ -94,7 +94,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.PlanarObject_zoomed;
+                return Properties.Resources.PlanarObject;
             }
         }
 

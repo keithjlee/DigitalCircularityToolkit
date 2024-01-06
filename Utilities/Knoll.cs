@@ -129,10 +129,8 @@ namespace DigitalCircularityToolkit.Utilities
     protected override System.Drawing.Bitmap Icon
     {
       get
-      { 
-        // You can add image files to your project resources and access them like this:
-        //return Resources.IconForThisComponent;
-        return null;
+      {
+                return Properties.Resources.Knoll;
       }
     }
 

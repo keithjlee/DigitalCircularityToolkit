@@ -67,7 +67,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.PCA_zoomed;
+                return Properties.Resources.OverridePCA;
             }
         }
 
