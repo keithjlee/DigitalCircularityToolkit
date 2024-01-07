@@ -59,17 +59,13 @@ namespace DigitalCircularityToolkit.Utilities
 
             Curve shadow = null;
 
-            var curve = obj.Geometry as Curve;
-            if (curve != null) shadow = GetShadow(curve, plane);
+            if (obj.Geometry is Curve curve) shadow = GetShadow(curve, plane);
 
-            var brep = obj.Geometry as Brep;
-            if (brep != null) shadow = GetShadow(brep, plane);
+            if (obj.Geometry is Brep brep) shadow = GetShadow(brep, plane);
 
-            var mesh = obj.Geometry as Mesh;
-            if (mesh != null) shadow = GetShadow(mesh, plane);
+            if (obj.Geometry is Mesh mesh) shadow = GetShadow(mesh, plane);
 
-            var pc = obj.Geometry as PointCloud;
-            if (pc != null) shadow = GetShadow(pc, plane);
+            if (obj.Geometry is PointCloud pc) shadow = GetShadow(pc, plane);
 
             DA.SetData(0, shadow);
 
