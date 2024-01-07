@@ -34,6 +34,7 @@ namespace DigitalCircularityToolkit.Objects
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Design object", GH_ParamAccess.item);
+            pManager.AddGeometryParameter("Geometry", "Geo", "Passed through geometry", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -65,6 +66,7 @@ namespace DigitalCircularityToolkit.Objects
             if (pointcloud != null) obj = new DesignObject(pointcloud, n, pca_user);
 
             DA.SetData(0, obj);
+            DA.SetData(1, obj.Geometry);
         }
 
         /// <summary>
