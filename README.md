@@ -22,4 +22,8 @@ Released privately to students taking the MIT IAP2024 workshop 4.181 Digital Cir
 6. Orientation
 7. Distance
    
-![](resources/Complete.png)
+![](Resources/Complete.png)
+
+<!-- # Objects
+![](Resources/)
+All analysis in DigitalCircularityToolkit revolves around `Object`s. In its most generic form, you can input a curve, BRep, or mesh as an object: -->
