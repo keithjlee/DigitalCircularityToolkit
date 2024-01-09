@@ -29,9 +29,12 @@ namespace SheetReader
             pManager.AddTextParameter("CSV Path", "P", "Path to the CSV file", GH_ParamAccess.item);
 
             // Set starting column
-            pManager.AddTextParameter("Starting column", "I", "Starting column of your sheet. " +
+            pManager.AddTextParameter("Starting column", "C", "Starting column of your sheet. " +
                 "Should also contain your id's. Input should be " +
                 "the column Letter! (A for first column etc.)", GH_ParamAccess.item, "A");
+
+            // Set starting row
+            pManager.AddIntegerParameter("Starting row", "R", "The row number where your actual data starts. 1 For the first row etc.", GH_ParamAccess.item, 1);
 
             // Set number of dimensions
             pManager.AddIntegerParameter("Number of dimensions", "D", "Number of " +
@@ -71,9 +74,14 @@ namespace SheetReader
             if (!DA.GetData(1, ref startColumnLetter)) return;
             int startColumn = ColumnLetterToNumber(startColumnLetter);
 
+            // Start row index
+            int startRow = 0;
+            if (!DA.GetData(2, ref startRow)) return;
+            startRow -= 1; // Because of 0-indexing
+
             // Number of dimensions
             int numDimensions = 3;
-            if (!DA.GetData(2, ref numDimensions)) return;
+            if (!DA.GetData(3, ref numDimensions)) return;
 
             // Initialize dim list for each row
             List<List<double>> dims = new List<List<double>>();
@@ -89,8 +97,11 @@ namespace SheetReader
             try
             {
                 string[] lines = File.ReadAllLines(filePath);
-                foreach (string line in lines)
+
+                for (int i = startRow; i < lines.Length; i++)
                 {
+                    string line = lines[i];
+                    
                     // Current row list
                     List<double> currentRow = new List<double>();
 
@@ -102,9 +113,9 @@ namespace SheetReader
 
                     // Iterate over the columns, starting from the startColumn index
                     // and considering up to numDimensions columns
-                    for (int i = startColumn + 2; i < Math.Min(parts.Length, startColumn + 2 + numDimensions); i++)
+                    for (int j = startColumn + 2; j < Math.Min(parts.Length, startColumn + 2 + numDimensions); j++)
                     {
-                        if (double.TryParse(parts[i], out double value))
+                        if (double.TryParse(parts[j], out double value))
                         {
                             currentRow.Add(value);
                         }
