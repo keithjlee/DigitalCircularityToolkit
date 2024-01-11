@@ -48,9 +48,15 @@ namespace DigitalCircularityToolkit.Input
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
 
+            //0
             pManager.AddBrepParameter("geo", "geo", "geo", GH_ParamAccess.tree);
+            //1
             pManager.AddNumberParameter("Dimensions", "dims", "dims", GH_ParamAccess.tree);
+            //2
             pManager.AddTextParameter("Identifier", "id", "Identifier", GH_ParamAccess.list);
+            //3
+            pManager.AddNumberParameter("Google", "Google", "Google", GH_ParamAccess.list);
+
 
 
         }
@@ -62,6 +68,39 @@ namespace DigitalCircularityToolkit.Input
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Live link
+
+            var googleSheetsReader = new GoogleSheetsReader("C:/Users/soere/OneDrive/Desktop/sheets/client_secret_2.json");
+            string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
+            string range = "B8:B18"; // Example range, also from input
+
+
+            IList<IList<Object>> sheetData = googleSheetsReader.ReadSheetData(spreadsheetId, range);
+
+            // Process sheetData and convert it to a suitable Grasshopper format
+            GH_Structure<GH_String> ghSheetData = new GH_Structure<GH_String>();
+            for (int i = 0; i < sheetData.Count; i++)
+            {
+                var row = sheetData[i];
+                List<GH_String> ghRow = new List<GH_String>();
+                foreach (var cell in row)
+                {
+                    // Assuming all data in sheetData are stringss.
+                    // Modify this part if you have different types of data
+                    ghRow.Add(new GH_String(cell.ToString()));
+                }
+                ghSheetData.AppendRange(ghRow, new GH_Path(i));
+            }
+
+            // Set the converted data to an output parameter, for example to parameter index 3
+            DA.SetDataTree(3, ghSheetData);
+
+
+
+            // Process sheetData as needed for your component
+
+
+
             // Getting the data
 
             // CSV
@@ -239,6 +278,6 @@ namespace DigitalCircularityToolkit.Input
         protected override System.Drawing.Bitmap Icon => null;
 
 
-        public override Guid ComponentGuid => new Guid("96BE80AA-6FF6-4343-AF1D-221C67F834A6");
+        public override Guid ComponentGuid => new Guid("BB2F194E-671B-4FDB-82E3-1355A563260D");
     }
 }
