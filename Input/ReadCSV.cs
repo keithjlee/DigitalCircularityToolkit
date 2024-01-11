@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 
-namespace SheetReader
+namespace DigitalCircularityToolkit.Input
 {
     public class SheetReaderComponent : GH_Component
     {
