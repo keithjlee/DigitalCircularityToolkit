@@ -40,6 +40,8 @@ namespace DigitalCircularityToolkit.Input
             pManager.AddIntegerParameter("Number of dimensions", "D", "Number of " +
                 "feature dimensions of your object type", GH_ParamAccess.item, 3);
 
+            pManager.AddBooleanParameter("Refresh", "R", "Refresh sheet data", GH_ParamAccess.item);
+
         }
 
         /// <summary>
