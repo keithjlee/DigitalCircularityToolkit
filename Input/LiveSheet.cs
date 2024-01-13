@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Input
     {
 
         public LiveSheetComponent()
-          : base("LiveSheet", "LiveSht",
+          : base("ReadSheet", "ReadS",
             "Read inventory data from Googlde sheet. The columns should be arranged in the following order: ID, Qty, Dim1, Dim2, Dim3...,",
             "DigitalCircularityToolkit", "Input")
         {
@@ -71,7 +71,6 @@ namespace DigitalCircularityToolkit.Input
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Live link
-
             var googleSheetsReader = new GoogleSheetsReader("C:/Users/soere/OneDrive/Desktop/sheets/client_secret_2.json");
             string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
             string range = "B8:B18"; // Example range, also from input
@@ -97,11 +96,7 @@ namespace DigitalCircularityToolkit.Input
             // Set the converted data to an output parameter, for example to parameter index 3
             DA.SetDataTree(3, ghSheetData);
 
-
-
             // Process sheetData as needed for your component
-
-
 
             // Getting the data
 
