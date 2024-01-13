@@ -6,6 +6,8 @@ using System.IO;
 using System.Collections.Generic;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
+using Grasshopper.Documentation;
+using System.Linq;
 
 namespace DigitalCircularityToolkit.Input
 {
@@ -62,9 +64,9 @@ namespace DigitalCircularityToolkit.Input
             //1
             pManager.AddNumberParameter("Dimensions", "dims", "dims", GH_ParamAccess.tree);
             //2
-            pManager.AddTextParameter("Identifier", "id", "Identifier", GH_ParamAccess.list);
+            pManager.AddTextParameter("Identifier", "id", "Identifier", GH_ParamAccess.tree);
             //3
-            pManager.AddNumberParameter("Test", "Test", "test", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Test", "Test", "test", GH_ParamAccess.tree);
 
 
         }
@@ -112,8 +114,33 @@ namespace DigitalCircularityToolkit.Input
 
             IList<IList<Object>> sheetData = googleSheetsReader.ReadSheetData(spreadsheetId, range);
 
+            // Initialize the tree for geometries
+            GH_Structure<GH_Brep> geoTree = new GH_Structure<GH_Brep>();
+
+            foreach (var row in sheetData)
+            {
+                // Assuming the last three values in each row are width, height, and length
+                // and the second value is quantity
+                if (row.Count >= numDimensions + 2)
+                {
+                    // Parse dimensions and quantity
+                    double width = Convert.ToDouble(row[row.Count - 3]);
+                    double height = Convert.ToDouble(row[row.Count - 2]);
+                    double length = Convert.ToDouble(row[row.Count - 1]);
+                    int quantity = Convert.ToInt32(row[1]);
+                    // Construct the brep
+                    GH_Brep brep = ConstructBrep(width, height, length, quantity);
+
+                    // Add the brep to the tree
+                    geoTree.Append(brep, new GH_Path(geoTree.PathCount));
+                }
+            }
+
+            // Set the geometry tree to the output parameter
+            DA.SetDataTree(0, geoTree);
+
             // Process sheetData and convert it to a suitable Grasshopper format
-            GH_Structure<GH_String> ghSheetData = new GH_Structure<GH_String>();
+            GH_Structure <GH_String> ghSheetData = new GH_Structure<GH_String>();
             for (int i = 0; i < sheetData.Count; i++)
             {
                 var row = sheetData[i];
@@ -127,11 +154,11 @@ namespace DigitalCircularityToolkit.Input
                 ghSheetData.AppendRange(ghRow, new GH_Path(i));
             }
 
-            // Set the converted data to an output parameter, for example to parameter index 3
-            DA.SetDataTree(3, ghSheetData);
-
             // Process sheetData as needed for your component
 
+
+            // Set the converted data to an output parameter, for example to parameter index 3
+            DA.SetDataTree(3, ghSheetData);
 
         }
 
@@ -177,6 +204,45 @@ namespace DigitalCircularityToolkit.Input
 
             return range;
         }
+
+        private GH_Brep ConstructBrep(double width, double height, double length, int quantity)
+        {
+            // Create a list to hold the duplicated Breps
+            List<GH_Brep> breps = new List<GH_Brep>();
+
+            // Define the base point for the box (can be changed based on requirements)
+            Point3d basePoint = new Point3d(0, 0, 0);
+
+            // Create a box with the given dimensions
+            Box box = new Box(Plane.WorldXY, new Interval(0, width), new Interval(0, height), new Interval(0, length));
+            Brep brep = box.ToBrep();
+
+            // Duplicate the brep according to the quantity
+            for (int i = 0; i < quantity; i++)
+            {
+                breps.Add(new GH_Brep(brep));
+            }
+
+            // If there's only one brep, return it directly
+            if (breps.Count == 1)
+            {
+                return breps[0];
+            }
+
+            // If multiple breps, return a new GH_Brep containing all of them
+            return new GH_Brep(Brep.JoinBreps(breps.Select(b => b.Value).ToList(), 0.01)[0]);
+        }
+
+
+ /*       private GH_Number ConstructDim()
+        {
+
+        }
+
+        private GH_Text ConstructID()
+        {
+
+        }*/
 
 
         protected override System.Drawing.Bitmap Icon => null;
