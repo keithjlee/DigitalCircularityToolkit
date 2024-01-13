@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Input
     {
 
         public SheetReaderComponent()
-          : base("ReadSheet", "ReadCSV",
+          : base("ReadCSV", "ReadCSV",
             "Read inventory data from sheet. The columns should be arranged in the following order: ID, Qty, Dim1, Dim2, Dim3...,",
             "DigitalCircularityToolkit", "Input")
         {

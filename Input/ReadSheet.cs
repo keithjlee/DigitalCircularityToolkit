@@ -9,10 +9,10 @@ using Grasshopper.Kernel.Types;
 
 namespace DigitalCircularityToolkit.Input
 {
-    public class LiveSheetComponent : GH_Component
+    public class ReadSheet : GH_Component
     {
 
-        public LiveSheetComponent()
+        public ReadSheet()
           : base("ReadSheet", "ReadS",
             "Read inventory data from Googlde sheet. The columns should be arranged in the following order: ID, Qty, Dim1, Dim2, Dim3...,",
             "DigitalCircularityToolkit", "Input")
@@ -25,21 +25,23 @@ namespace DigitalCircularityToolkit.Input
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
 
-            // Set path
+            // 0 Set path
             pManager.AddTextParameter("CSV Path", "P", "Path to the CSV file", GH_ParamAccess.item);
 
-            // Set starting column
+            // 1 Set starting column
             pManager.AddTextParameter("Starting column", "C", "Starting column of your sheet. " +
                 "Should also contain your id's. Input should be " +
                 "the column Letter! (A for first column etc.)", GH_ParamAccess.item, "A");
 
-            // Set starting row
-            pManager.AddIntegerParameter("Starting row", "R", "The row number where your actual data starts. 1 For the first row etc.", GH_ParamAccess.item, 1);
+            // 2 Set starting row
+            pManager.AddIntegerParameter("Starting row", "R", "The row number where your actual data starts. " +
+                "1 For the first row etc.", GH_ParamAccess.item, 1);
 
-            // Set number of dimensions
+            // 3 Set number of dimensions
             pManager.AddIntegerParameter("Number of dimensions", "D", "Number of " +
                 "feature dimensions of your object type", GH_ParamAccess.item, 3);
 
+            // 4 Refresh
             pManager.AddBooleanParameter("Refresh", "R", "Refresh sheet data", GH_ParamAccess.item);
 
         }
@@ -57,8 +59,7 @@ namespace DigitalCircularityToolkit.Input
             //2
             pManager.AddTextParameter("Identifier", "id", "Identifier", GH_ParamAccess.list);
             //3
-            pManager.AddNumberParameter("Google", "Google", "Google", GH_ParamAccess.list);
-
+            pManager.AddTextParameter("Test", "Test", "test", GH_ParamAccess.item);
 
 
         }
@@ -70,10 +71,14 @@ namespace DigitalCircularityToolkit.Input
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            //Test ConstructRange
+            string rangeTest = ConstructRange("Sheet4", "A", 3, 3);
+            DA.SetData(3, rangeTest);
+            
             // Live link
             var googleSheetsReader = new GoogleSheetsReader("C:/Users/soere/OneDrive/Desktop/sheets/client_secret_2.json");
             string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
-            string range = "B8:B18"; // Example range, also from input
+            string range = "Sheet4!A3:E13"; // Example range, also from input
 
 
             IList<IList<Object>> sheetData = googleSheetsReader.ReadSheetData(spreadsheetId, range);
@@ -94,7 +99,7 @@ namespace DigitalCircularityToolkit.Input
             }
 
             // Set the converted data to an output parameter, for example to parameter index 3
-            DA.SetDataTree(3, ghSheetData);
+            // DA.SetDataTree(3, ghSheetData);
 
             // Process sheetData as needed for your component
 
@@ -107,7 +112,7 @@ namespace DigitalCircularityToolkit.Input
 
             // Start column
             string startColumnLetter = "A";
-            if (!DA.GetData(1, ref startColumnLetter)) return;
+            DA.GetData(1, ref startColumnLetter);
             int startColumn = ColumnLetterToNumber(startColumnLetter);
 
             // Start row index
@@ -256,7 +261,9 @@ namespace DigitalCircularityToolkit.Input
             DA.SetDataTree(2, id_tree);
         }
 
-
+        // ============================================================
+        // HELPER FUNCTIONS
+        // ============================================================
 
         private int ColumnLetterToNumber(string columnLetter)
         {
@@ -269,6 +276,32 @@ namespace DigitalCircularityToolkit.Input
                 columnNumber += (columnLetter[i] - 'A' + 1);
             }
             return columnNumber - 1; // Subtract 1 to make it zero-based
+        }
+
+        private string ColumnNumberToLetter(int columnNumber)
+        {
+            string columnLetter = String.Empty;
+            int modulo;
+
+            while (columnNumber > 0)
+            {
+                modulo = (columnNumber) % 26;
+                columnLetter = Convert.ToChar('A' + modulo) + columnLetter;
+                columnNumber = (columnNumber - modulo) / 26;
+            }
+
+            return columnLetter;
+        }
+
+        private string ConstructRange(string sheet, string startingColumn, int startingRow, int dimCount)
+        {
+            int startColumnNumber = ColumnLetterToNumber(startingColumn);
+            int endColumnNumber = startColumnNumber + dimCount + 1;
+            string endColumn = ColumnNumberToLetter(endColumnNumber);
+
+            string range = sheet + "!" + startingColumn + startingRow + ":" + endColumn;
+
+            return range;
         }
 
 
