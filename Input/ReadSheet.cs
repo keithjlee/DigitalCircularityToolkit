@@ -59,7 +59,7 @@ namespace DigitalCircularityToolkit.Input
             //2
             pManager.AddTextParameter("Identifier", "id", "Identifier", GH_ParamAccess.list);
             //3
-            pManager.AddTextParameter("Test", "Test", "test", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Test", "Test", "test", GH_ParamAccess.tree);
 
 
         }
@@ -71,14 +71,35 @@ namespace DigitalCircularityToolkit.Input
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Test ConstructRange
-            string rangeTest = ConstructRange("Sheet4", "A", 3, 3);
-            DA.SetData(3, rangeTest);
-            
+            // ===========================================================
+            // INPUTS
+            // ===========================================================
+
+            // CSV
+            string filePath = null;
+            if (!DA.GetData(0, ref filePath)) return; // If no data or wrong data type, exit
+            if (!File.Exists(filePath)) return; // If file doesn't exist, exit
+
+            // Start column
+            string startColumnLetter = "";
+            DA.GetData(1, ref startColumnLetter);
+            int startColumn = ColumnLetterToNumber(startColumnLetter);
+
+            // Start row index
+            int startRow = 0;
+            if (!DA.GetData(2, ref startRow)) return;
+            startRow -= 1; // Because of 0-indexing
+
+            // Number of dimensions
+            int numDimensions = 3;
+            if (!DA.GetData(3, ref numDimensions)) return;
+
+
             // Live link
             var googleSheetsReader = new GoogleSheetsReader("C:/Users/soere/OneDrive/Desktop/sheets/client_secret_2.json");
             string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
             string range = "Sheet4!A3:E13"; // Example range, also from input
+            range = ConstructRange("Sheet4", startColumnLetter, startRow + 1, numDimensions);
 
 
             IList<IList<Object>> sheetData = googleSheetsReader.ReadSheetData(spreadsheetId, range);
@@ -99,30 +120,10 @@ namespace DigitalCircularityToolkit.Input
             }
 
             // Set the converted data to an output parameter, for example to parameter index 3
-            // DA.SetDataTree(3, ghSheetData);
+            DA.SetDataTree(3, ghSheetData);
 
             // Process sheetData as needed for your component
 
-            // Getting the data
-
-            // CSV
-            string filePath = null;
-            if (!DA.GetData(0, ref filePath)) return; // If no data or wrong data type, exit
-            if (!File.Exists(filePath)) return; // If file doesn't exist, exit
-
-            // Start column
-            string startColumnLetter = "A";
-            DA.GetData(1, ref startColumnLetter);
-            int startColumn = ColumnLetterToNumber(startColumnLetter);
-
-            // Start row index
-            int startRow = 0;
-            if (!DA.GetData(2, ref startRow)) return;
-            startRow -= 1; // Because of 0-indexing
-
-            // Number of dimensions
-            int numDimensions = 3;
-            if (!DA.GetData(3, ref numDimensions)) return;
 
             // Initialize dim list for each row
             List<List<double>> dims = new List<List<double>>();
