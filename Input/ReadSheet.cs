@@ -26,22 +26,27 @@ namespace DigitalCircularityToolkit.Input
         {
 
             // 0 Set path
-            pManager.AddTextParameter("CSV Path", "P", "Path to the CSV file", GH_ParamAccess.item);
+            pManager.AddTextParameter("Client secret file path", "CS", "Path to the client " +
+                "secret file (Supplied by instructors)", GH_ParamAccess.item);
 
-            // 1 Set starting column
+            // 1 Sheet name
+            pManager.AddTextParameter("Sheet name", "S", "Sheet name typed out " +
+                "excactly as in the bottom of your sheet (eg. Sheet5)", GH_ParamAccess.item);
+
+            // 2 Set starting column
             pManager.AddTextParameter("Starting column", "C", "Starting column of your sheet. " +
                 "Should also contain your id's. Input should be " +
                 "the column Letter! (A for first column etc.)", GH_ParamAccess.item, "A");
 
-            // 2 Set starting row
+            // 3 Set starting row
             pManager.AddIntegerParameter("Starting row", "R", "The row number where your actual data starts. " +
                 "1 For the first row etc.", GH_ParamAccess.item, 1);
 
-            // 3 Set number of dimensions
+            // 4 Set number of dimensions
             pManager.AddIntegerParameter("Number of dimensions", "D", "Number of " +
                 "feature dimensions of your object type", GH_ParamAccess.item, 3);
 
-            // 4 Refresh
+            // 5 Refresh
             pManager.AddBooleanParameter("Refresh", "R", "Refresh sheet data", GH_ParamAccess.item);
 
         }
@@ -75,31 +80,34 @@ namespace DigitalCircularityToolkit.Input
             // INPUTS
             // ===========================================================
 
-            // CSV
-            string filePath = null;
-            if (!DA.GetData(0, ref filePath)) return; // If no data or wrong data type, exit
-            if (!File.Exists(filePath)) return; // If file doesn't exist, exit
+            // Client Secret
+            string filePathClientSecret = null;
+            DA.GetData(0, ref filePathClientSecret);
+
+            // Sheet name
+            string sheetName = null;
+            DA.GetData(1, ref sheetName);
 
             // Start column
             string startColumnLetter = "";
-            DA.GetData(1, ref startColumnLetter);
+            DA.GetData(2, ref startColumnLetter);
             int startColumn = ColumnLetterToNumber(startColumnLetter);
 
             // Start row index
             int startRow = 0;
-            if (!DA.GetData(2, ref startRow)) return;
+            DA.GetData(3, ref startRow);
             startRow -= 1; // Because of 0-indexing
 
             // Number of dimensions
             int numDimensions = 3;
-            if (!DA.GetData(3, ref numDimensions)) return;
+            DA.GetData(4, ref numDimensions);
 
 
             // Live link
-            var googleSheetsReader = new GoogleSheetsReader("C:/Users/soere/OneDrive/Desktop/sheets/client_secret_2.json");
+            var googleSheetsReader = new GoogleSheetsReader(filePathClientSecret);
             string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
-            string range = "Sheet4!A3:E13"; // Example range, also from input
-            range = ConstructRange("Sheet4", startColumnLetter, startRow + 1, numDimensions);
+            string range = null;
+            range = ConstructRange(sheetName, startColumnLetter, startRow + 1, numDimensions);
 
 
             IList<IList<Object>> sheetData = googleSheetsReader.ReadSheetData(spreadsheetId, range);
