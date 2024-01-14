@@ -44,16 +44,24 @@ namespace DigitalCircularityToolkit.Input
             pManager.AddIntegerParameter("Starting row", "R", "The row number where your actual data starts. " +
                 "1 For the first row etc.", GH_ParamAccess.item, 1);
 
-            // 4 Dim1
+            // 4 Identity (ID) parameter
+            pManager.AddTextParameter("Identity (ID)", "ID", "Identity for the object (eg. balsa_sticks", GH_ParamAccess.item);
+
+            // 5 Quantity (Qty) parameter
+            pManager.AddNumberParameter("Quantity (Qty)", "Qty", "List of quantities for each row", GH_ParamAccess.list);
+
+            // 6 Dim1
             pManager.AddNumberParameter("Dimension 1", "D1", "List of first dimensions eg. Lenght", GH_ParamAccess.list);
 
-            // 5 Dim2
+            // 7 Dim2
             pManager.AddNumberParameter("Dimension 2", "D2", "List of second dimensions eg. Width", GH_ParamAccess.list);
 
-            // 6 Dim3
+            // 8 Dim3
             pManager.AddNumberParameter("Dimension 3", "D3", "List of third dimensions eg. height", GH_ParamAccess.list);
-
             pManager[6].Optional = true;
+
+            // 9 Add a button parameter
+            pManager.AddBooleanParameter("Write to Sheet", "W", "Press button to write data to the sheet", GH_ParamAccess.item, false);
 
 
         }
@@ -90,15 +98,23 @@ namespace DigitalCircularityToolkit.Input
             int startRow = 0;
             DA.GetData(3, ref startRow);
 
+            // Identity (ID) - new input at index 4
+            string idText = null;
+            DA.GetData(4, ref idText);
+
+            // Quantity (Qty) - new input at index 5
+            List<double> qtyList = new List<double>();
+            DA.GetDataList(5, qtyList);
+
             // Lists for dimensions
             List<double> dim1 = new List<double>();
             List<double> dim2 = new List<double>();
             List<double> dim3 = new List<double>();
 
             // Get the data as List<double> for all dimensions
-            DA.GetDataList(4, dim1);
-            DA.GetDataList(5, dim2);
-            DA.GetDataList(6, dim3);
+            DA.GetDataList(6, dim1);
+            DA.GetDataList(7, dim2);
+            DA.GetDataList(8, dim3);
 
             // Check if all lists are of the same length
             if (dim1.Count != dim2.Count || dim2.Count != dim3.Count)
@@ -106,6 +122,17 @@ namespace DigitalCircularityToolkit.Input
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Dimension lists are not of the same length.");
                 return;
             }
+
+            //============================================================
+            //BODY
+            //============================================================
+
+            // Button state
+            bool writeToSheet = false;
+            DA.GetData(9, ref writeToSheet);
+
+            // Only proceed if the button is pressed
+            if (!writeToSheet) return;
 
             // Live link
             var googleSheetsConnect = new GoogleSheetsConnect(filePathClientSecret);
@@ -115,14 +142,13 @@ namespace DigitalCircularityToolkit.Input
             IList<IList<Object>> values = new List<IList<Object>>();
             for (int i = 0; i < dim1.Count; i++)
             {
-                values.Add(new List<Object> { dim1[i], dim2[i], dim3[i] });
+                string idWithIndex = idText + "_" + (i + 1).ToString(); // Concatenating ID with index
+                values.Add(new List<Object> { idWithIndex, qtyList[i], dim1[i], dim2[i], dim3[i] });
             }
 
-            // Calculate the ending column letter
-            char endingColumnLetter = (char)(startColumnLetter[0] + 2); // Assuming startColumnLetter is a single character
-
             // Define range
-            string range = $"{sheetName}!{startColumnLetter}{startRow}:{endingColumnLetter}{startRow + dim1.Count - 1}";
+            string endColumnLetter = ((char)(startColumnLetter[0] + 4)).ToString(); // Adjusted for 5 columns (ID, Qty, Dim1, Dim2, Dim3)
+            string range = $"{sheetName}!{startColumnLetter}{startRow}:{endColumnLetter}{startRow + dim1.Count - 1}";
 
             // Write to Google Sheets
             googleSheetsConnect.WriteSheetData(spreadsheetId, range, values);
