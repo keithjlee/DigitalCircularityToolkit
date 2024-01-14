@@ -51,7 +51,7 @@ namespace DigitalCircularityToolkit.Input
             pManager.AddNumberParameter("Dimension 2", "D2", "List of second dimensions eg. Width", GH_ParamAccess.list);
 
             // 6 Dim3
-            pManager.AddIntegerParameter("Dimension 3", "D3", "List of third dimensions eg. height", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Dimension 3", "D3", "List of third dimensions eg. height", GH_ParamAccess.list);
 
             pManager[6].Optional = true;
 
@@ -61,10 +61,7 @@ namespace DigitalCircularityToolkit.Input
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-  
-        }
+        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager) { }
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -93,26 +90,42 @@ namespace DigitalCircularityToolkit.Input
             int startRow = 0;
             DA.GetData(3, ref startRow);
 
-            // dim1
-            GH_List dim1 = null;
-            DA.GetData(4, ref dim1);
+            // Lists for dimensions
+            List<double> dim1 = new List<double>();
+            List<double> dim2 = new List<double>();
+            List<double> dim3 = new List<double>();
 
-            // dim2
-            GH_List dim2 = null;
-            DA.GetData(4, ref dim2);
+            // Get the data as List<double> for all dimensions
+            DA.GetDataList(4, dim1);
+            DA.GetDataList(5, dim2);
+            DA.GetDataList(6, dim3);
 
-            // dim3
-            GH_List dim3 = null;
-            DA.GetData(4, ref dim3);
-
-            //===========================================================
-            //BODY
-            //===========================================================
-
+            // Check if all lists are of the same length
+            if (dim1.Count != dim2.Count || dim2.Count != dim3.Count)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Dimension lists are not of the same length.");
+                return;
+            }
 
             // Live link
             var googleSheetsConnect = new GoogleSheetsConnect(filePathClientSecret);
             string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
+
+            // Construct data for Google Sheets
+            IList<IList<Object>> values = new List<IList<Object>>();
+            for (int i = 0; i < dim1.Count; i++)
+            {
+                values.Add(new List<Object> { dim1[i], dim2[i], dim3[i] });
+            }
+
+            // Calculate the ending column letter
+            char endingColumnLetter = (char)(startColumnLetter[0] + 2); // Assuming startColumnLetter is a single character
+
+            // Define range
+            string range = $"{sheetName}!{startColumnLetter}{startRow}:{endingColumnLetter}{startRow + dim1.Count - 1}";
+
+            // Write to Google Sheets
+            googleSheetsConnect.WriteSheetData(spreadsheetId, range, values);
 
         }
 

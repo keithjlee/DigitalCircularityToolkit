@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Collections.Generic;
 using System;
+using Google.Apis.Auth.OAuth2.Flows;
 
 namespace DigitalCircularityToolkit.Input
 {
@@ -30,6 +31,29 @@ namespace DigitalCircularityToolkit.Input
                     "user", CancellationToken.None).Result; // Synchronous call for simplicity
             }
         }
+
+
+        /*private void Authenticate(string clientSecretFilePath)
+        {
+            using (var stream = new FileStream(clientSecretFilePath, FileMode.Open, FileAccess.Read))
+            {
+                // Initialize the authorization request
+                var initializer = new GoogleAuthorizationCodeFlow.Initializer
+                {
+                    ClientSecrets = GoogleClientSecrets.FromStream(stream).Secrets,
+                    Scopes = Scopes
+                };
+
+                var flow = new GoogleAuthorizationCodeFlow(initializer);
+
+                // Create a code receiver that forces a new prompt
+                var codeReceiver = new LocalServerCodeReceiver();
+
+                // Generate new token
+                credential = new AuthorizationCodeInstalledApp(flow, codeReceiver).AuthorizeAsync("user", CancellationToken.None).Result;
+            }
+        }*/
+
 
         public IList<IList<Object>> ReadSheetData(string spreadsheetId, string range)
         {
