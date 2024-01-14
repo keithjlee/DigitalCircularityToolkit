@@ -79,87 +79,69 @@ namespace DigitalCircularityToolkit.Input
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // ===========================================================
-            // INPUTS
-            // ===========================================================
-
-            // Client Secret
+            // Retrieve inputs
             string filePathClientSecret = null;
-            DA.GetData(0, ref filePathClientSecret);
-
-            // Sheet name
             string sheetName = "Sheet1";
-            DA.GetData(1, ref sheetName);
-
-            // Start column
             string startColumnLetter = "A";
-            DA.GetData(2, ref startColumnLetter);
-
-            // Start row index
             int startRow = 0;
-            DA.GetData(3, ref startRow);
-
-            // Identity (ID) - new input at index 4
             string idText = null;
-            DA.GetData(4, ref idText);
-
-            // Lists for dimensions
+            List<double> qtyList = new List<double>();
             List<double> dim1 = new List<double>();
             List<double> dim2 = new List<double>();
             List<double> dim3 = new List<double>();
 
-            // Get the data as List<double> for all dimensions
+            DA.GetData(0, ref filePathClientSecret);
+            DA.GetData(1, ref sheetName);
+            DA.GetData(2, ref startColumnLetter);
+            DA.GetData(3, ref startRow);
+            DA.GetData(4, ref idText);
+            DA.GetDataList(5, qtyList); // Quantity list
             DA.GetDataList(6, dim1);
             DA.GetDataList(7, dim2);
-            DA.GetDataList(8, dim3);
+            bool dim3Provided = DA.GetDataList(8, dim3) && dim3.Count > 0;
 
-            // Retrieve and handle Quantity (Qty)
-            List<double> qtyList = new List<double>();
-            if (!DA.GetDataList(5, qtyList) || qtyList.Count == 0)
+            // Default quantity to 1 if not provided
+            if (qtyList.Count == 0)
             {
-                // Default to a quantity of 1 for each item
                 qtyList = Enumerable.Repeat(1.0, dim1.Count).ToList();
             }
 
-            // Check if all lists are of the same length
-            if (dim1.Count != dim2.Count || dim2.Count != dim3.Count)
+            // Check dimensions' lengths
+            if (dim1.Count != dim2.Count || (dim3Provided && dim3.Count > dim1.Count))
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Dimension lists are not of the same length.");
                 return;
             }
 
-            //============================================================
-            //BODY
-            //============================================================
-
             // Button state
             bool writeToSheet = false;
             DA.GetData(9, ref writeToSheet);
-
-            // Only proceed if the button is pressed
             if (!writeToSheet) return;
-
-            // Live link
-            var googleSheetsConnect = new GoogleSheetsConnect(filePathClientSecret);
-            string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
 
             // Construct data for Google Sheets
             IList<IList<Object>> values = new List<IList<Object>>();
             for (int i = 0; i < dim1.Count; i++)
             {
-                string idWithIndex = idText + "_" + (i + 1).ToString(); // Concatenating ID with index
-                double quantity = i < qtyList.Count ? qtyList[i] : 1; // Use qtyList value or default to 1 if qtyList is shorter than dim lists
-                values.Add(new List<Object> { idWithIndex, quantity, dim1[i], dim2[i], dim3[i] });
+                string idWithIndex = idText + "_" + (i + 1).ToString();
+                double quantity = qtyList.Count > i ? qtyList[i] : 1;
+                List<Object> rowValues = new List<Object> { idWithIndex, quantity, dim1[i], dim2[i] };
+                if (dim3Provided && i < dim3.Count)
+                {
+                    rowValues.Add(dim3[i]);
+                }
+                values.Add(rowValues);
             }
 
             // Define range
-            string endColumnLetter = ((char)(startColumnLetter[0] + 4)).ToString(); // Adjusted for 5 columns (ID, Qty, Dim1, Dim2, Dim3)
+            string endColumnLetter = dim3Provided ? ((char)(startColumnLetter[0] + 4)).ToString() : ((char)(startColumnLetter[0] + 3)).ToString();
             string range = $"{sheetName}!{startColumnLetter}{startRow}:{endColumnLetter}{startRow + dim1.Count - 1}";
 
             // Write to Google Sheets
+            var googleSheetsConnect = new GoogleSheetsConnect(filePathClientSecret);
+            string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs";
             googleSheetsConnect.WriteSheetData(spreadsheetId, range, values);
-
         }
+
 
         // ============================================================
         // HELPER FUNCTIONS
