@@ -65,10 +65,7 @@ namespace DigitalCircularityToolkit.Input
             pManager.AddNumberParameter("Dimensions", "dims", "dims", GH_ParamAccess.tree);
             //2
             pManager.AddTextParameter("Identifier", "id", "Identifier", GH_ParamAccess.tree);
-            //3
-            pManager.AddTextParameter("Test", "Test", "test", GH_ParamAccess.tree);
-
-
+  
         }
 
         /// <summary>
@@ -138,26 +135,37 @@ namespace DigitalCircularityToolkit.Input
 
             DA.SetDataTree(0, geoTree);
 
-            // Process sheetData and convert it to a suitable Grasshopper format
-            GH_Structure <GH_String> ghSheetData = new GH_Structure<GH_String>();
-            for (int i = 0; i < sheetData.Count; i++)
+            // Initialize the tree for dimensions
+            GH_Structure<GH_Number> dimTree = new GH_Structure<GH_Number>();
+
+            foreach (var row in sheetData)
             {
-                var row = sheetData[i];
-                List<GH_String> ghRow = new List<GH_String>();
-                foreach (var cell in row)
+                if (row.Count >= numDimensions + 2)
                 {
-                    // Assuming all data in sheetData are stringss.
-                    // Modify this part if you have different types of data
-                    ghRow.Add(new GH_String(cell.ToString()));
+                    List<GH_Number> dimensions = ConstructDim(row, numDimensions);
+
+                    GH_Path path = new GH_Path(dimTree.PathCount);
+                    foreach (GH_Number dim in dimensions)
+                    {
+                        dimTree.Append(dim, path);
+                    }
                 }
-                ghSheetData.AppendRange(ghRow, new GH_Path(i));
             }
 
-            // Process sheetData as needed for your component
+            DA.SetDataTree(1, dimTree);
 
+            // Initialize the tree for IDs
+            GH_Structure<GH_String> idTree = new GH_Structure<GH_String>();
 
-            // Set the converted data to an output parameter, for example to parameter index 3
-            DA.SetDataTree(3, ghSheetData);
+            foreach (var row in sheetData)
+            {
+                GH_String id = ConstructID(row);
+                GH_Path path = new GH_Path(idTree.PathCount);
+                idTree.Append(id, path);
+            }
+
+            DA.SetDataTree(2, idTree);
+
 
         }
 
@@ -236,17 +244,40 @@ namespace DigitalCircularityToolkit.Input
         }
 
 
+        private List<GH_Number> ConstructDim(IList<Object> row, int numDimensions)
+        {
+            List<GH_Number> dimensions = new List<GH_Number>();
+
+            // Extract the last numDimensions values from the row
+            for (int i = row.Count - numDimensions; i < row.Count; i++)
+            {
+                if (double.TryParse(row[i].ToString(), out double value))
+                {
+                    dimensions.Add(new GH_Number(value));
+                }
+                else
+                {
+                    // Handle the case where the value cannot be parsed as a double
+                    dimensions.Add(new GH_Number(0));
+                }
+            }
+
+            return dimensions;
+        }
 
 
-        /*       private GH_Number ConstructDim()
-               {
+        private GH_String ConstructID(IList<Object> row)
+        {
+            if (row.Count > 0)
+            {
+                return new GH_String(row[0].ToString());
+            }
+            else
+            {
+                return new GH_String(string.Empty);
+            }
+        }
 
-               }
-
-               private GH_Text ConstructID()
-               {
-
-               }*/
 
 
         protected override System.Drawing.Bitmap Icon => null;
