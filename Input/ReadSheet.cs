@@ -103,13 +103,13 @@ namespace DigitalCircularityToolkit.Input
 
 
             // Live link
-            var googleSheetsReader = new GoogleSheetsReader(filePathClientSecret);
+            var googleSheetsConnect = new GoogleSheetsConnect(filePathClientSecret);
             string spreadsheetId = "1SKWICixI2Zce94PyAZpngRVtqgGM2VslZ27H35ihaSs"; // You'll get this from the component's input
             string range = null;
             range = ConstructRange(sheetName, startColumnLetter, startRow + 1, numDimensions);
 
 
-            IList<IList<Object>> sheetData = googleSheetsReader.ReadSheetData(spreadsheetId, range);
+            IList<IList<Object>> sheetData = googleSheetsConnect.ReadSheetData(spreadsheetId, range);
 
             // Initialize the tree for geometries
             GH_Structure<GH_Brep> geoTree = new GH_Structure<GH_Brep>();

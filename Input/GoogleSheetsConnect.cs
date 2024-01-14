@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-//Google
-using Google.Apis.Auth.OAuth2;
+﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4.Data;
 using System.IO;
 using System.Threading;
+using System.Collections.Generic;
+using System;
 
 namespace DigitalCircularityToolkit.Input
 {
-    public class GoogleSheetsReader
+    public class GoogleSheetsConnect
     {
-        private readonly string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+        private readonly string[] Scopes = { SheetsService.Scope.Spreadsheets }; // Change scope for read/write
         private readonly string ApplicationName = "Your Application Name";
         private UserCredential credential;
 
-        public GoogleSheetsReader(string clientSecretFilePath)
+        public GoogleSheetsConnect(string clientSecretFilePath)
         {
             Authenticate(clientSecretFilePath);
         }
@@ -46,6 +42,23 @@ namespace DigitalCircularityToolkit.Input
             SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
             ValueRange response = request.Execute();
             return response.Values;
+        }
+
+        // Method to write data to the sheet
+        public void WriteSheetData(string spreadsheetId, string range, IList<IList<Object>> values)
+        {
+            var service = new SheetsService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = ApplicationName,
+            });
+
+            var valueRange = new ValueRange();
+            valueRange.Values = values;
+
+            var updateRequest = service.Spreadsheets.Values.Update(valueRange, spreadsheetId, range);
+            updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
+            updateRequest.Execute();
         }
     }
 }
