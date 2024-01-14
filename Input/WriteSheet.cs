@@ -49,6 +49,7 @@ namespace DigitalCircularityToolkit.Input
 
             // 5 Quantity (Qty) parameter
             pManager.AddNumberParameter("Quantity (Qty)", "Qty", "List of quantities for each row", GH_ParamAccess.list);
+            pManager[5].Optional = true;
 
             // 6 Dim1
             pManager.AddNumberParameter("Dimension 1", "D1", "List of first dimensions eg. Lenght", GH_ParamAccess.list);
@@ -58,7 +59,7 @@ namespace DigitalCircularityToolkit.Input
 
             // 8 Dim3
             pManager.AddNumberParameter("Dimension 3", "D3", "List of third dimensions eg. height", GH_ParamAccess.list);
-            pManager[6].Optional = true;
+            pManager[8].Optional = true;
 
             // 9 Add a button parameter
             pManager.AddBooleanParameter("Write to Sheet", "W", "Press button to write data to the sheet", GH_ParamAccess.item, false);
@@ -102,10 +103,6 @@ namespace DigitalCircularityToolkit.Input
             string idText = null;
             DA.GetData(4, ref idText);
 
-            // Quantity (Qty) - new input at index 5
-            List<double> qtyList = new List<double>();
-            DA.GetDataList(5, qtyList);
-
             // Lists for dimensions
             List<double> dim1 = new List<double>();
             List<double> dim2 = new List<double>();
@@ -115,6 +112,14 @@ namespace DigitalCircularityToolkit.Input
             DA.GetDataList(6, dim1);
             DA.GetDataList(7, dim2);
             DA.GetDataList(8, dim3);
+
+            // Retrieve and handle Quantity (Qty)
+            List<double> qtyList = new List<double>();
+            if (!DA.GetDataList(5, qtyList) || qtyList.Count == 0)
+            {
+                // Default to a quantity of 1 for each item
+                qtyList = Enumerable.Repeat(1.0, dim1.Count).ToList();
+            }
 
             // Check if all lists are of the same length
             if (dim1.Count != dim2.Count || dim2.Count != dim3.Count)
@@ -143,7 +148,8 @@ namespace DigitalCircularityToolkit.Input
             for (int i = 0; i < dim1.Count; i++)
             {
                 string idWithIndex = idText + "_" + (i + 1).ToString(); // Concatenating ID with index
-                values.Add(new List<Object> { idWithIndex, qtyList[i], dim1[i], dim2[i], dim3[i] });
+                double quantity = i < qtyList.Count ? qtyList[i] : 1; // Use qtyList value or default to 1 if qtyList is shorter than dim lists
+                values.Add(new List<Object> { idWithIndex, quantity, dim1[i], dim2[i], dim3[i] });
             }
 
             // Define range
