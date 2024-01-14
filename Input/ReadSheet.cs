@@ -121,17 +121,17 @@ namespace DigitalCircularityToolkit.Input
             {
                 if (row.Count >= numDimensions + 2)
                 {
-                    double width = Convert.ToDouble(row[row.Count - 3]);
-                    double height = Convert.ToDouble(row[row.Count - 2]);
-                    double length = Convert.ToDouble(row[row.Count - 1]);
+                    double dim1 = Convert.ToDouble(row[row.Count - numDimensions]);
+                    double dim2 = Convert.ToDouble(row[row.Count - numDimensions + 1]);
+                    double? dim3 = numDimensions == 3 ? (double?)Convert.ToDouble(row[row.Count - numDimensions + 2]) : null;
                     int quantity = Convert.ToInt32(row[1]);
 
-                    List<GH_Brep> breps = ConstructBrep(width, height, length, quantity);
+                    List<GH_Brep> breps = ConstructBrep(dim1, dim2, dim3, quantity, numDimensions);
 
                     GH_Path path = new GH_Path(geoTree.PathCount);
                     foreach (GH_Brep brep in breps)
                     {
-                        geoTree.Append(brep, path); // Add each brep to the same branch
+                        geoTree.Append(brep, path);
                     }
                 }
             }
@@ -204,20 +204,37 @@ namespace DigitalCircularityToolkit.Input
             return range;
         }
 
-        private List<GH_Brep> ConstructBrep(double width, double height, double length, int quantity)
+        private List<GH_Brep> ConstructBrep(double dim1, double dim2, double? dim3, int quantity, int numDimensions)
         {
             List<GH_Brep> breps = new List<GH_Brep>();
 
-            Box box = new Box(Plane.WorldXY, new Interval(0, width), new Interval(0, height), new Interval(0, length));
-            Brep brep = box.ToBrep();
-
-            for (int i = 0; i < quantity; i++)
+            if (numDimensions == 3 && dim3.HasValue)
             {
-                breps.Add(new GH_Brep(brep.DuplicateBrep())); // Duplicate the brep for each quantity
+                // Create a box for 3 dimensions
+                Box box = new Box(Plane.WorldXY, new Interval(0, dim1), new Interval(0, dim2), new Interval(0, dim3.Value));
+                Brep brep = box.ToBrep();
+                for (int i = 0; i < quantity; i++)
+                {
+                    breps.Add(new GH_Brep(brep.DuplicateBrep()));
+                }
+            }
+            else if (numDimensions == 2)
+            {
+                // Create a rectangle for 2 dimensions
+                Rectangle3d rectangle = new Rectangle3d(Plane.WorldXY, dim1, dim2);
+                Brep[] breps2D = Brep.CreatePlanarBreps(rectangle.ToNurbsCurve());
+                if (breps2D != null && breps2D.Length > 0)
+                {
+                    for (int i = 0; i < quantity; i++)
+                    {
+                        breps.Add(new GH_Brep(breps2D[0].DuplicateBrep()));
+                    }
+                }
             }
 
             return breps;
         }
+
 
 
 
