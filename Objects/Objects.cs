@@ -47,6 +47,7 @@ namespace DigitalCircularityToolkit.Objects
         public Box Localbox;
         public GeometryBase Geometry;
         public GeometryBase TransformedGeometry;
+        public string ID { get; set; }
 
         public DesignObject() { }
 
@@ -63,6 +64,7 @@ namespace DigitalCircularityToolkit.Objects
             this.Boundingbox= other.Boundingbox;
             this.Geometry= other.Geometry;
             this.TransformedGeometry = other.TransformedGeometry;
+            this.ID = other.ID;
         }
 
         /// <summary>
@@ -318,6 +320,8 @@ namespace DigitalCircularityToolkit.Objects
 
             if (rotated_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
 
+            obj.ID = ID;
+
             return obj;
         }
 
@@ -336,6 +340,8 @@ namespace DigitalCircularityToolkit.Objects
             if (transformed_geo is Mesh mesh) obj = new DesignObject(mesh, NSamples);
 
             if (transformed_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
+
+            obj.ID = ID;
 
             return obj;
         }

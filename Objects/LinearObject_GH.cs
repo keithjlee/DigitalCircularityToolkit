@@ -28,6 +28,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddIntegerParameter("Quantity", "qty", "Quantity of object", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the plane length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Area", "Area", "Area of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
+            pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
         }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace DigitalCircularityToolkit.Objects
             double buffer = 1;
             double area = -1;
             Vector3d pca_user = new Vector3d(0, 0, 0);
+            string id = "NoID";
 
             // populate
             if (!DA.GetData(0, ref geo)) return;
@@ -59,6 +61,7 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(2, ref qty);
             DA.GetData(3, ref buffer);
             DA.GetData(4, ref area);
+            DA.GetData(5, ref id);
 
             if (buffer <= 0)
             {
@@ -79,6 +82,9 @@ namespace DigitalCircularityToolkit.Objects
 
             var pointcloud = geo as PointCloud;
             if (pointcloud != null) obj = new LinearObject(pointcloud, qty, buffer, area, pca_user);
+
+            //id
+            obj.ID = id;
 
             // return
             DA.SetData(0, obj);
