@@ -26,6 +26,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             pManager.AddGenericParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.item);
             pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
+            pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
         }
 
         /// <summary>
@@ -46,9 +47,11 @@ namespace DigitalCircularityToolkit.Objects
             GeometryBase geo = null;
             int n = 50;
             Vector3d pca_user = new Vector3d(0, 0, 0);
+            string id = "NoID";
 
             if (!DA.GetData(0, ref geo)) return;
             DA.GetData(1, ref n);
+            DA.GetData(2, ref id);
 
             // convert to object
             DesignObject obj = new DesignObject();
@@ -64,6 +67,8 @@ namespace DigitalCircularityToolkit.Objects
 
             var pointcloud = geo as PointCloud;
             if (pointcloud != null) obj = new DesignObject(pointcloud, n, pca_user);
+
+            obj.ID = id;
 
             DA.SetData(0, obj);
             DA.SetData(1, obj.Geometry);

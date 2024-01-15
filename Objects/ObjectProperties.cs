@@ -45,6 +45,7 @@ namespace DigitalCircularityToolkit.Characterization
             pManager.AddMeshParameter("VolumeHull", "Hull3D", "Volumetric convex hull", GH_ParamAccess.item);
             pManager.AddPointParameter("SampledPoints", "Pts", "Points used for PCA analysis", GH_ParamAccess.list);
             pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.list);
+            pManager.AddTextParameter("IDs", "IDs", "Object IDs", GH_ParamAccess.list);
 
             pManager.HideParameter(0);
             pManager.HideParameter(7);
@@ -80,6 +81,7 @@ namespace DigitalCircularityToolkit.Characterization
             DA.SetData(10, obj.Hull3D);
             DA.SetDataList(11, obj.SampledPoints);
             DA.SetData(12, obj.Geometry);
+            DA.SetData(13, obj.ID);
 
         }
 

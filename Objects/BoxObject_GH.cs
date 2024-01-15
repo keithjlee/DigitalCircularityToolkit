@@ -29,6 +29,8 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the box length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("WidthBuffer", "fW", "Scale the box width by fW", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("HeightBuffer", "fH", "Scale the box height by fH", GH_ParamAccess.item, 1.0);
+            pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
+
         }
 
         /// <summary>
@@ -54,6 +56,7 @@ namespace DigitalCircularityToolkit.Objects
             double buffer2 = 1;
             double buffer3 = -1;
             Vector3d pca_user = new Vector3d(0, 0, 0);
+            string id = "NoID";
 
             // populate
             if (!DA.GetData(0, ref geo)) return;
@@ -62,6 +65,7 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(3, ref buffer1);
             DA.GetData(4, ref buffer2);
             DA.GetData(5, ref buffer3);
+            DA.GetData(6, ref id);
 
             if (buffer1 <= 0 || buffer2 <= 0 || buffer3 <= 0)
             {
@@ -82,6 +86,8 @@ namespace DigitalCircularityToolkit.Objects
             var pointcloud = geo as PointCloud;
             if (pointcloud != null) obj = new BoxObject(pointcloud, qty, buffer1, buffer2, buffer3, pca_user);
 
+            // ID
+            obj.ID = id;
             // return
             DA.SetData(0, obj);
             DA.SetData(1, obj.EffectiveBox);

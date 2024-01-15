@@ -29,6 +29,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the plane length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("WidthBuffer", "fW", "Scale the plane width by fW", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Thickness", "Thickness", "Thickness of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
+            pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
         }
 
         /// <summary>
@@ -54,6 +55,7 @@ namespace DigitalCircularityToolkit.Objects
             double buffer2 = 1;
             double thickness = -1;
             Vector3d pca_user = new Vector3d(0, 0, 0);
+            string id = "NoID";
 
             // populate
             if (!DA.GetData(0, ref geo)) return;
@@ -62,6 +64,7 @@ namespace DigitalCircularityToolkit.Objects
             DA.GetData(3, ref buffer1);
             DA.GetData(4, ref buffer2);
             DA.GetData(5, ref thickness);
+            DA.GetData(6, ref id);
 
             if (buffer1 <= 0 || buffer2 <= 0)
             {
@@ -81,6 +84,8 @@ namespace DigitalCircularityToolkit.Objects
 
             var pointcloud = geo as PointCloud;
             if (pointcloud != null) obj = new PlanarObject(pointcloud, qty, buffer1, buffer2, thickness, pca_user);
+
+            obj.ID = id;
 
             // return
             DA.SetData(0, obj);
