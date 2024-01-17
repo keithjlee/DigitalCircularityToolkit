@@ -373,6 +373,16 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Read {
+            get {
+                object obj = ResourceManager.GetObject("Read", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap RotatePCA {
             get {
                 object obj = ResourceManager.GetObject("RotatePCA", resourceCulture);
@@ -416,6 +426,16 @@ namespace DigitalCircularityToolkit.Properties {
         internal static System.Drawing.Bitmap ToPointCloud {
             get {
                 object obj = ResourceManager.GetObject("ToPointCloud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Write {
+            get {
+                object obj = ResourceManager.GetObject("Write", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

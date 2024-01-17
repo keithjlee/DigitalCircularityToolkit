@@ -51,6 +51,7 @@ namespace DigitalCircularityToolkit.Objects
             this.Boundingbox = obj.Boundingbox;
             this.Geometry = obj.Geometry;
             this.TransformedGeometry = obj.TransformedGeometry;
+            this.ID = obj.ID;
 
             Quantity = 1;
             Radius = GetTrueRadius();

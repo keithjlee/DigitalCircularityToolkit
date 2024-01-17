@@ -211,6 +211,9 @@
   <data name="RadialSignature" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RadialSignature.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Read" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Read.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="RotatePCA" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RotatePCA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -225,5 +228,8 @@
   </data>
   <data name="ToPointCloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ToPointCloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Write" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Write.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

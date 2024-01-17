@@ -236,7 +236,7 @@ namespace DigitalCircularityToolkit.Input
         }
 
 
-        protected override System.Drawing.Bitmap Icon => null;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Read;
 
 
         public override Guid ComponentGuid => new Guid("96BE80AA-6FF6-4343-AF1D-221C67F834A6");
