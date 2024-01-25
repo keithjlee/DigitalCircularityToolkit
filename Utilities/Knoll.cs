@@ -29,7 +29,7 @@ namespace DigitalCircularityToolkit.Utilities
     protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
     {
             pManager.AddGenericParameter("Objects", "Objs", "Collection of objects to knoll", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("OriginPlane", "Plane", "Plane that defines the starting origin of grid", GH_ParamAccess.item, new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.XAxis));
+            pManager.AddPlaneParameter("OriginPlane", "Plane", "Plane that defines the starting origin of grid", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddIntegerParameter("NumRows", "nRows", "Number of rows in knoll", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RowSpacing", "dRow", "Spacing of rows", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("ColSpacing", "dCol", "Spacing of columns", GH_ParamAccess.item, 1);
@@ -51,76 +51,105 @@ namespace DigitalCircularityToolkit.Utilities
     /// to store data in output parameters.</param>
     protected override void SolveInstance(IGH_DataAccess DA)
     {
-      List<DesignObject> objs = new List<DesignObject>();
-      Plane plane = new Plane(Point3d.Origin, Vector3d.YAxis, Vector3d.XAxis);
-      int nCols = 1;
-      double dCol = 1;
-      double dRow = 1;
+            // Initialize
+            List<DesignObject> objs = new List<DesignObject>();
+            Plane plane = Plane.WorldXY;
+            int nRows = 1;
+            double dRow = 1;
+            double dCol = 1;
 
-      if (!DA.GetDataList(0, objs)) return;
-      DA.GetData(1, ref plane);
-      DA.GetData(2, ref nCols);
-      DA.GetData(3, ref dCol);
-      DA.GetData(4, ref dRow);
+            // Assign
+            if (!DA.GetDataList(0, objs)) return;
+            DA.GetData(1, ref plane);
+            DA.GetData(2, ref nRows);
+            DA.GetData(3, ref dRow);
+            DA.GetData(4, ref dCol);
 
-      if (nCols > objs.Count){
-        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Number of columns specified > number of objects; nCols reduce to total number of objects");
-                nCols = objs.Count;
-      }
+            // Assertions
+            if (nRows > objs.Count) nRows = objs.Count;
+            if (nRows < 1) nRows = 1;
 
-      List<DesignObject> new_objs = KnollObjects(objs, plane, nCols, dCol, dRow);
+            // Knolled objects
+            List<DesignObject> new_objs = KnollObjects(objs, plane, nRows, dCol, dRow);
 
-      List<GeometryBase> geos = new List<GeometryBase>();
+            // Extract geometries
+            List<GeometryBase> geos = new List<GeometryBase>();
+            foreach (DesignObject obj in new_objs){
+            geos.Add(obj.Geometry);
+            }
 
-      foreach (DesignObject obj in new_objs){
-        geos.Add(obj.Geometry);
-      }
-
-      DA.SetDataList(0, new_objs);
-      DA.SetDataList(1, geos);
+            DA.SetDataList(0, new_objs);
+            DA.SetDataList(1, geos);
     }
 
-    public List<DesignObject> KnollObjects(List<DesignObject> objs, Plane plane, int nCols, double dCol, double dRow){
-
-      int count = -1;
-
-      List<DesignObject> new_objects = new List<DesignObject>();
-
-      double y_offset = 0;
-
-      while (count < objs.Count){
-
-        double x_offset = 0;
-        double y_max = 0;
-
-        for (int j = 0; j < nCols; j++)
+    /// <summary>
+    /// Knoll a set of design objects given a target plane, number of rows, and column/row spacings. Objects are aligned such that PCA1 is aligned with target plane Y.
+    /// </summary>
+    /// <param name="objs"></param>
+    /// <param name="plane"></param>
+    /// <param name="nRows"></param>
+    /// <param name="dCol"></param>
+    /// <param name="dRow"></param>
+    /// <returns></returns>
+    public List<DesignObject> KnollObjects(List<DesignObject> objs, Plane plane, int nRows, double dCol, double dRow)
         {
-            count++;
-            if (count >= objs.Count) { break; }
-            Plane target_plane = plane.Clone();
-            var obj = objs[count];
+            //Initialize
+            int count = -1;
+            List<DesignObject> new_objects = new List<DesignObject>();
+            double y_offset = 0;
 
-            var x = x_offset + obj.Length / 2 + dCol;
-            var y = y_offset + obj.Width / 2 + dRow;
+            //Number of columns per row
+            int n_cols_per_row = (int)Math.Ceiling((double)objs.Count / (double)nRows);
 
-            target_plane.Origin = plane.Origin + plane.XAxis * x + plane.YAxis * y;
 
-            Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, target_plane);
+            // Knolling loop
+            for (int i = 0; i < nRows; i++)
+            {
 
-            var new_obj = obj.TransformObject(transformer);
+                // initialize row offsets
+                double x_offset = 0;
+                double y_max = 0;
 
-            new_objects.Add(new_obj);
+                for (int j = 0; j < n_cols_per_row; j++)
+                {
+                    // Check count
+                    count++;
+                    if (count >= objs.Count) break;
 
-            if (obj.Width > y_max) y_max = obj.Width;
-            x_offset += obj.Length + dCol;
+                    // Create the target plane that the object will be aligned to
+                    Plane target_plane = plane.Clone();
+                    target_plane.Rotate(Math.PI / 2, target_plane.ZAxis);
+
+                    // Extract object 
+                    var obj = objs[count];
+
+                    // Get offset
+                    var x = x_offset + obj.Width / 2 + dCol;
+                    var y = y_offset + obj.Length / 2 + dRow;
+                        
+                    // Make explicit plane to target
+                    target_plane.Origin = plane.Origin + plane.YAxis * y + plane.XAxis * x;
+
+                    // Make transformer
+                    Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, target_plane);
+
+                    // Make transformed object
+                    var new_obj = obj.TransformObject(transformer);
+                    new_objects.Add(new_obj);
+
+                    //update longest object and x offset
+                    if (obj.Length > y_max) y_max = obj.Length;
+                    x_offset += obj.Width + dCol;
+
+                }
+
+                // Update y offset
+                y_offset += y_max + dRow;
+            }
+
+            return new_objects;
         }
 
-        y_offset += y_max + dRow;
-
-      }
-
-      return new_objects;
-    }
 
     /// <summary>
     /// Provides an Icon for every component that will be visible in the User Interface.
