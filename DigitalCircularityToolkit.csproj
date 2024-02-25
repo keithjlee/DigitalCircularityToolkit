@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -12,6 +12,7 @@
     <Compile Remove="Distance\HullDifference2D_GH.cs" />
     <Compile Remove="Distance\HullDifference3D_GH.cs" />
     <Compile Remove="Experimental\HullDiffDebug.cs" />
+    <Compile Remove="Input\GoogleSheetsConnect.cs" />
     <Compile Remove="Input\ReadCSV.cs" />
     <Compile Remove="Input\ReadSheet.cs" />
     <Compile Remove="Input\WriteSheet.cs" />
@@ -22,8 +23,6 @@
   
   <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.65.0" />
-    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.65.0.3148" />
     <PackageReference Include="Grasshopper" Version="7.13.21348.13001" IncludeAssets="compile;build" />
     <PackageReference Include="HungarianAlgorithm" Version="2.2.10" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
@@ -32,6 +31,7 @@
   <ItemGroup>
     <Folder Include="Analysis\" />
     <Folder Include="Experimental\" />
+    <Folder Include="Input\" />
   </ItemGroup>
   
   <ItemGroup>
