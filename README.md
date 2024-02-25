@@ -1,4 +1,4 @@
-![](Resources/anim.mp4)
+![](Resources/axo.png)
 
 # DigitalCircularityToolkit
 A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workflows, including:
