@@ -159,7 +159,7 @@ namespace DigitalCircularityToolkit.Utilities
     {
       get
       {
-                return Properties.Resources.Knoll;
+                return Properties.Resources.KNOLL;
       }
     }
 

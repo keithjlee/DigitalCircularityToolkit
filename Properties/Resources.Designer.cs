@@ -63,9 +63,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AlignToObject {
+        internal static System.Drawing.Bitmap ALIGNTOOBJECT {
             get {
-                object obj = ResourceManager.GetObject("AlignToObject", resourceCulture);
+                object obj = ResourceManager.GetObject("ALIGNTOOBJECT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AlignToPlane {
+        internal static System.Drawing.Bitmap ALIGNTOPLANE {
             get {
-                object obj = ResourceManager.GetObject("AlignToPlane", resourceCulture);
+                object obj = ResourceManager.GetObject("ALIGNTOPLANE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BoxObject {
+        internal static System.Drawing.Bitmap BOXOBJECT {
             get {
-                object obj = ResourceManager.GetObject("BoxObject", resourceCulture);
+                object obj = ResourceManager.GetObject("BOXOBJECT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BoxScore {
+        internal static System.Drawing.Bitmap BOXSCORE {
             get {
-                object obj = ResourceManager.GetObject("BoxScore", resourceCulture);
+                object obj = ResourceManager.GetObject("BOXSCORE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BoxSet {
+        internal static System.Drawing.Bitmap BOXSET {
             get {
-                object obj = ResourceManager.GetObject("BoxSet", resourceCulture);
+                object obj = ResourceManager.GetObject("BOXSET", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap EuclideanAsymm {
+        internal static System.Drawing.Bitmap DISTANCEASYMM {
             get {
-                object obj = ResourceManager.GetObject("EuclideanAsymm", resourceCulture);
+                object obj = ResourceManager.GetObject("DISTANCEASYMM", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap EuclideanSymm {
+        internal static System.Drawing.Bitmap DISTANCESYMM {
             get {
-                object obj = ResourceManager.GetObject("EuclideanSymm", resourceCulture);
+                object obj = ResourceManager.GetObject("DISTANCESYMM", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap FeatureVector {
+        internal static System.Drawing.Bitmap FEATUREVEC {
             get {
-                object obj = ResourceManager.GetObject("FeatureVector", resourceCulture);
+                object obj = ResourceManager.GetObject("FEATUREVEC", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap HarmonicAnalysisComplex {
+        internal static System.Drawing.Bitmap HARMONICSCOMPLEX {
             get {
-                object obj = ResourceManager.GetObject("HarmonicAnalysisComplex", resourceCulture);
+                object obj = ResourceManager.GetObject("HARMONICSCOMPLEX", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +153,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap HarmonicAnalysisReal {
+        internal static System.Drawing.Bitmap HARMONICSREAL {
             get {
-                object obj = ResourceManager.GetObject("HarmonicAnalysisReal", resourceCulture);
+                object obj = ResourceManager.GetObject("HARMONICSREAL", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +163,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Hungarian {
+        internal static System.Drawing.Bitmap HULL {
             get {
-                object obj = ResourceManager.GetObject("Hungarian", resourceCulture);
+                object obj = ResourceManager.GetObject("HULL", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -173,9 +173,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Knoll {
+        internal static System.Drawing.Bitmap HUNGARIAN {
             get {
-                object obj = ResourceManager.GetObject("Knoll", resourceCulture);
+                object obj = ResourceManager.GetObject("HUNGARIAN", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -183,9 +183,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LinearObject {
+        internal static System.Drawing.Bitmap KNOLL {
             get {
-                object obj = ResourceManager.GetObject("LinearObject", resourceCulture);
+                object obj = ResourceManager.GetObject("KNOLL", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,9 +193,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LinearSet {
+        internal static System.Drawing.Bitmap LINEAROBJECT {
             get {
-                object obj = ResourceManager.GetObject("LinearSet", resourceCulture);
+                object obj = ResourceManager.GetObject("LINEAROBJECT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -203,9 +203,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LineScore {
+        internal static System.Drawing.Bitmap LINEARSET {
             get {
-                object obj = ResourceManager.GetObject("LineScore", resourceCulture);
+                object obj = ResourceManager.GetObject("LINEARSET", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -213,9 +213,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LineToVector {
+        internal static System.Drawing.Bitmap LINESCORE {
             get {
-                object obj = ResourceManager.GetObject("LineToVector", resourceCulture);
+                object obj = ResourceManager.GetObject("LINESCORE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -223,9 +223,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap MatchLines {
+        internal static System.Drawing.Bitmap LINETOVECTOR {
             get {
-                object obj = ResourceManager.GetObject("MatchLines", resourceCulture);
+                object obj = ResourceManager.GetObject("LINETOVECTOR", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -233,9 +233,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Normalize {
+        internal static System.Drawing.Bitmap MATCHLINES {
             get {
-                object obj = ResourceManager.GetObject("Normalize", resourceCulture);
+                object obj = ResourceManager.GetObject("MATCHLINES", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -243,9 +243,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Object {
+        internal static System.Drawing.Bitmap NORMALIZE {
             get {
-                object obj = ResourceManager.GetObject("Object", resourceCulture);
+                object obj = ResourceManager.GetObject("NORMALIZE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -253,9 +253,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ObjectProperties {
+        internal static System.Drawing.Bitmap OBJECT {
             get {
-                object obj = ResourceManager.GetObject("ObjectProperties", resourceCulture);
+                object obj = ResourceManager.GetObject("OBJECT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -263,9 +263,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap OverridePCA {
+        internal static System.Drawing.Bitmap OBJECTPROPERTIES {
             get {
-                object obj = ResourceManager.GetObject("OverridePCA", resourceCulture);
+                object obj = ResourceManager.GetObject("OBJECTPROPERTIES", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -273,9 +273,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PCABrep {
+        internal static System.Drawing.Bitmap OUTLINE {
             get {
-                object obj = ResourceManager.GetObject("PCABrep", resourceCulture);
+                object obj = ResourceManager.GetObject("OUTLINE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -283,9 +283,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PCACurve {
+        internal static System.Drawing.Bitmap OVERRIDEPCA {
             get {
-                object obj = ResourceManager.GetObject("PCACurve", resourceCulture);
+                object obj = ResourceManager.GetObject("OVERRIDEPCA", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -293,9 +293,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PCAMesh {
+        internal static System.Drawing.Bitmap PCABREP {
             get {
-                object obj = ResourceManager.GetObject("PCAMesh", resourceCulture);
+                object obj = ResourceManager.GetObject("PCABREP", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -303,9 +303,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PCAPointCloud {
+        internal static System.Drawing.Bitmap PCACURVE {
             get {
-                object obj = ResourceManager.GetObject("PCAPointCloud", resourceCulture);
+                object obj = ResourceManager.GetObject("PCACURVE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -313,9 +313,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlanarHull {
+        internal static System.Drawing.Bitmap PCAMESH {
             get {
-                object obj = ResourceManager.GetObject("PlanarHull", resourceCulture);
+                object obj = ResourceManager.GetObject("PCAMESH", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -323,9 +323,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlanarObject {
+        internal static System.Drawing.Bitmap PCAPC {
             get {
-                object obj = ResourceManager.GetObject("PlanarObject", resourceCulture);
+                object obj = ResourceManager.GetObject("PCAPC", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -333,9 +333,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlanarOutline {
+        internal static System.Drawing.Bitmap PLANAROBJECT {
             get {
-                object obj = ResourceManager.GetObject("PlanarOutline", resourceCulture);
+                object obj = ResourceManager.GetObject("PLANAROBJECT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -343,9 +343,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlanarSet {
+        internal static System.Drawing.Bitmap PLANARSET {
             get {
-                object obj = ResourceManager.GetObject("PlanarSet", resourceCulture);
+                object obj = ResourceManager.GetObject("PLANARSET", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -353,9 +353,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlaneScore {
+        internal static System.Drawing.Bitmap PLANESCORE {
             get {
-                object obj = ResourceManager.GetObject("PlaneScore", resourceCulture);
+                object obj = ResourceManager.GetObject("PLANESCORE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -363,9 +363,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap RadialSignature {
+        internal static System.Drawing.Bitmap RADIALSIG {
             get {
-                object obj = ResourceManager.GetObject("RadialSignature", resourceCulture);
+                object obj = ResourceManager.GetObject("RADIALSIG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -373,9 +373,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Read {
+        internal static System.Drawing.Bitmap ROTATEPCA {
             get {
-                object obj = ResourceManager.GetObject("Read", resourceCulture);
+                object obj = ResourceManager.GetObject("ROTATEPCA", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -383,9 +383,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap RotatePCA {
+        internal static System.Drawing.Bitmap SPHERESCORE {
             get {
-                object obj = ResourceManager.GetObject("RotatePCA", resourceCulture);
+                object obj = ResourceManager.GetObject("SPHERESCORE", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -393,9 +393,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SphereScore {
+        internal static System.Drawing.Bitmap SPHERESET {
             get {
-                object obj = ResourceManager.GetObject("SphereScore", resourceCulture);
+                object obj = ResourceManager.GetObject("SPHERESET", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -403,9 +403,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SphereSet {
+        internal static System.Drawing.Bitmap SPHERICALOBJECT {
             get {
-                object obj = ResourceManager.GetObject("SphereSet", resourceCulture);
+                object obj = ResourceManager.GetObject("SPHERICALOBJECT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -413,29 +413,9 @@ namespace DigitalCircularityToolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SphericalObject {
+        internal static System.Drawing.Bitmap TOPOINTLCOUD {
             get {
-                object obj = ResourceManager.GetObject("SphericalObject", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ToPointCloud {
-            get {
-                object obj = ResourceManager.GetObject("ToPointCloud", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Write {
-            get {
-                object obj = ResourceManager.GetObject("Write", resourceCulture);
+                object obj = ResourceManager.GetObject("TOPOINTLCOUD", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -61,7 +61,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return Properties.Resources.Normalize;
+                return Properties.Resources.NORMALIZE;
             }
         }
 

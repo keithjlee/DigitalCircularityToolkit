@@ -63,7 +63,7 @@ namespace DigitalCircularityToolkit.Utilities
     {
       get
       {
-                return Properties.Resources.ToPointCloud;
+                return Properties.Resources.TOPOINTLCOUD;
       }
     }
 

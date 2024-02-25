@@ -67,7 +67,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.OverridePCA;
+                return Properties.Resources.OVERRIDEPCA;
             }
         }
 
@@ -78,5 +78,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get { return new Guid("FC6588C8-8DDF-4B65-B001-C3DD861CEED6"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
     }
 }

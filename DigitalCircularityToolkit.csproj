@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -12,6 +12,9 @@
     <Compile Remove="Distance\HullDifference2D_GH.cs" />
     <Compile Remove="Distance\HullDifference3D_GH.cs" />
     <Compile Remove="Experimental\HullDiffDebug.cs" />
+    <Compile Remove="Input\ReadCSV.cs" />
+    <Compile Remove="Input\ReadSheet.cs" />
+    <Compile Remove="Input\WriteSheet.cs" />
     <Compile Remove="Matching\LSAP.cs" />
     <Compile Remove="Objects\PointBasedObject_GH.cs" />
     <Compile Remove="Sets\GenericInventory.cs" />

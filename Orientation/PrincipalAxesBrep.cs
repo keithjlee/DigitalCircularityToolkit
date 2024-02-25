@@ -76,7 +76,7 @@ namespace DigitalCircularityToolkit.Orientation
         {
             get
             {
-                return Properties.Resources.PCABrep;
+                return Properties.Resources.PCABREP;
             }
         }
 

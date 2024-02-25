@@ -95,7 +95,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.SphericalObject;
+                return Properties.Resources.SPHERICALOBJECT;
             }
         }
 
@@ -106,5 +106,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get { return new Guid("67D25FA8-D4B8-452B-92D2-9D976A6BD1C5"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.primary;
     }
 }

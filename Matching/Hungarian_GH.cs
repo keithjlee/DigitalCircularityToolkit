@@ -75,7 +75,7 @@ namespace DigitalCircularityToolkit.Matching
         {
             get
             {
-                return Properties.Resources.Hungarian;
+                return Properties.Resources.HUNGARIAN;
             }
         }
 

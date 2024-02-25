@@ -96,7 +96,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return Properties.Resources.PlanarHull;
+                return Properties.Resources.HULL;
             }
         }
 

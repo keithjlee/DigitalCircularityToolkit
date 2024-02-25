@@ -72,7 +72,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.HarmonicAnalysisReal;
+                return Properties.Resources.HARMONICSREAL;
             }
         }
 
@@ -83,5 +83,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get { return new Guid("0A5ADC36-9E00-4DE2-B1DC-784EEE5E89A8"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
     }
 }

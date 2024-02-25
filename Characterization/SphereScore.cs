@@ -64,7 +64,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.SphereScore;
+                return Properties.Resources.SPHERESCORE;
             }
         }
 
@@ -75,5 +75,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get { return new Guid("4FEEA68B-24CB-4186-BD12-120CBCD9AB6B"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
     }
 }

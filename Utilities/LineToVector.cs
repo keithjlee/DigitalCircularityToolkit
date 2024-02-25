@@ -56,7 +56,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return Properties.Resources.LineToVector;
+                return Properties.Resources.LINETOVECTOR;
             }
         }
 

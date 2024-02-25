@@ -62,7 +62,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.BoxScore;
+                return Properties.Resources.BOXSCORE;
             }
         }
 
@@ -73,5 +73,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get { return new Guid("0343696C-BE70-46FB-9F4B-26662C2D7D27"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
     }
 }

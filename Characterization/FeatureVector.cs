@@ -175,7 +175,7 @@ namespace DigitalCircularityToolkit.Characterization
     {
       get
       {
-                return Properties.Resources.FeatureVector;
+                return Properties.Resources.FEATUREVEC;
       }
     }
 
@@ -188,5 +188,9 @@ namespace DigitalCircularityToolkit.Characterization
     {
       get { return new Guid("b006d02d-2e04-4875-a77d-a3d3b80e0700"); }
     }
-  }
+
+    public override GH_Exposure Exposure => GH_Exposure.primary;
+
+
+    }
 }

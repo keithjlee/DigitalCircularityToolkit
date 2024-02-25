@@ -99,7 +99,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.PlanarObject;
+                return Properties.Resources.PLANAROBJECT;
             }
         }
 
@@ -110,5 +110,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get { return new Guid("21C2A735-15B5-4DED-AF15-1075C3CD62D4"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.primary;
     }
 }

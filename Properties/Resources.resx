@@ -118,118 +118,112 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="AlignToObject" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AlignToObject.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ALIGNTOOBJECT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ALIGNTOOBJECT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AlignToPlane" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AlignToPlane.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ALIGNTOPLANE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ALIGNTOPLANE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BoxObject" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BoxObject.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BOXOBJECT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BOXOBJECT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BoxScore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BoxScore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BOXSCORE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BOXSCORE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BoxSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BoxSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BOXSET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BOXSET.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="EuclideanAsymm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EuclideanAsymm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="DISTANCEASYMM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DISTANCEASYMM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="EuclideanSymm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EuclideanSymm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="DISTANCESYMM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DISTANCESYMM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FeatureVector" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FeatureVector.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FEATUREVEC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FEATUREVEC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="HarmonicAnalysisComplex" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\HarmonicAnalysisComplex.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="HARMONICSCOMPLEX" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HARMONICSCOMPLEX.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="HarmonicAnalysisReal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\HarmonicAnalysisReal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="HARMONICSREAL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HARMONICSREAL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Hungarian" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hungarian.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="HULL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HULL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Knoll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Knoll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="HUNGARIAN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\HUNGARIAN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LinearObject" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LinearObject.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="KNOLL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\KNOLL.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LinearSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LinearSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="LINEAROBJECT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LINEAROBJECT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LineScore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LineScore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="LINEARSET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LINEARSET.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LineToVector" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LineToVector.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="LINESCORE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LINESCORE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="MatchLines" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\MatchLines.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="LINETOVECTOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LINETOVECTOR.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Normalize" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Normalize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="MATCHLINES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MATCHLINES.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Object" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Object.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="NORMALIZE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NORMALIZE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ObjectProperties" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ObjectProperties.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OBJECT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OBJECT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="OverridePCA" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OverridePCA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OBJECTPROPERTIES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OBJECTPROPERTIES.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PCABrep" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PCABrep.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OUTLINE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OUTLINE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PCACurve" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PCACurve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OVERRIDEPCA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OVERRIDEPCA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PCAMesh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PCAMesh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PCABREP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PCABREP.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PCAPointCloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PCAPointCloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PCACURVE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PCACURVE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PlanarHull" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PlanarHull.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PCAMESH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PCAMESH.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PlanarObject" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PlanarObject.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PCAPC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PCAPC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PlanarOutline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PlanarOutline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PLANAROBJECT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PLANAROBJECT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PlanarSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PlanarSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PLANARSET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PLANARSET.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PlaneScore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PlaneScore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PLANESCORE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PLANESCORE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RadialSignature" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RadialSignature.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="RADIALSIG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RADIALSIG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Read" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Read.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ROTATEPCA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ROTATEPCA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RotatePCA" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RotatePCA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SPHERESCORE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SPHERESCORE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SphereScore" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SphereScore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SPHERESET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SPHERESET.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SphereSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SphereSet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SPHERICALOBJECT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SPHERICALOBJECT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SphericalObject" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SphericalObject.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ToPointCloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ToPointCloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Write" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Write.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TOPOINTLCOUD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TOPOINTLCOUD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
