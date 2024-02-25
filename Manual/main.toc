@@ -1,0 +1,46 @@
+\contentsline {part}{I\hspace {1em}Introduction}{3}{part.1}%
+\contentsline {section}{\numberline {1}Digital Circularity}{4}{section.1}%
+\contentsline {section}{\numberline {2}DigitalCircularityToolkit}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Minimum working example}{4}{subsection.2.1}%
+\contentsline {part}{II\hspace {1em}Workflows}{4}{part.2}%
+\contentsline {part}{III\hspace {1em}Component Reference}{4}{part.3}%
+\contentsline {section}{\numberline {3}Objects}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Object}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}LinearObject}{4}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}PlanarObject}{4}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}BoxObject}{4}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}SphericalObject}{4}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Utilities}{4}{subsection.3.6}%
+\contentsline {subsubsection}{\numberline {3.6.1}ObjectProperties}{4}{subsubsection.3.6.1}%
+\contentsline {subsubsection}{\numberline {3.6.2}OverridePCA}{4}{subsubsection.3.6.2}%
+\contentsline {section}{\numberline {4}Sets}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}LinearSet}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}PlanarSet}{4}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}BoxSet}{4}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}SphereSet}{4}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Characterization}{4}{section.5}%
+\contentsline {subsection}{\numberline {5.1}FeatureVector}{4}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}LineScore}{4}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}PlaneScore}{4}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}BoxScore}{4}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}SphereScore}{4}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}RadialSignature}{4}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}HarmonicAnalysisReal}{4}{subsection.5.7}%
+\contentsline {subsection}{\numberline {5.8}HarmonicAnalysisComplex}{4}{subsection.5.8}%
+\contentsline {section}{\numberline {6}Distance}{4}{section.6}%
+\contentsline {subsection}{\numberline {6.1}EuclideanDistance}{4}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}AsymmEuclideanDistance}{4}{subsection.6.2}%
+\contentsline {section}{\numberline {7}Matching}{4}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Hungarian}{4}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Utilities}{4}{subsection.7.2}%
+\contentsline {subsubsection}{\numberline {7.2.1}MatchLines}{4}{subsubsection.7.2.1}%
+\contentsline {subsubsection}{\numberline {7.2.2}AlignToObject}{4}{subsubsection.7.2.2}%
+\contentsline {section}{\numberline {8}Utilities}{4}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Knoll}{4}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}AlignToPlane}{4}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}LineToVector}{4}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Normalize}{4}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}PlanarHull}{4}{subsection.8.5}%
+\contentsline {subsection}{\numberline {8.6}PlanarOutline}{4}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.7}RotatePCA}{4}{subsection.8.7}%
+\contentsline {subsection}{\numberline {8.8}ToPointCloud}{4}{subsection.8.8}%
