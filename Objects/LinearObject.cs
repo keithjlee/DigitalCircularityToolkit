@@ -56,6 +56,7 @@ namespace DigitalCircularityToolkit.Objects
 
             Quantity = 1;
             LengthBuffer = 1;
+
             GetApproxArea();
         }
 

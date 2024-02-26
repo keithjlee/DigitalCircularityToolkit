@@ -47,10 +47,15 @@ namespace DigitalCircularityToolkit.Objects
             if (!DA.GetData(0, ref obj)) return;
             if (!DA.GetData(1, ref plane)) return;
 
-            if (obj is LinearObject) obj = new LinearObject(obj);
-            if (obj is PlanarObject) obj = new PlanarObject(obj);
-            if (obj is BoxObject) obj = new BoxObject(obj);
-            if (obj is SphericalObject) obj = new SphericalObject(obj);
+            //if (obj is LinearObject) obj = new LinearObject(obj);
+            //if (obj is PlanarObject) obj = new PlanarObject(obj);
+            //if (obj is BoxObject) obj = new BoxObject(obj);
+            //if (obj is SphericalObject) obj = new SphericalObject(obj);
+
+            if (obj is LinearObject) obj = (LinearObject)obj;
+            if (obj is PlanarObject) obj = (PlanarObject)obj;
+            if (obj is BoxObject) obj = (BoxObject)obj;
+            if (obj is SphericalObject) obj = (SphericalObject)obj;
 
             // assert that plane origin is centered
             plane.Origin = obj.Localbox.Center;
