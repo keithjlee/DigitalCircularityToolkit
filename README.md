@@ -11,15 +11,21 @@ A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workfl
 - Optimal assignment using the Hungarian matching algorithm
 - Visualization tools for assignment
 
+This toolkit provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
+
+# Examples
+## Beading curves with rocks
+![](Resources/Rhino_KLiOxd6hwI.gif)
+
 # Development Notes
-- This plugin was developed by Keith J. Lee, PhD Candidate @ MIT, in collaboration with the Digital Circularity research collective within the Digital Structures research group in the Department of Architecture, Building Technology.
+- This plugin was developed by Keith J. Lee, PhD Candidate (Associaton: MIT > Architecture > Building Technology > Digital Structures > Digital Circularity).
 - [Karl-Johan Soerensen](https://github.com/soerensenkarl) developed I/O functionality for read/write workflows with Google Sheets and local .CSV files. To be released publicly in the near future.
 - Initial release was given to students taking the IAP2024 design workshop: *4.181 Digital Circularity: Tooling up for reuse with Odds & Mods*
 - Public release coincides with the S2024 design workshop: *4.185 ODDS & MODS Castaways*
-- The Digital Circularity team consists of Rachel Blowes (SMArchS BT '25), Celia Chaussabel (SMArchS AD '25), Alex Htet Kyaw (SMArchS Computation '25), Keith J. Lee (PhD BT '25), and Karl-Johan Soerensen (SMArchS Computation '25, SM CEE '25). It is advised by Professor Caitlin Mueller.
+- The Digital Circularity team consists of Rachel Blowes (SMArchS BT '25), Celia Chaussabel (SMArchS AD '25), Alex Htet Kyaw (SMArchS Comp '25), Keith J. Lee (PhD BT '25), and Karl-Johan Soerensen (SMArchS Comp '25 + SM CEE '25). It We are advised by Professor Caitlin Mueller.
 
 # Installation
-The initial public build was compiled February 25, 2024 in preparation for registration in the Food4Rhino ecosystem.
+The initial public build was compiled February 25, 2024 in preparation for registration in the Food4Rhino ecosystem. It has been tested for Rhino 7/8 for both Windows and Mac.
 
 1. Find and download the latest build (.zip file) in the [releases](https://github.com/keithjlee/DigitalCircularityToolkit/releases) page.
 2. Find your Grasshopper components folder by opening Grasshopper, then `File>Special Folders>Components Folder`
