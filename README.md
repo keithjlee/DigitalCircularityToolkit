@@ -14,8 +14,50 @@ A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workfl
 This toolkit provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
 
 # Examples
+## Matching lengths to truss design
+![](Resources/trusses.gif)
+See `Examples>01_trusses>01_trusses`
+
+Features used:
+- `LinearObject` class
+- Adding `qty` for duplications of objects
+- Creating `FeatureVector`s
+- `EuclideanDistance` for distance matrix generation
+- `Hungarian` for matching
+- `AlignToObject` for aligning matched inventory objects to drawn design
+- `MatchLines` to draw matching lines
+
+## Incorporating structural analysis to truss matching
+![](Resources/karamba.gif)
+See `Examples>01b_trusses>01b_trusses_karamba`
+
+Features used:
+- `LinearObject` class
+- Adding `qty` for duplications of objects
+- Integrating with Karamba3d and other plugins
+- Creating custom `FeatureVector`s to have multiple dimensions
+- `EuclideanDistance` for distance matrix generation
+- `Hungarian` for matching
+- `AlignToObject` for aligning matched inventory objects to drawn design
+- `MatchLines` to draw matching lines
+
 ## Beading curves with rocks
-![](Resources/Rhino_KLiOxd6hwI.gif)
+![](Resources/beading.gif)
+See `Examples>02_rock_beading>02a_linear_beading` and `02b_box_beading`
+
+Features used:
+- `LinearObject` and `BoxObject`
+- `OverridePCA` to set a custom orientation for objects
+
+## Tiling rocks into a Voronoi plane
+![](Resources/tiling.gif)
+See `Examples>03_rock_tiling>03_rock_tiling`
+
+Features used:
+- `PlanarObject` to abstract objects as planes
+- `PlanarOutline` to get the 2D curve representation of an object
+- `RadialSignature` to perform ray sampling of the planar outlines
+- `HarmonicsAnalysisComplex` to extract feature vectors from complex radial signatures
 
 # Development Notes
 - This plugin was developed by Keith J. Lee, PhD Candidate (Associaton: MIT > Architecture > Building Technology > Digital Structures > Digital Circularity).
