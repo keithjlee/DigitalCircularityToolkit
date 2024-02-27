@@ -5,7 +5,7 @@ The initial public build was compiled February 25, 2024 in preparation for regis
 
 1. Find and download the latest build (.zip file) in the [releases](https://github.com/keithjlee/DigitalCircularityToolkit/releases) page.
 2. Find your Grasshopper components folder by opening Grasshopper, then `File>Special Folders>Components Folder`
-3. **For Windows users:** right click the downloaded .zip file and select `Properties`, and make sure that `Unblock` is checked off.
+3. **For Windows users:** right click the downloaded .zip file and select `Properties`, and make sure that `Unblock` is checked.
 4. Directly extract the contents of the .zip file to your Components Folder.
 5. Restart Rhino/Grasshopper
 
