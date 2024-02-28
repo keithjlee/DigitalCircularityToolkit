@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10724610.svg)](https://doi.org/10.5281/zenodo.10724610)
+
 ![](Resources/axo.png)
 
 # Installation
@@ -10,6 +12,29 @@ The initial public build was compiled February 25, 2024 in preparation for regis
 5. Restart Rhino/Grasshopper
 
 A set of example files have been provided (to be updated).
+
+## Citing
+When using or extending this software for research purposes, please cite using the following:
+
+### Bibtex
+```
+@software{lee_2024_10724610,
+  author       = {Lee, Keith Janghyun},
+  title        = {DigitalCircularityToolkit},
+  month        = feb,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v0.2},
+  doi          = {10.5281/zenodo.10724610},
+  url          = {https://doi.org/10.5281/zenodo.10724610}
+}
+```
+
+### Other styles
+Or find a pre-written citation in the style of your choice [here](https://zenodo.org/records/10724610) (see the Citation box on the right side). E.g., for APA:
+```
+Lee, K. J. (2024). DigitalCircularityToolkit (v0.2). Zenodo. https://doi.org/10.5281/zenodo.10724610
+```
 
 # DigitalCircularityToolkit
 A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workflows, including:
@@ -76,3 +101,7 @@ Features used:
 - Initial release was given to students taking the IAP2024 design workshop: *4.181 Digital Circularity: Tooling up for reuse with Odds & Mods*
 - Public release coincides with the S2024 design workshop: *4.185 ODDS & MODS Castaways*
 - The Digital Circularity team consists of Rachel Blowes (SMArchS BT '25), Celia Chaussabel (SMArchS AD '25), Alex Htet Kyaw (SMArchS Comp '25), Keith J. Lee (PhD BT '25), and Karl-Johan Soerensen (SMArchS Comp '25 + SM CEE '25). We are advised by Professor Caitlin Mueller.
+
+# Release Notes
+## Feb 28 2024
+- `v0.2` was released to enable Zenodo DOI and add minor description changes in some components. No functional changes.
