@@ -1,5 +1,6 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10724610.svg)](https://doi.org/10.5281/zenodo.10724610)
-![](Resources/FRONT.png)
+
+![](Resources/logo_front.png)
 # DigitalCircularityToolkit
 A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workflows, including:
 - Extracting principal axes from arbitrary geometry
@@ -104,4 +105,4 @@ Features used:
 ## Feb 28 2024
 - `v0.2` was released to enable Zenodo DOI and add minor description changes in some components. No functional changes.
 
-![](Resources/AXO.png)
+![](Resources/logo_axo.png)
