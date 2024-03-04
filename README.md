@@ -1,6 +1,8 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10724610.svg)](https://doi.org/10.5281/zenodo.10724610)
 
 ![](Resources/logo_front.png)
+
+Available on [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en).
 # DigitalCircularityToolkit
 A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workflows, including:
 - Extracting principal axes from arbitrary geometry
