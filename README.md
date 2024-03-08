@@ -1,8 +1,22 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10724610.svg)](https://doi.org/10.5281/zenodo.10724610)
 
-![](Resources/axo.png)
+![](Resources/logo_front.png)
 
-# Installation
+Available on [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en).
+# DigitalCircularityToolkit
+A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workflows, including:
+- Extracting principal axes from arbitrary geometry
+- Abstracing objects as primitive lines, planes, boxes, and spheres
+- Knolling and alignment
+- Shape characterization: LineScore, PlaneScore, BoxScore, SphereScore, RadialSignature
+- Fourier shape descriptors (in complex and real coordinates) of radial signatures
+- Custom feature vector definitions
+- Optimal assignment using the Hungarian matching algorithm
+- Visualization tools for assignment
+
+This toolkit provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
+
+## Installation
 The initial public build was compiled February 25, 2024 in preparation for registration in the Food4Rhino ecosystem. It has been tested for Rhino 7/8 for both Windows and Mac.
 
 1. Find and download the latest build (.zip file) in the [releases](https://github.com/keithjlee/DigitalCircularityToolkit/releases) page.
@@ -35,19 +49,6 @@ Or find a pre-written citation in the style of your choice [here](https://zenodo
 ```
 Lee, K. J. (2024). DigitalCircularityToolkit (v0.2). Zenodo. https://doi.org/10.5281/zenodo.10724610
 ```
-
-# DigitalCircularityToolkit
-A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workflows, including:
-- Extracting principal axes from arbitrary geometry
-- Abstracing objects as primitive lines, planes, boxes, and spheres
-- Knolling and alignment
-- Shape characterization: LineScore, PlaneScore, BoxScore, SphereScore, RadialSignature
-- Fourier shape descriptors (in complex and real coordinates) of radial signatures
-- Custom feature vector definitions
-- Optimal assignment using the Hungarian matching algorithm
-- Visualization tools for assignment
-
-This toolkit provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
 
 # Examples
 ## Matching lengths to truss design
@@ -105,3 +106,5 @@ Features used:
 # Release Notes
 ## Feb 28 2024
 - `v0.2` was released to enable Zenodo DOI and add minor description changes in some components. No functional changes.
+
+![](Resources/logo_axo.png)
