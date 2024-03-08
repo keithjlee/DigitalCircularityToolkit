@@ -124,16 +124,8 @@ namespace DigitalCircularityToolkit.Characterization
     {
 
             // Has to return a parameter object!
-            Param_GenericObject param = new Param_GenericObject();
+            Param_GenericObject param = new Param_GenericObject();            
 
-            int count = 0;
-            for (int i = 0; i < Params.Input.Count; i++)
-            {
-                count += i;
-            }
-
-            param.Name = "X" + (count + 2).ToString();
-            param.NickName = param.Name;
             param.Description = "Object property";
             param.Optional = true;
             param.Access = GH_ParamAccess.list;
@@ -154,15 +146,21 @@ namespace DigitalCircularityToolkit.Characterization
 
     public void VariableParameterMaintenance()
     {
-        //This method will be called when a closely related set of variable parameter operations completes. 
-        //This would be a good time to ensure all Nicknames and parameter properties are correct. This method will also be 
-        //called upon IO operations such as Open, Paste, Undo and Redo.
+            //This method will be called when a closely related set of variable parameter operations completes. 
+            //This would be a good time to ensure all Nicknames and parameter properties are correct. This method will also be 
+            //called upon IO operations such as Open, Paste, Undo and Redo.
 
 
-        //throw new NotImplementedException();
+            //throw new NotImplementedException();
+            for (int i = 0; i < Params.Input.Count; i++)
+            {
+                string name = "X" + (i + 1).ToString();
+                Params.Input[i].Name = name;
+                Params.Input[i].NickName = name;
+            }
 
 
-    }
+        }
 
 
     #endregion
