@@ -359,6 +359,8 @@ namespace DigitalCircularityToolkit.Objects
             TransformedGeometry.Transform(plane_transform);
             Boundingbox = Geometry.GetBoundingBox(plane, out Localbox);
 
+            LocalPlane.Origin = Localbox.Center;
+
             //new hull
             Hull2D = Hulls.MakeHull2d(SampledPoints, plane);
 
