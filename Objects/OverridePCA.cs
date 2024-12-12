@@ -72,7 +72,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.OVERRIDEPCA;
+                return null; //.OVERRIDEPCA;
             }
         }
 

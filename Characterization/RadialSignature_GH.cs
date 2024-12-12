@@ -91,7 +91,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.RADIALSIG;
+                return null; //.RADIALSIG;
             }
         }
 

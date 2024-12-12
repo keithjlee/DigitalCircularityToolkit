@@ -173,7 +173,7 @@ namespace DigitalCircularityToolkit.Characterization
     {
       get
       {
-                return Properties.Resources.FEATUREVEC;
+                return null; //.FEATUREVEC;
       }
     }
 

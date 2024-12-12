@@ -74,7 +74,7 @@ namespace DigitalCircularityToolkit.Matching
         {
             get
             {
-                return Properties.Resources.MATCHLINES;
+                return null; //.MATCHLINES;
             }
         }
 

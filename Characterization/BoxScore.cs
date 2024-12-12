@@ -62,7 +62,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.BOXSCORE;
+                return null; //.BOXSCORE;
             }
         }
 

@@ -73,7 +73,7 @@ namespace DigitalCircularityToolkit.Distance
         {
             get
             {
-                return Properties.Resources.DISTANCESYMM;
+                return null; //.DISTANCESYMM;
             }
         }
 

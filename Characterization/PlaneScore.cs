@@ -67,7 +67,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.PLANESCORE;
+                return null; //.PLANESCORE;
             }
         }
 

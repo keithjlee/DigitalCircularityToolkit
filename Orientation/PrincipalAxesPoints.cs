@@ -72,7 +72,7 @@ namespace DigitalCircularityToolkit.Orientation
         {
             get
             {
-                return Properties.Resources.PCAPC;
+                return null; //.PCAPC;
             }
         }
 

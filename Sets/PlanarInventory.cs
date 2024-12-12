@@ -104,7 +104,7 @@ namespace DigitalCircularityToolkit.Sets
         {
             get
             {
-                return Properties.Resources.PLANARSET;
+                return null; //.PLANARSET;
             }
         }
 

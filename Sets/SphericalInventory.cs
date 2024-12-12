@@ -94,7 +94,7 @@ namespace DigitalCircularityToolkit.Sets
         {
             get
             {
-                return Properties.Resources.SPHERESET;
+                return null; //.SPHERESET;
             }
         }
 

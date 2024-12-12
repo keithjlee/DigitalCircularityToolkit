@@ -74,7 +74,7 @@ namespace DigitalCircularityToolkit.Orientation
         {
             get
             {
-                return Properties.Resources.PCAMESH;
+                return null; //.PCAMESH;
             }
         }
 

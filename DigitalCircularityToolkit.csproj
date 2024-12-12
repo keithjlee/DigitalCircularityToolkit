@@ -27,6 +27,7 @@
     <PackageReference Include="Grasshopper" Version="8.14.24345.15001" IncludeAssets="compile;build" />
     <PackageReference Include="HungarianAlgorithm" Version="2.2.10" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="9.0.0" />
   </ItemGroup>
   
   <ItemGroup>
@@ -35,7 +36,7 @@
     </Reference>
   </ItemGroup>
   
-  <ItemGroup>
+  <!-- <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -48,7 +49,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
+  </ItemGroup> -->
   
     <!-- For Windows only builds -->
   <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4'))">
@@ -65,5 +66,9 @@
     <Reference Include="$(PkgMicrosoft_NETFramework_ReferenceAssemblies_net48)\build\.NETFramework\v4.8\System.Windows.Forms.dll" Private="False" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" ExcludeAssets="runtime" />
   </ItemGroup>
+
+  <PropertyGroup>     
+  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+  </PropertyGroup>
 
 </Project>

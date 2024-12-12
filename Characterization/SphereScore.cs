@@ -64,7 +64,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.SPHERESCORE;
+                return null; //.SPHERESCORE;
             }
         }
 

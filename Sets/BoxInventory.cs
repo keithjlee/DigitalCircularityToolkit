@@ -103,7 +103,7 @@ namespace DigitalCircularityToolkit.Sets
         {
             get
             {
-                return Properties.Resources.BOXSET;
+                return null; //.BOXSET;
             }
         }
 

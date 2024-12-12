@@ -65,7 +65,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return Properties.Resources.ALIGNTOPLANE;
+                return null; //.ALIGNTOPLANE;
             }
         }
 

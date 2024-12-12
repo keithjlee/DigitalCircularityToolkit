@@ -65,7 +65,7 @@ namespace DigitalCircularityToolkit.Matching
         {
             get
             {
-                return Properties.Resources.ALIGNTOOBJECT;
+                return null; //.ALIGNTOOBJECT;
             }
         }
 

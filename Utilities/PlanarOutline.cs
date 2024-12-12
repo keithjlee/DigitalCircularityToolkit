@@ -129,7 +129,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return Properties.Resources.OUTLINE;
+                return null; //.OUTLINE;
             }
         }
 
