@@ -71,4 +71,8 @@
   <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Resources/DISTANCESYMM.png" />
+  </ItemGroup>
+
 </Project>

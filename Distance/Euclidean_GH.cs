@@ -69,13 +69,7 @@ namespace DigitalCircularityToolkit.Distance
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                return null; //.DISTANCESYMM;
-            }
-        }
+        protected override System.Drawing.Bitmap Icon => IconLoader.EuclideanIcon;
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
