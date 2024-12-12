@@ -22,5 +22,8 @@ namespace DigitalCircularityToolkit
 
         //Return a string representing your preferred contact details.
         public override string AuthorContact => "";
+
+        //Return a string representing the version.  This returns the same version as the assembly.
+        public override string AssemblyVersion => GetType().Assembly.GetName().Version.ToString();
     }
 }
