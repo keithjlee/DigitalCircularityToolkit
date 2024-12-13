@@ -99,7 +99,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return null; //.PLANAROBJECT;
+                return IconLoader.PlanarObjectIcon; //.PLANAROBJECT;
             }
         }
 

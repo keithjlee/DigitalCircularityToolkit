@@ -99,7 +99,7 @@ namespace DigitalCircularityToolkit.Sets
         {
             get
             {
-                return null; //.LINEARSET;
+                return IconLoader.LinearSetIcon; //.LINEARSET;
             }
         }
 

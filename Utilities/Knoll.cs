@@ -159,7 +159,7 @@ namespace DigitalCircularityToolkit.Utilities
     {
       get
       {
-                return null; //.KNOLL;
+                return IconLoader.KnollIcon; //.KNOLL;
       }
     }
 

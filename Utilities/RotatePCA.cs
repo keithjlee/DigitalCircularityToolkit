@@ -80,7 +80,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return null; //.ROTATEPCA;
+                return IconLoader.RotatePCAIcon; //.ROTATEPCA;
             }
         }
 

@@ -81,7 +81,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return null; //.OBJECT;
+                return IconLoader.ObjectIcon; //.OBJECT;
             }
         }
 

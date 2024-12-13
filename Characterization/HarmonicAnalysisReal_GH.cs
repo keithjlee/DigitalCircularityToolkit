@@ -72,7 +72,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return null; //.HARMONICSREAL;
+                return IconLoader.HarmonicsRealIcon; //.HARMONICSREAL;
             }
         }
 

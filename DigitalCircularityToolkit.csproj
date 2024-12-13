@@ -72,7 +72,38 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources/DISTANCESYMM.png" />
+    <EmbeddedResource Include="Resources\ALIGNTOOBJECT.png" />
+    <EmbeddedResource Include="Resources\ALIGNTOPLANE.png" />
+    <EmbeddedResource Include="Resources\BOXOBJECT.png" />
+    <EmbeddedResource Include="Resources\BOXSCORE.png" />
+    <EmbeddedResource Include="Resources\BOXSET.png" />
+    <EmbeddedResource Include="Resources\DISTANCEASYMM.png" />
+    <EmbeddedResource Include="Resources\DISTANCESYMM.png" />
+    <EmbeddedResource Include="Resources\FEATUREVEC.png" />
+    <EmbeddedResource Include="Resources\HARMONICSCOMPLEX.png" />
+    <EmbeddedResource Include="Resources\HARMONICSREAL.png" />
+    <EmbeddedResource Include="Resources\HULL.png" />
+    <EmbeddedResource Include="Resources\HUNGARIAN.png" />
+    <EmbeddedResource Include="Resources\KNOLL.png" />
+    <EmbeddedResource Include="Resources\LINEAROBJECT.png" />
+    <EmbeddedResource Include="Resources\LINEARSET.png" />
+    <EmbeddedResource Include="Resources\LINESCORE.png" />
+    <EmbeddedResource Include="Resources\MANHATTAN.png" />
+    <EmbeddedResource Include="Resources\MATCHLINES.png" />
+    <EmbeddedResource Include="Resources\NORMALIZE.png" />
+    <EmbeddedResource Include="Resources\OBJECT.png" />
+    <EmbeddedResource Include="Resources\OBJECTPROPERTIES.png" />
+    <EmbeddedResource Include="Resources\OUTLINE.png" />
+    <EmbeddedResource Include="Resources\OVERRIDEPCA.png" />
+    <EmbeddedResource Include="Resources\PAIRNORMALIZE.png" />
+    <EmbeddedResource Include="Resources\PLANAROBJECT.png" />
+    <EmbeddedResource Include="Resources\PLANARSET.png" />
+    <EmbeddedResource Include="Resources\PLANESCORE.png" />
+    <EmbeddedResource Include="Resources\RADIALSIG.png" />
+    <EmbeddedResource Include="Resources\ROTATEPCA.png" />
+    <EmbeddedResource Include="Resources\SPHERESCORE.png" />
+    <EmbeddedResource Include="Resources\SPHERESET.png" />
+    <EmbeddedResource Include="Resources\SPHERICALOBJECT.png" />
   </ItemGroup>
 
 </Project>

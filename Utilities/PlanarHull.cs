@@ -96,7 +96,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return null; //.HULL;
+                return IconLoader.Hull2dIcon; //.HULL;
             }
         }
 

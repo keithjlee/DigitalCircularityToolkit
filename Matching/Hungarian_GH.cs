@@ -75,7 +75,7 @@ namespace DigitalCircularityToolkit.Matching
         {
             get
             {
-                return null; //.HUNGARIAN;
+                return IconLoader.HungarianIcon; //.HUNGARIAN;
             }
         }
 

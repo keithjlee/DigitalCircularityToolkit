@@ -67,7 +67,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return null; //.PLANESCORE;
+                return IconLoader.PlaneScoreIcon; //.PLANESCORE;
             }
         }
 

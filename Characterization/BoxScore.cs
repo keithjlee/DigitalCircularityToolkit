@@ -62,7 +62,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return null; //.BOXSCORE;
+                return IconLoader.BoxScoreIcon;
             }
         }
 

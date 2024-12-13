@@ -72,7 +72,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return null; //.OVERRIDEPCA;
+                return IconLoader.OverridePCAIcon; //.OVERRIDEPCA;
             }
         }
 

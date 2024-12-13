@@ -67,7 +67,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return null; //.LINESCORE;
+                return IconLoader.LineScoreIcon; //.LINESCORE;
             }
         }
 

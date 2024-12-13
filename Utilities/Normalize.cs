@@ -61,7 +61,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return null; //.NORMALIZE;
+                return IconLoader.NormalizeIcon; //.NORMALIZE;
             }
         }
 

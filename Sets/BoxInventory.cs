@@ -103,7 +103,7 @@ namespace DigitalCircularityToolkit.Sets
         {
             get
             {
-                return null; //.BOXSET;
+                return IconLoader.BoxSetIcon; //.BOXSET;
             }
         }
 

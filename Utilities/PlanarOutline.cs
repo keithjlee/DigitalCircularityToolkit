@@ -129,7 +129,7 @@ namespace DigitalCircularityToolkit.Utilities
         {
             get
             {
-                return null; //.OUTLINE;
+                return IconLoader.PlanarOutlineIcon; //.OUTLINE;
             }
         }
 
