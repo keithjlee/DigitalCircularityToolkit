@@ -92,7 +92,7 @@ namespace DigitalCircularityToolkit.Characterization
         {
             get
             {
-                return Properties.Resources.OBJECTPROPERTIES;
+                return IconLoader.ObjectPropertiesIcon; //.OBJECTPROPERTIES;
             }
         }
 

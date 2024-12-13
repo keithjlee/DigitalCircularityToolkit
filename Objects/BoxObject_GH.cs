@@ -100,7 +100,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.BOXOBJECT;
+                return IconLoader.BoxObjectIcon; //.BOXOBJECT;
             }
         }
 

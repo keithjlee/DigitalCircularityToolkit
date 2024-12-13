@@ -98,7 +98,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.LINEAROBJECT;
+                return IconLoader.LinearObjectIcon; //.LINEAROBJECT;
             }
         }
 

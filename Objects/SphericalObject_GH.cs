@@ -95,7 +95,7 @@ namespace DigitalCircularityToolkit.Objects
         {
             get
             {
-                return Properties.Resources.SPHERICALOBJECT;
+                return IconLoader.SphericalObjectIcon; //.SPHERICALOBJECT;
             }
         }
 

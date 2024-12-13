@@ -1,41 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
-    <Version>1.0</Version>
-    <Title>DigitalCircularityToolkit</Title>
-    <Description>Description of DigitalCircularityToolkit</Description>
+    <!-- Select the framework(s) you wish to target.
+        Rhino 6: net45
+        Rhino 7: net48
+        Rhino 8 Windows: net48, net7.0, net7.0-windows, net7.0-windows10.0.22000.0, etc
+        Rhino 8 Mac: net7.0, net7.0-macos, net7.0-macos12.0, etc
+    -->
+    <TargetFrameworks>net7.0-windows;net7.0;net48</TargetFrameworks>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
     <TargetExt>.gha</TargetExt>
+    <NoWarn>NU1701;NETSDK1086</NoWarn>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <Compile Remove="Distance\HullDifference2D_GH.cs" />
-    <Compile Remove="Distance\HullDifference3D_GH.cs" />
-    <Compile Remove="Experimental\HullDiffDebug.cs" />
-    <Compile Remove="Input\GoogleSheetsConnect.cs" />
-    <Compile Remove="Input\ReadCSV.cs" />
-    <Compile Remove="Input\ReadSheet.cs" />
-    <Compile Remove="Input\WriteSheet.cs" />
-    <Compile Remove="Matching\LSAP.cs" />
-    <Compile Remove="Objects\PointBasedObject_GH.cs" />
-    <Compile Remove="Sets\GenericInventory.cs" />
-  </ItemGroup>
+  
+    <PropertyGroup>
+      <!-- Specifies information for Assembly and Yak -->
+      <Version>1.0</Version>
+      <Title>DigitalCircularityToolkit</Title>
+      <Company>DigitalCircularityToolkit Authors</Company>
+      <Description>Description of DigitalCircularityToolkit</Description>
+    </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
-    <PackageReference Include="Grasshopper" Version="7.13.21348.13001" IncludeAssets="compile;build" />
+    <PackageReference Include="Grasshopper" Version="8.14.24345.15001" IncludeAssets="compile;build" />
     <PackageReference Include="HungarianAlgorithm" Version="2.2.10" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Analysis\" />
-    <Folder Include="Experimental\" />
-    <Folder Include="Input\" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="Distance\" />
+    <PackageReference Include="System.Resources.Extensions" Version="9.0.0" />
   </ItemGroup>
   
   <ItemGroup>
@@ -44,7 +36,7 @@
     </Reference>
   </ItemGroup>
   
-  <ItemGroup>
+  <!-- <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -57,11 +49,62 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <PropertyGroup Condition="$(Configuration) == 'Debug' AND $([MSBuild]::IsOSPlatform(Windows))">
-    <StartProgram>C:\Program Files\Rhino 7\System\Rhino.exe</StartProgram>
-    <StartArguments></StartArguments>
-    <StartAction>Program</StartAction>
+  </ItemGroup> -->
+  
+    <!-- For Windows only builds -->
+  <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4'))">
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
+  <!-- Reference WinForms for .NET 7.0 on macOS -->
+  <ItemGroup Condition="!($(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4')))">
+    <!-- Rhino 8.11 and later you can use this -->
+    <!-- <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" /> -->
+    
+    <!-- Rhino 8.10 and earlier -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" ExcludeAssets="all" GeneratePathProperty="true" />
+    <Reference Include="$(PkgMicrosoft_NETFramework_ReferenceAssemblies_net48)\build\.NETFramework\v4.8\System.Windows.Forms.dll" Private="False" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <PropertyGroup>     
+  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ALIGNTOOBJECT.png" />
+    <EmbeddedResource Include="Resources\ALIGNTOPLANE.png" />
+    <EmbeddedResource Include="Resources\BOXOBJECT.png" />
+    <EmbeddedResource Include="Resources\BOXSCORE.png" />
+    <EmbeddedResource Include="Resources\BOXSET.png" />
+    <EmbeddedResource Include="Resources\DISTANCEASYMM.png" />
+    <EmbeddedResource Include="Resources\DISTANCESYMM.png" />
+    <EmbeddedResource Include="Resources\FEATUREVEC.png" />
+    <EmbeddedResource Include="Resources\FRECHET.png" />
+    <EmbeddedResource Include="Resources\HARMONICSCOMPLEX.png" />
+    <EmbeddedResource Include="Resources\HARMONICSREAL.png" />
+    <EmbeddedResource Include="Resources\HULL.png" />
+    <EmbeddedResource Include="Resources\HUNGARIAN.png" />
+    <EmbeddedResource Include="Resources\KNOLL.png" />
+    <EmbeddedResource Include="Resources\LINEAROBJECT.png" />
+    <EmbeddedResource Include="Resources\LINEARSET.png" />
+    <EmbeddedResource Include="Resources\LINESCORE.png" />
+    <EmbeddedResource Include="Resources\MANHATTAN.png" />
+    <EmbeddedResource Include="Resources\MATCHLINES.png" />
+    <EmbeddedResource Include="Resources\NORMALIZE.png" />
+    <EmbeddedResource Include="Resources\OBJECT.png" />
+    <EmbeddedResource Include="Resources\OBJECTPROPERTIES.png" />
+    <EmbeddedResource Include="Resources\OUTLINE.png" />
+    <EmbeddedResource Include="Resources\OVERRIDEPCA.png" />
+    <EmbeddedResource Include="Resources\PAIRNORMALIZE.png" />
+    <EmbeddedResource Include="Resources\PLANAROBJECT.png" />
+    <EmbeddedResource Include="Resources\PLANARSET.png" />
+    <EmbeddedResource Include="Resources\PLANESCORE.png" />
+    <EmbeddedResource Include="Resources\RADIALSIG.png" />
+    <EmbeddedResource Include="Resources\ROTATEPCA.png" />
+    <EmbeddedResource Include="Resources\SPHERESCORE.png" />
+    <EmbeddedResource Include="Resources\SPHERESET.png" />
+    <EmbeddedResource Include="Resources\SPHERICALOBJECT.png" />
+  </ItemGroup>
 
 </Project>

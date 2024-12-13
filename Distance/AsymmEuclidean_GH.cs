@@ -78,7 +78,7 @@ namespace DigitalCircularityToolkit.Distance
         {
             get
             {
-                return Properties.Resources.DISTANCEASYMM;
+                return IconLoader.DistanceAsymmIcon; //.DISTANCEASYMM;
             }
         }
 
