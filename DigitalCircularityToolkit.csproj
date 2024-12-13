@@ -80,6 +80,7 @@
     <EmbeddedResource Include="Resources\DISTANCEASYMM.png" />
     <EmbeddedResource Include="Resources\DISTANCESYMM.png" />
     <EmbeddedResource Include="Resources\FEATUREVEC.png" />
+    <EmbeddedResource Include="Resources\FRECHET.png" />
     <EmbeddedResource Include="Resources\HARMONICSCOMPLEX.png" />
     <EmbeddedResource Include="Resources\HARMONICSREAL.png" />
     <EmbeddedResource Include="Resources\HULL.png" />

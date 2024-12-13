@@ -17,6 +17,7 @@ namespace DigitalCircularityToolkit
     public static Bitmap DistanceAsymmIcon { get; private set; }
     public static Bitmap DistanceSymmIcon { get; private set; }
     public static Bitmap FeatureVectorIcon { get; private set; }
+    public static Bitmap FrechetDistanceIcon { get; private set; }
     public static Bitmap HarmonicsComplexIcon { get; private set; }
     public static Bitmap HarmonicsRealIcon { get; private set; }
     public static Bitmap Hull2dIcon { get; private set; }
@@ -52,6 +53,7 @@ namespace DigitalCircularityToolkit
         DistanceAsymmIcon = LoadIcon("DigitalCircularityToolkit.Resources.DISTANCEASYMM.png");
         DistanceSymmIcon = LoadIcon("DigitalCircularityToolkit.Resources.DISTANCESYMM.png");
         FeatureVectorIcon = LoadIcon("DigitalCircularityToolkit.Resources.FEATUREVEC.png");
+        FrechetDistanceIcon = LoadIcon("DigitalCircularityToolkit.Resources.FRECHET.png");
         HarmonicsComplexIcon = LoadIcon("DigitalCircularityToolkit.Resources.HARMONICSCOMPLEX.png");
         HarmonicsRealIcon = LoadIcon("DigitalCircularityToolkit.Resources.HARMONICSREAL.png");
         Hull2dIcon = LoadIcon("DigitalCircularityToolkit.Resources.HULL.png");
