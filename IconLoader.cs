@@ -4,6 +4,9 @@ using System.Drawing;
 namespace DigitalCircularityToolkit
 {
 
+    /// <summary>
+    /// Provides access to all icons used in the plugin
+    /// </summary>
   public static class IconLoader
   {
     public static Bitmap AlignToObjectIcon { get; private set; }
