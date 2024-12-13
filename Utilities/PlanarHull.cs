@@ -26,13 +26,10 @@ namespace DigitalCircularityToolkit.Utilities
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to analyze", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Plane", "Plane", "PCA Plane to project to", GH_ParamAccess.item, 1);
+            pManager.AddPlaneParameter("Plane", "Plane", "PCA Plane to project to", GH_ParamAccess.item);
 
-            Param_Integer param = pManager[1] as Param_Integer;
-
-            param.AddNamedValue("XY", 1);
-            param.AddNamedValue("XZ", 2);
-            param.AddNamedValue("YZ", 3);
+            //make plane optional
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -41,7 +38,6 @@ namespace DigitalCircularityToolkit.Utilities
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddBrepParameter("Hull", "Hull", "Planar hull", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Plane", "Plane", "Projection plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -50,43 +46,22 @@ namespace DigitalCircularityToolkit.Utilities
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            //initialize
             DesignObject obj = new DesignObject();
-            int iplane = 1;
 
+            //get data
             if (!DA.GetData(0, ref obj)) return;
-            DA.GetData(1, ref iplane);
+            
+            //if plane is not provided, default to PCA XY
+            Plane plane = new Plane(obj.Localbox.Center, obj.PCA1, obj.PCA2);
+            DA.GetData(1, ref plane);
 
-            Plane plane = GetReferencePlane(obj, iplane);
+            //center to origin
+            plane.Origin = obj.Localbox.Center;
 
             Polyline hull = Hulls.MakeHull2d(obj.SampledPoints, plane);
 
             DA.SetData(0, Brep.CreatePlanarBreps(hull.ToNurbsCurve(), 1e-6)[0]);
-            DA.SetData(1, plane);
-        }
-
-        private Plane GetReferencePlane(DesignObject obj, int iplane)
-        {
-            Plane plane;
-
-            if (iplane == 1)
-            {
-                plane = new Plane(obj.Localbox.Center, obj.PCA1, obj.PCA2);
-            }
-            else if (iplane == 2)
-            {
-                plane = new Plane(obj.Localbox.Center, obj.PCA1, obj.PCA3);
-            }
-            else if (iplane == 3)
-            {
-                plane = new Plane(obj.Localbox.Center, obj.PCA2, obj.PCA3);
-            }
-            else
-            {
-                plane = new Plane(obj.Localbox.Center, obj.PCA1, obj.PCA2);
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Plane enum not recognized, defaulted to PCA XY");
-            }
-
-            return plane;
         }
 
         /// <summary>
