@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Objects
         /// Initializes a new instance of the LinearElement class.
         /// </summary>
         public LinearObject_GH()
-          : base("LinearObject", "LineObj",
+          : base("LinearObject (DCT)", "LineObj",
               "A linear object",
               "DigitalCircularityToolkit", "Objects")
         {

@@ -20,7 +20,7 @@ namespace DigitalCircularityToolkit.Characterization
     /// new tabs/panels will automatically be created.
     /// </summary>
     public FeatureVector()
-      : base("FeatureVector", "FeatureVec",
+      : base("FeatureVector (DCT)", "FeatureVec",
         "Create a feature vector for an object",
         "DigitalCircularityToolkit", "Characterization")
     {

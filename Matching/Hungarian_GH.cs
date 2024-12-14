@@ -17,7 +17,7 @@ namespace DigitalCircularityToolkit.Matching
         /// Initializes a new instance of the Hungarian class.
         /// </summary>
         public Hungarian_GH()
-          : base("Hungarian", "Hungarian",
+          : base("Hungarian (DCT)", "Hungarian",
               "Hungarian matching algorithm",
               "DigitalCircularityToolkit", "Matching")
         {

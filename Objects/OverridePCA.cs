@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Objects
         /// Initializes a new instance of the OverridePCA class.
         /// </summary>
         public OverridePCA()
-          : base("OverridePCA", "OverridePCA",
+          : base("OverridePCA (DCT)", "OverridePCA",
               "Override the calculated principal components with a plane whose X,Y components = PCA1, PCA2",
               "DigitalCircularityToolkit", "Objects")
         {

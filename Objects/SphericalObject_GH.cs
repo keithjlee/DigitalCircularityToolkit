@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Objects
         /// Initializes a new instance of the SphericalObject_GH class.
         /// </summary>
         public SphericalObject_GH()
-          : base("SphericalObject", "SphereObj",
+          : base("SphericalObject (DCT)", "SphereObj",
               "A spherical object",
               "DigitalCircularityToolkit", "Objects")
         {

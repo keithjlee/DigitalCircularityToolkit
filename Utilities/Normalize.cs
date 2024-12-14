@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// Initializes a new instance of the Normalize class.
         /// </summary>
         public Normalize()
-          : base("Normalize", "Normalize",
+          : base("Normalize (DCT)", "Normalize",
               "Normalize a list of numbers by its max value",
               "DigitalCircularityToolkit", "Utilities")
         {

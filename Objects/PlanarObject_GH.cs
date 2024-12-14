@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Objects
         /// Initializes a new instance of the PlanarObject_GH class.
         /// </summary>
         public PlanarObject_GH()
-          : base("PlanarObject", "PlaneObj",
+          : base("PlanarObject (DCT)", "PlaneObj",
               "A planar object",
               "DigitalCircularityToolkit", "Objects")
         {

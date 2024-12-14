@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// Initializes a new instance of the PlanarShadow class.
         /// </summary>
         public PlanarHull()
-          : base("PlanarHull", "Hull2D",
+          : base("PlanarHull (DCT)", "Hull2D",
               "Get the planar convex hull of an object",
               "DigitalCircularityToolkit", "Utilities")
         {

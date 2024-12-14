@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// Initializes a new instance of the AlignToPlane class.
         /// </summary>
         public AlignToPlane()
-          : base("AlignToPlane", "AlignPlane",
+          : base("AlignToPlane (DCT)", "AlignPlane",
               "Align an object to a plane",
               "DigitalCircularityToolkit", "Utilities")
         {

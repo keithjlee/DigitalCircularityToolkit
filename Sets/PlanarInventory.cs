@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Sets
         /// Initializes a new instance of the PlanarInventory class.
         /// </summary>
         public PlanarInventory()
-          : base("PlanarSet", "PlanarSet",
+          : base("PlanarSet (DCT)", "PlanarSet",
               "A set of planar elements",
               "DigitalCircularityToolkit", "Sets")
         {

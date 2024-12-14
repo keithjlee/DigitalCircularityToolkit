@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the HarmonicAnalysisReal_GH class.
         /// </summary>
         public HarmonicAnalysisReal_GH()
-          : base("HarmonicAnalysisReal", "HarmonicsReal",
+          : base("HarmonicAnalysisReal (DCT)", "HarmonicsReal",
               "Get the 2D Fourier shape descriptor of a real-valued signature",
               "DigitalCircularityToolkit", "Characterization")
         {

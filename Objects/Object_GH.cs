@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Objects
         /// Initializes a new instance of the Object_GH class.
         /// </summary>
         public Object_GH()
-          : base("Object", "Obj",
+          : base("Object (DCT)", "Obj",
               "A design object",
               "DigitalCircularityToolkit", "Objects")
         {

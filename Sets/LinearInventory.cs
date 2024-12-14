@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Sets
         /// Initializes a new instance of the LinearInventory class.
         /// </summary>
         public LinearInventory()
-          : base("LinearSet", "LinearSet",
+          : base("LinearSet (DCT)", "LinearSet",
               "A set of linear elements",
               "DigitalCircularityToolkit", "Sets")
         {

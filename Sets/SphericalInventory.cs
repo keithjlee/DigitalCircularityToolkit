@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Sets
         /// Initializes a new instance of the SphericalInventory class.
         /// </summary>
         public SphericalInventory()
-          : base("SphereSet", "SphereSet",
+          : base("SphereSet (DCT)", "SphereSet",
               "A set of spherical elements",
               "DigitalCircularityToolkit", "Sets")
         {

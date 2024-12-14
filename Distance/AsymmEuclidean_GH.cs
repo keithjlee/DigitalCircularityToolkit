@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Distance
         /// Initializes a new instance of the AsymmEuclidean_GH class.
         /// </summary>
         public AsymmEuclidean_GH()
-          : base("AsymmEuclideanDistance", "DMAsymm",
+          : base("AsymmEuclideanDistance (DCT)", "DMAsymm",
               "Generate a distance matrix of asymmetric Euclidean distances between two feature vector sets",
               "DigitalCircularityToolkit", "Distance")
         {

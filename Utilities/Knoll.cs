@@ -17,7 +17,7 @@ namespace DigitalCircularityToolkit.Utilities
     /// new tabs/panels will automatically be created.
     /// </summary>
     public Knoll()
-      : base("Knoll", "Knoll",
+      : base("Knoll (DCT)", "Knoll",
         "Knoll a collection of objects",
         "DigitalCircularityToolkit", "Utilities")
     {

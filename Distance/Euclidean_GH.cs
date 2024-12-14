@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Distance
         /// Initializes a new instance of the CostMatrix_GH class.
         /// </summary>
         public Euclidean_GH()
-          : base("EuclideanDistance", "DMEuclidean",
+          : base("EuclideanDistance (DCT)", "DMEuclidean",
               "Generate a distance matrix of Euclidean distances between two feature vector sets",
               "DigitalCircularityToolkit", "Distance")
         {

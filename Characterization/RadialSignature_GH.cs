@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the RadialSignatureComplex_GH class.
         /// </summary>
         public RadialSignature_GH()
-          : base("RadialSignature", "RadialSig",
+          : base("RadialSignature (DCT)", "RadialSig",
               "Perform a radial signature analysis on a curve.",
               "DigitalCircularityToolkit", "Characterization")
         {

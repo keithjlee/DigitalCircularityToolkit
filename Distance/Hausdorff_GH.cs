@@ -6,14 +6,14 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit
 {
-    public class FrechetDistance : GH_Component
+    public class HausdorffDistance : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the FrechetDistance class.
+        /// Initializes a new instance of the Hausdorff_GH class.
         /// </summary>
-        public FrechetDistance()
-          : base("FrechetDistance (DCT)", "Frechet",
-              "Compute the Frechet distance between two curves",
+        public HausdorffDistance()
+          : base("HausdorffDistance (DCT)", "Hausdorff",
+              "Compute the Hausdorff distance between two curves",
               "DigitalCircularityToolkit", "Distance")
         {
         }
@@ -25,7 +25,7 @@ namespace DigitalCircularityToolkit
         {
             pManager.AddCurveParameter("First curve", "A", "First curve", GH_ParamAccess.item);
             pManager.AddCurveParameter("Second curve", "B", "Second curve", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Sample count", "N", "Number of samples to use for the Frechet distance calculation", GH_ParamAccess.item, 50);
+            pManager.AddIntegerParameter("Sample count", "N", "Number of samples to use for the Hausdorff distance calculation", GH_ParamAccess.item, 50);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace DigitalCircularityToolkit
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("FrechetDistance", "FD", "Frechet distance between the two curves", GH_ParamAccess.item);
+            pManager.AddNumberParameter("HausdorffDistance", "HD", "Hausdorff distance between the two curves", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -50,20 +50,14 @@ namespace DigitalCircularityToolkit
             if (!DA.GetData(1, ref B)) return;
             if (!DA.GetData(2, ref N)) return;
 
-            if (A.IsClosed || B.IsClosed)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Frechet distances will work best for open curves; consider using the Hausdorff distance instead.");
-            }
-
             //divide each curve
             A.DivideByCount(N, true, out Point3d[] Apoints);
             B.DivideByCount(N, true, out Point3d[] Bpoints);
 
-            double fd = Frechet.FrechetDistance(Apoints, Bpoints);
+            double hd = Distance.Hausdorff.ComputeDistance(Apoints, Bpoints);
 
-            DA.SetData(0, fd);
+            DA.SetData(0, hd);
         }
-
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -74,7 +68,7 @@ namespace DigitalCircularityToolkit
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return IconLoader.FrechetDistanceIcon;
+                return IconLoader.HausdorffDistanceIcon;
             }
         }
 
@@ -83,7 +77,7 @@ namespace DigitalCircularityToolkit
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("17CB1D16-9277-477B-955E-2C45AAB7200F"); }
+            get { return new Guid("0EA65DAF-D86A-485E-BE41-E7BF102A5723"); }
         }
     }
 }

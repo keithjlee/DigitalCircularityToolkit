@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the SphereScore class.
         /// </summary>
         public SphereScore()
-          : base("SphereScore", "SphereScore",
+          : base("SphereScore (DCT)", "SphereScore",
               "Measure how well a sphere abstracts an input object",
               "DigitalCircularityToolkit", "Characterization")
         {

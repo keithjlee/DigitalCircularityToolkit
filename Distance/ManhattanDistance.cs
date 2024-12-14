@@ -14,7 +14,7 @@ namespace DigitalCircularityToolkit.Distance
         /// Initializes a new instance of the ManhattanDistance class.
         /// </summary>
         public ManhattanDistance()
-          : base("ManhattanDistance", "DMManhattan",
+          : base("ManhattanDistance (DCT)", "DMManhattan",
               "Generate a distance matrix of manhattan distances between two feature vector sets",
               "DigitalCircularityToolkit", "Distance")
         {

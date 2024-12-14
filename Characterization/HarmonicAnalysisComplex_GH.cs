@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the HarmonicAnalysis_GH class.
         /// </summary>
         public HarmonicAnalysisComplex_GH()
-          : base("HarmonicAnalysisComplex", "HarmonicsComplex",
+          : base("HarmonicAnalysisComplex (DCT)", "HarmonicsComplex",
               "Get the 2D Fourier shape descriptor of a complex signature",
               "DigitalCircularityToolkit", "Characterization")
         {

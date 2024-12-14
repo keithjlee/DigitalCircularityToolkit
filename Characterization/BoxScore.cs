@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the BoxScore class.
         /// </summary>
         public BoxScore()
-          : base("BoxScore", "BoxScore",
+          : base("BoxScore (DCT)", "BoxScore",
               "Measure how well a box abstracts an input object",
               "DigitalCircularityToolkit", "Characterization")
         {

@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the LineScore class.
         /// </summary>
         public LineScore()
-          : base("LineScore", "LineScore",
+          : base("LineScore (DCT)", "LineScore",
               "Measure how well a line abstracts an input object",
               "DigitalCircularityToolkit", "Characterization")
         {

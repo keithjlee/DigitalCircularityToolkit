@@ -15,7 +15,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// Initializes a new instance of the PlanarOutline class.
         /// </summary>
         public PlanarOutline()
-          : base("PlanarOutline", "PlanarOutline",
+          : base("PlanarOutline (DCT)", "PlanarOutline",
               "Get the planar shadow outline of an object",
               "DigitalCircularityToolkit", "Utilities")
         {

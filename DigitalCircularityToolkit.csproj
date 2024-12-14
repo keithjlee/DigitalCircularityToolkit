@@ -83,6 +83,7 @@
     <EmbeddedResource Include="Resources\FRECHET.png" />
     <EmbeddedResource Include="Resources\HARMONICSCOMPLEX.png" />
     <EmbeddedResource Include="Resources\HARMONICSREAL.png" />
+    <EmbeddedResource Include="Resources\HAUSDORFF.png" />
     <EmbeddedResource Include="Resources\HULL.png" />
     <EmbeddedResource Include="Resources\HUNGARIAN.png" />
     <EmbeddedResource Include="Resources\KNOLL.png" />

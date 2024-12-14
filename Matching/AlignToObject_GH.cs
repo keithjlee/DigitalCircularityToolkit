@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Matching
         /// Initializes a new instance of the Align_GH class.
         /// </summary>
         public AlignToObject_GH()
-          : base("AlignToObject", "AlignObj",
+          : base("AlignToObject (DCT)", "AlignObj",
               "Align an object to another",
               "DigitalCircularityToolkit", "Matching")
         {

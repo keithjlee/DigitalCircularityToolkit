@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// Initializes a new instance of the PairNormalize class.
         /// </summary>
         public PairNormalize()
-          : base("PairNormalize", "PairNormalize",
+          : base("PairNormalize (DCT)", "PairNormalize",
               "Normalize two lists of number by the overall maximum value",
               "DigitalCircularityToolkit", "Utilities")
         {

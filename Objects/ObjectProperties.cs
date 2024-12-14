@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the ObjectInformation class.
         /// </summary>
         public ObjectProperties()
-          : base("ObjectProperties", "ObjProps",
+          : base("ObjectProperties (DCT)", "ObjProps",
               "Properties of a design object",
               "DigitalCircularityToolkit", "Objects")
         {

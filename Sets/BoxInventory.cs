@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Sets
         /// Initializes a new instance of the BoxInventory class.
         /// </summary>
         public BoxInventory()
-          : base("BoxSet", "BoxSet",
+          : base("BoxSet (DCT)", "BoxSet",
               "A set of box elements",
               "DigitalCircularityToolkit", "Sets")
         {

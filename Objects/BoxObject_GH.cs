@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Objects
         /// Initializes a new instance of the BoxObject_GH class.
         /// </summary>
         public BoxObject_GH()
-          : base("BoxObject", "BoxObj",
+          : base("BoxObject (DCT)", "BoxObj",
               "A volumetric box object",
               "DigitalCircularityToolkit", "Objects")
         {

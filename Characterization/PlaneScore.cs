@@ -12,7 +12,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// Initializes a new instance of the PlanarScore class.
         /// </summary>
         public PlaneScore()
-          : base("PlaneScore", "PlaneScore",
+          : base("PlaneScore (DCT)", "PlaneScore",
               "Measure how well a plane abstracts an input object",
               "DigitalCircularityToolkit", "Characterization")
         {
