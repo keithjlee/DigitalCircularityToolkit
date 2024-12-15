@@ -5,6 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using LapjvCSharp;
 
 namespace DigitalCircularityToolkit.Matching
 {
@@ -61,6 +62,7 @@ namespace DigitalCircularityToolkit.Matching
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "|demand| > |supply|, not all demands will be assigned a real supply item");
             }
 
+
             if (auto){
 
                 int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
@@ -78,7 +80,7 @@ namespace DigitalCircularityToolkit.Matching
 
             DA.SetDataList(0, assignments);
             DA.SetData(1, total_cost);
-            }
+            
         }
 
         /// <summary>

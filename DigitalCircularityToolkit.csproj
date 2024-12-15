@@ -26,6 +26,7 @@
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
     <PackageReference Include="Grasshopper" Version="8.14.24345.15001" IncludeAssets="compile;build" />
     <PackageReference Include="HungarianAlgorithm" Version="2.2.10" />
+    <PackageReference Include="LapjvCSharp" Version="1.0.1" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="System.Resources.Extensions" Version="9.0.0" />
   </ItemGroup>
