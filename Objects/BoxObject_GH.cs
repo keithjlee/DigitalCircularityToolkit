@@ -38,7 +38,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "BoxObject class", GH_ParamAccess.item);
+            pManager.AddGenericParameter("BoxObject", "BoxObj", "BoxObject class", GH_ParamAccess.item);
             pManager.AddBoxParameter("EffectiveBox", "Box", "Effective box representation of object", GH_ParamAccess.item);
         }
 

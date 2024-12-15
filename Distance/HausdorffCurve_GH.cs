@@ -6,13 +6,13 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit
 {
-    public class HausdorffDistance : GH_Component
+    public class HausdorffDistanceCurve : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the Hausdorff_GH class.
         /// </summary>
-        public HausdorffDistance()
-          : base("HausdorffDistance (DCT)", "Hausdorff",
+        public HausdorffDistanceCurve()
+          : base("HausdorffDistanceCurve (DCT)", "HausdorffCurve",
               "Compute the Hausdorff distance between two curves",
               "DigitalCircularityToolkit", "Distance")
         {
@@ -33,7 +33,7 @@ namespace DigitalCircularityToolkit
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("HausdorffDistance", "HD", "Hausdorff distance between the two curves", GH_ParamAccess.item);
+            pManager.AddNumberParameter("HausdorffDistanceCurve", "HD", "Hausdorff distance between the two curves", GH_ParamAccess.item);
         }
 
         /// <summary>

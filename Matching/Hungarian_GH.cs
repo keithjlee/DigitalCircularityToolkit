@@ -8,7 +8,7 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Matching
 {
-    public class Hungarian_GH : GH_Component
+    public class Hungarian_GH_OBSOLETE : GH_Component
     {
         int[] assignments; //container for assignment indices
         double total_cost; //container for total cost
@@ -16,7 +16,7 @@ namespace DigitalCircularityToolkit.Matching
         /// <summary>
         /// Initializes a new instance of the Hungarian class.
         /// </summary>
-        public Hungarian_GH()
+        public Hungarian_GH_OBSOLETE()
           : base("Hungarian (DCT)", "Hungarian",
               "Hungarian matching algorithm",
               "DigitalCircularityToolkit", "Matching")

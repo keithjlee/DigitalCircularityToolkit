@@ -35,7 +35,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "SphericalObject class", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SphereObject", "SphereObj", "SphericalObject class", GH_ParamAccess.item);
             pManager.AddBrepParameter("EffectiveSphere", "Sphere", "Effective sphere representation of object", GH_ParamAccess.item);
         }
 

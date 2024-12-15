@@ -9,17 +9,17 @@ using LapjvCSharp;
 
 namespace DigitalCircularityToolkit.Matching
 {
-    public class ShortestPath : GH_Component
+    public class Match : GH_Component
     {
         int[] assignments; //container for assignment indices
         double total_cost; //container for total cost
 
         /// <summary>
-        /// Initializes a new instance of the ShortestPath class.
+        /// Initializes a new instance of the Match class.
         /// </summary>
-        public ShortestPath()
-          : base("ShortestPath (DCT)", "ShortestPath",
-              "Shortest Path matching algorithm",
+        public Match()
+          : base("Match (DCT)", "Match",
+              "Perform linear assignment of supply to demand using the Jonker-Volgenant algorithm",
               "DigitalCircularityToolkit", "Matching")
         {
         }
@@ -62,10 +62,10 @@ namespace DigitalCircularityToolkit.Matching
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "|demand| > |supply|, not all demands will be assigned a real supply item");
             }
 
-            LapjvCSharp.Lapjv lap = new LapjvCSharp.Lapjv();
+            Lapjv lap = new Lapjv();
             if (auto){
 
-                int[,] cost_matrix_int = Distance.Utilities.CostTree2CostMatrix(dm);
+                int[,] cost_matrix_int = Distance.Utilities.CostTree2CostMatrix(dm, false);
                 double[,] cost_matrix = new double[cost_matrix_int.GetLength(0), cost_matrix_int.GetLength(1)];
                 for (int i = 0; i < n_demand; i++)
                 {
@@ -74,17 +74,15 @@ namespace DigitalCircularityToolkit.Matching
                         cost_matrix[i, j] = (double)cost_matrix_int[i, j];
                     }
                 }
-
-                double[,] cost_matrix_clone = (double[,])cost_matrix.Clone();
                 
-                (int[] row_assignments, int[] col_assignments) = lap.lapjvCsharp(cost_matrix);
+                (int[] row_assignments, int[] _) = lap.lapjvCsharp(cost_matrix, true, double.PositiveInfinity);
                 assignments = row_assignments;
 
                 total_cost = 0;
 
                 for (int i = 0; i < n_demand; i++)
                 {
-                    total_cost += cost_matrix_clone[i, assignments[i]];
+                    total_cost += cost_matrix_int[i, assignments[i]];
                 }
             }
 
@@ -104,7 +102,7 @@ namespace DigitalCircularityToolkit.Matching
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return IconLoader.HungarianIcon;
             }
         }
 

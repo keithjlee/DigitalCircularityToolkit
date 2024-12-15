@@ -77,6 +77,8 @@ namespace DigitalCircularityToolkit.Distance
             return cost_tree;
         }
 
+        
+
         /// <summary>
         /// Get the |ndemand| x |nsupply| cost matrix DM in data tree format where DM.Branches[i].Values[j] is the distance between the demand and supply points raised to a power
         /// </summary>
