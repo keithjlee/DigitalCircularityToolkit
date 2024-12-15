@@ -66,7 +66,7 @@ namespace DigitalCircularityToolkit.Matching
             if (auto){
 
                 int[,] cost_matrix_int = Distance.Utilities.CostTree2CostMatrix(dm);
-                double[,] cost_matrix = new double[n_demand, n_supply];
+                double[,] cost_matrix = new double[cost_matrix_int.GetLength(0), cost_matrix_int.GetLength(1)];
                 for (int i = 0; i < n_demand; i++)
                 {
                     for (int j = 0; j < n_supply; j++)
@@ -77,8 +77,8 @@ namespace DigitalCircularityToolkit.Matching
 
                 double[,] cost_matrix_clone = (double[,])cost_matrix.Clone();
                 
-                (int[] full_assignments, int[] col_assignments) = lap.lapjvCsharp(cost_matrix);
-                assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
+                (int[] row_assignments, int[] col_assignments) = lap.lapjvCsharp(cost_matrix);
+                assignments = row_assignments;
 
                 total_cost = 0;
 
