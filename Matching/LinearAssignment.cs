@@ -62,21 +62,33 @@ namespace DigitalCircularityToolkit.Matching
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "|demand| > |supply|, not all demands will be assigned a real supply item");
             }
 
-
+            LapjvCSharp.Lapjv lap = new LapjvCSharp.Lapjv();
             if (auto){
 
-                int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
-            int[,] cost_matrix_clone = (int[,])cost_matrix.Clone();
-            var solver = new ShortestPathSolver();
-            int[] full_assignments = solver.Solve(cost_matrix);
-            assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
+                int[,] cost_matrix_int = Distance.Utilities.CostTree2CostMatrix(dm);
+                double[,] cost_matrix = new double[n_demand, n_supply];
+                for (int i = 0; i < n_demand; i++)
+                {
+                    for (int j = 0; j < n_supply; j++)
+                    {
+                        cost_matrix[i, j] = (double)cost_matrix_int[i, j];
+                    }
+                }
 
-            total_cost = 0;
+                double[,] cost_matrix_clone = (double[,])cost_matrix.Clone();
+                
+                (int[] full_assignments, int[] col_assignments) = lap.lapjvCsharp(cost_matrix);
+                assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
 
-            for (int i = 0; i < n_demand; i++)
-            {
-                total_cost += cost_matrix_clone[i, assignments[i]];
+                total_cost = 0;
+
+                for (int i = 0; i < n_demand; i++)
+                {
+                    total_cost += cost_matrix_clone[i, assignments[i]];
+                }
             }
+
+            
 
             DA.SetDataList(0, assignments);
             DA.SetData(1, total_cost);
