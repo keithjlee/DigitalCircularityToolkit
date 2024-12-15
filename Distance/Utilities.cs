@@ -53,7 +53,7 @@ namespace DigitalCircularityToolkit.Distance
             return tree;
         }
 
-        public static int[,] CostTree2CostMatrix(GH_Structure<GH_Integer> tree)
+        public static int[,] CostTree2CostMatrix(GH_Structure<GH_Integer> tree, bool pad = true)
         {
             int n_demand = tree.PathCount;
             int n_supply = tree.get_Branch(0).Count;
@@ -69,7 +69,7 @@ namespace DigitalCircularityToolkit.Distance
                 }
             }
 
-            if (n_demand != n_supply)
+            if (n_demand != n_supply && pad)
             {
                 if (n_demand < n_supply)
                 {

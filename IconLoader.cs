@@ -21,6 +21,7 @@ namespace DigitalCircularityToolkit
     public static Bitmap HarmonicsComplexIcon { get; private set; }
     public static Bitmap HarmonicsRealIcon { get; private set; }
     public static Bitmap HausdorffDistanceIcon { get; private set; }
+    public static Bitmap HausdorffDistancePointsIcon { get; private set; }
     public static Bitmap Hull2dIcon { get; private set; }
     public static Bitmap HungarianIcon { get; private set; }
     public static Bitmap KnollIcon { get; private set; }
@@ -58,6 +59,7 @@ namespace DigitalCircularityToolkit
         HarmonicsComplexIcon = LoadIcon("DigitalCircularityToolkit.Resources.HARMONICSCOMPLEX.png");
         HarmonicsRealIcon = LoadIcon("DigitalCircularityToolkit.Resources.HARMONICSREAL.png");
         HausdorffDistanceIcon = LoadIcon("DigitalCircularityToolkit.Resources.HAUSDORFF.png");
+        HausdorffDistancePointsIcon = LoadIcon("DigitalCircularityToolkit.Resources.HAUSDORFFPOINTS.png");
         Hull2dIcon = LoadIcon("DigitalCircularityToolkit.Resources.HULL.png");
         HungarianIcon = LoadIcon("DigitalCircularityToolkit.Resources.HUNGARIAN.png");
         KnollIcon = LoadIcon("DigitalCircularityToolkit.Resources.KNOLL.png");

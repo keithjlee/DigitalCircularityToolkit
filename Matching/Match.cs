@@ -5,20 +5,21 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using LapjvCSharp;
 
 namespace DigitalCircularityToolkit.Matching
 {
-    public class Hungarian_GH_OBSOLETE : GH_Component
+    public class Match : GH_Component
     {
         int[] assignments; //container for assignment indices
         double total_cost; //container for total cost
-        
+
         /// <summary>
-        /// Initializes a new instance of the Hungarian class.
+        /// Initializes a new instance of the Match class.
         /// </summary>
-        public Hungarian_GH_OBSOLETE()
-          : base("Hungarian (DCT)", "Hungarian",
-              "Hungarian matching algorithm",
+        public Match()
+          : base("Match (DCT)", "Match",
+              "Perform linear assignment of supply to demand using the Jonker-Volgenant algorithm",
               "DigitalCircularityToolkit", "Matching")
         {
         }
@@ -61,24 +62,35 @@ namespace DigitalCircularityToolkit.Matching
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "|demand| > |supply|, not all demands will be assigned a real supply item");
             }
 
+            Lapjv lap = new Lapjv();
             if (auto){
 
-                int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
-            int[,] cost_matrix_clone = (int[,])cost_matrix.Clone();
-            int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
-            assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
+                int[,] cost_matrix_int = Distance.Utilities.CostTree2CostMatrix(dm, false);
+                double[,] cost_matrix = new double[cost_matrix_int.GetLength(0), cost_matrix_int.GetLength(1)];
+                for (int i = 0; i < n_demand; i++)
+                {
+                    for (int j = 0; j < n_supply; j++)
+                    {
+                        cost_matrix[i, j] = (double)cost_matrix_int[i, j];
+                    }
+                }
+                
+                (int[] row_assignments, int[] _) = lap.lapjvCsharp(cost_matrix, true, double.PositiveInfinity);
+                assignments = row_assignments;
 
-            total_cost = 0;
+                total_cost = 0;
 
-            for (int i = 0; i < n_demand; i++)
-            {
-                total_cost += cost_matrix_clone[i, assignments[i]];
+                for (int i = 0; i < n_demand; i++)
+                {
+                    total_cost += cost_matrix_int[i, assignments[i]];
+                }
             }
 
-            }
+            
 
             DA.SetDataList(0, assignments);
             DA.SetData(1, total_cost);
+            
         }
 
         /// <summary>
@@ -88,7 +100,9 @@ namespace DigitalCircularityToolkit.Matching
         {
             get
             {
-                return IconLoader.HungarianIcon; //.HUNGARIAN;
+                //You can add image files to your project resources and access them like this:
+                // return Resources.IconForThisComponent;
+                return IconLoader.HungarianIcon;
             }
         }
 
@@ -97,7 +111,7 @@ namespace DigitalCircularityToolkit.Matching
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("D93D70FA-F26F-4ED8-A35D-9FFE58E460D4"); }
+            get { return new Guid("00A166A1-0044-4E16-AB8E-415FE55E2E1F"); }
         }
     }
 }
