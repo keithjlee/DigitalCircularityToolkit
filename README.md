@@ -11,21 +11,19 @@ A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workfl
 - Shape characterization: LineScore, PlaneScore, BoxScore, SphereScore, RadialSignature
 - Fourier shape descriptors (in complex and real coordinates) of radial signatures
 - Custom feature vector definitions
-- Optimal assignment using the Hungarian matching algorithm
+- Optimal assignment
 - Visualization tools for assignment
 
 This toolkit provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
 
 ## Installation
-The initial public build was compiled February 25, 2024 in preparation for registration in the Food4Rhino ecosystem. It has been tested for Rhino 7/8 for both Windows and Mac.
+The latest build (v0.4) are avilable of [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en) or in the releases page. Two packages are now available, target .NET 4.8 (For Rhino 7, Windows + Mac) and .NET 7 (For Rhino 8, Windows + Mac).
 
 1. Find and download the latest build (.zip file) in the [releases](https://github.com/keithjlee/DigitalCircularityToolkit/releases) page.
 2. Find your Grasshopper components folder by opening Grasshopper, then `File>Special Folders>Components Folder`
 3. **For Windows users:** right click the downloaded .zip file and select `Properties`, and make sure that `Unblock` is checked.
 4. Directly extract the contents of the .zip file to your Components Folder.
 5. Restart Rhino/Grasshopper
-
-A set of example files have been provided (to be updated).
 
 ## Citing
 When using or extending this software for research purposes, please cite using the following:
@@ -38,7 +36,7 @@ When using or extending this software for research purposes, please cite using t
   month        = feb,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {v0.2},
+  version      = {v0.4},
   doi          = {10.5281/zenodo.10724610},
   url          = {https://doi.org/10.5281/zenodo.10724610}
 }
@@ -104,6 +102,12 @@ Features used:
 - The Digital Circularity team consists of Rachel Blowes (SMArchS BT '25), Celia Chaussabel (SMArchS AD '25), Alex Htet Kyaw (SMArchS Comp '25), Keith J. Lee (PhD BT '25), and Karl-Johan Soerensen (SMArchS Comp '25 + SM CEE '25). We are advised by Professor Caitlin Mueller.
 
 # Release Notes
+## Dec 15 2024
+- `Hungarian` is now an obsolete component (still available to use for older projects) and is superseded by `Match`. This uses the Jonker-Volgenant matching algorithm, and results in a 100-500x speed improvement.
+- New Distance Matrix generator `ManhattanDistance` computes the Manhattan distances between feature vectors (e.g., sum of components distance)
+- `Frechet` computes the Frechet distance between two open curves
+- `HausdorffCurve` and `HausdorffPoints` computes the Hausdorff distance between two closed curves or two sets of points.
+
 ## Feb 28 2024
 - `v0.2` was released to enable Zenodo DOI and add minor description changes in some components. No functional changes.
 

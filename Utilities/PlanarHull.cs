@@ -54,7 +54,7 @@ namespace DigitalCircularityToolkit.Utilities
             
             //if plane is not provided, default to PCA XY
             Plane plane = new Plane(obj.Localbox.Center, obj.PCA1, obj.PCA2);
-            DA.GetData(1, ref plane);
+            if (!DA.GetData(1, ref plane)) plane = plane;
 
             //center to origin
             plane.Origin = obj.Localbox.Center;
