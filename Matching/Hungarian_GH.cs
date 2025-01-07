@@ -99,5 +99,7 @@ namespace DigitalCircularityToolkit.Matching
         {
             get { return new Guid("D93D70FA-F26F-4ED8-A35D-9FFE58E460D4"); }
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
     }
 }
