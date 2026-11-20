@@ -62,10 +62,10 @@ namespace DigitalCircularityToolkit.Distance
 
             for (int i = 0; i < n_demand; i++)
             {
-                GH_Path path = tree.get_Path(i);
+                var branch = tree.Branches[i];
                 for (int j = 0; j < n_supply; j++)
                 {
-                    cost_matrix[i, j] = tree.get_DataItem(path, j).Value;
+                    cost_matrix[i, j] = branch[j].Value;
                 }
             }
 

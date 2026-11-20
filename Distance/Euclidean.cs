@@ -88,28 +88,11 @@ namespace DigitalCircularityToolkit.Distance
         /// <returns></returns>
         public static GH_Structure<GH_Integer> EuclideanCostTree(GH_Structure<GH_Number> demands, GH_Structure<GH_Number> supply, int power)
         {
-            int n_demand = demands.PathCount;
-            int n_supply = supply.PathCount;
-
-            GH_Structure<GH_Integer> cost_tree = new GH_Structure<GH_Integer>();
-
-            for (int i = 0; i < n_demand; i++)
-            {
-                var d = demands.Branches[i].Cast<GH_Number>();
-
-                GH_Path path = new GH_Path(i);
-
-                for (int j = 0; j < n_supply; j++)
-                {
-                    var s = supply.Branches[j].Cast<GH_Number>();
-                    int dist = (int)Math.Ceiling(Math.Pow(EuclideanDist(d, s), power));
-
-                    dist = dist < Int32.MaxValue ? dist : Int32.MaxValue;
-
-                    cost_tree.Append(new GH_Integer(dist), path);
-                }
-            }
-            return cost_tree;
+            double[][] d = CostKernels.ToRows(demands);
+            double[][] s = CostKernels.ToRows(supply);
+            return CostKernels.BuildTree(d.Length, s.Length,
+                (i, j) => CostKernels.SaturatingInt(Math.Ceiling(Math.Pow(CostKernels.EuclideanDist(d[i], s[j]), power))),
+                i => new GH_Path(i));
         }
 
         /// <summary>
@@ -122,28 +105,11 @@ namespace DigitalCircularityToolkit.Distance
         /// <returns></returns>
         public static GH_Structure<GH_Integer> AsymmEuclideanCostTree(GH_Structure<GH_Number> demands, GH_Structure<GH_Number> supply, int p, int q)
         {
-            int n_demand = demands.PathCount;
-            int n_supply = supply.PathCount;
-
-            GH_Structure<GH_Integer> cost_tree = new GH_Structure<GH_Integer>();
-
-            for (int i = 0; i < n_demand; i++)
-            {
-                var d = demands.Branches[i].Cast<GH_Number>();
-
-                GH_Path path = new GH_Path(i);
-
-                for (int j = 0; j < n_supply; j++)
-                {
-                    var s = supply.Branches[j].Cast<GH_Number>();
-                    int dist = (int)Math.Ceiling(AsymmEuclideanDist(d, s, p, q));
-
-                    dist = dist < Int32.MaxValue ? dist : Int32.MaxValue;
-
-                    cost_tree.Append(new GH_Integer(dist), path);
-                }
-            }
-            return cost_tree;
+            double[][] d = CostKernels.ToRows(demands);
+            double[][] s = CostKernels.ToRows(supply);
+            return CostKernels.BuildTree(d.Length, s.Length,
+                (i, j) => CostKernels.SaturatingInt(Math.Ceiling(CostKernels.AsymmEuclideanDist(d[i], s[j], p, q))),
+                i => new GH_Path(i));
         }
 
         public static double EuclideanDist(IEnumerable<double> x1, IEnumerable<double> x2)

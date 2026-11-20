@@ -6,7 +6,7 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class LinearObject_GH : GH_Component
+    public class LinearObject_GH : Framework.ObjectConstructorComponent
     {
         /// <summary>
         /// Initializes a new instance of the LinearElement class.
@@ -44,9 +44,9 @@ namespace DigitalCircularityToolkit.Objects
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override Func<DesignObject> Prepare(IGH_DataAccess DA, out string error)
         {
-            // Initialize
+            error = null;
             GeometryBase geo = null;
             int n = 50;
             int qty = 1;
@@ -55,14 +55,9 @@ namespace DigitalCircularityToolkit.Objects
             Vector3d pca_user = new Vector3d(0, 0, 0);
             string id = "NoID";
 
-            // populate
-            if (!DA.GetData(0, ref geo)) return;
-            geo = ObjectInput.Normalize(geo, out string geo_error);
-            if (geo == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, geo_error);
-                return;
-            }
+            if (!DA.GetData(0, ref geo)) return null;
+            geo = ObjectInput.Normalize(geo, out error);
+            if (geo == null) return null;
             DA.GetData(1, ref n);
             DA.GetData(2, ref qty);
             DA.GetData(3, ref buffer);
@@ -71,31 +66,26 @@ namespace DigitalCircularityToolkit.Objects
 
             if (buffer <= 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Buffer must be > 0");
-                return;
+                error = "Buffer must be > 0";
+                return null;
             }
 
-            // Instantiate
-            LinearObject obj = new LinearObject();
+            return () =>
+            {
+                LinearObject obj = new LinearObject();
+                if (geo is Curve curve) obj = new LinearObject(curve, n, qty, buffer, area, pca_user);
+                if (geo is Brep brep) obj = new LinearObject(brep, n, qty, buffer, area, pca_user);
+                if (geo is Mesh mesh) obj = new LinearObject(mesh, qty, buffer, area, pca_user);
+                if (geo is PointCloud pointcloud) obj = new LinearObject(pointcloud, qty, buffer, area, pca_user);
+                obj.ID = id;
+                return obj;
+            };
+        }
 
-            var curve = geo as Curve;
-            if (curve != null) obj = new LinearObject(curve, n, qty, buffer, area, pca_user);
-
-            var brep = geo as Brep;
-            if (brep != null) obj = new LinearObject(brep, n, qty, buffer, area, pca_user);
-
-            var mesh = geo as Mesh;
-            if (mesh != null) obj = new LinearObject(mesh, qty, buffer, area, pca_user);
-
-            var pointcloud = geo as PointCloud;
-            if (pointcloud != null) obj = new LinearObject(pointcloud, qty, buffer, area, pca_user);
-
-            //id
-            obj.ID = id;
-
-            // return
+        protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)
+        {
             DA.SetData(0, obj);
-            DA.SetData(1, obj.EffectiveLine);
+            DA.SetData(1, ((LinearObject)obj).EffectiveLine);
         }
 
         /// <summary>

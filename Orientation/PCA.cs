@@ -292,6 +292,15 @@ namespace DigitalCircularityToolkit.Orientation
         /// <param name="align"></param>
         /// <param name="pca_vectors"></param>
         /// <param name="discretized_points"></param>
+        /// <summary>PCA of a mesh; returns the plane transform instead of applying it to a copy (P1 performance).</summary>
+        public static void SolvePCA(Mesh mesh, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, out Transform plane_transform)
+        {
+            discretized_points = mesh.Vertices.ToPoint3dArray();
+            double[][] positions = Discretizer.PositionMatrix(discretized_points);
+            pca_vectors = PCAvectors(positions, align);
+            plane_transform = GetPlaneTransformer(pca_vectors, discretized_points.ToList());
+        }
+
         public static void SolvePCA(Mesh mesh, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, Mesh transformed_mesh)
         {
             // Get mesh vertices
@@ -307,6 +316,27 @@ namespace DigitalCircularityToolkit.Orientation
             Transform plane_transform = GetPlaneTransformer(pca_vectors, discretized_points.ToList());
 
             transformed_mesh.Transform(plane_transform);
+        }
+
+        /// <summary>
+        /// PCA of a Brep without the transformed copy: no VolumeMassProperties (P1 performance).
+        /// Use <see cref="TransformedBrep"/> when the transformed geometry is actually needed.
+        /// </summary>
+        public static void SolvePCA(Brep brep, int n, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points)
+        {
+            discretized_points = Discretizer.DiscretizeBrep(brep, n).ToArray();
+            double[][] positions = Discretizer.PositionMatrix(discretized_points);
+            pca_vectors = PCAvectors(positions, align);
+        }
+
+        /// <summary>The Brep rotated into the world axes about its volume centroid (as SolvePCA used to produce eagerly).</summary>
+        public static Brep TransformedBrep(Brep brep, Vector3d[] pca_vectors)
+        {
+            VolumeMassProperties props = VolumeMassProperties.Compute(brep);
+            Transform plane_transform = GetPlaneTransformer(pca_vectors, props.Centroid);
+            Brep transformed_brep = brep.DuplicateBrep();
+            transformed_brep.Transform(plane_transform);
+            return transformed_brep;
         }
 
         public static void SolvePCA(Brep brep, int n, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, Brep transformed_brep)

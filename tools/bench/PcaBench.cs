@@ -146,3 +146,73 @@ static class PcaBench
         }
     }
 }
+
+/// <summary>
+/// Can Accord's PCA eigenvector signs be predicted? (P1: replacing Accord must not change any frame.)
+/// For many random clouds, compare Accord's vectors with Jacobi's and test candidate sign rules.
+/// Run: dotnet run -c Release --project tools/bench -- pcasign
+/// </summary>
+static class PcaSignProbe
+{
+    public static void Run()
+    {
+        var rng = new Random(1);
+        int trials = 3000, signMismatchRaw = 0;
+        var rules = new Dictionary<string, int>
+        {
+            ["largest-|component| negative"] = 0, ["largest-|component| positive"] = 0,
+            ["first component negative"] = 0, ["first component positive"] = 0,
+            ["sum negative"] = 0, ["sum positive"] = 0,
+        };
+        int degenerateSkips = 0;
+        for (int t = 0; t < trials; t++)
+        {
+            int n = rng.Next(20, 400);
+            // anisotropic random cloud, random rotation
+            double sx = 1 + rng.NextDouble() * 9, sy = 1 + rng.NextDouble() * 4, sz = 0.1 + rng.NextDouble();
+            var p = new double[3 * n];
+            var R = RandomRotation(rng);
+            for (int i = 0; i < n; i++)
+            {
+                double x = Gauss(rng) * sx, y = Gauss(rng) * sy, z = Gauss(rng) * sz;
+                p[3 * i] = R[0, 0] * x + R[0, 1] * y + R[0, 2] * z + 5;
+                p[3 * i + 1] = R[1, 0] * x + R[1, 1] * y + R[1, 2] * z - 3;
+                p[3 * i + 2] = R[2, 0] * x + R[2, 1] * y + R[2, 2] * z + 1;
+            }
+            var data = new double[n][];
+            for (int i = 0; i < n; i++) data[i] = new[] { p[3 * i], p[3 * i + 1], p[3 * i + 2] };
+            var pca = new PrincipalComponentAnalysis { Method = PrincipalComponentMethod.Center };
+            var tr = pca.Learn(data);
+            var (vals, vecs) = PcaBench.Covariance(p, false);
+            if (vals[0] / vals[1] < 1.01 || vals[1] / vals[2] < 1.01) { degenerateSkips++; continue; }
+            for (int k = 0; k < 3; k++)
+            {
+                // Accord vector k = column k of the regression weights, as in Orientation/PCA.PCAvectors
+                var a = new[] { tr.Weights[0][k], tr.Weights[1][k], tr.Weights[2][k] };
+                var j = vecs[k];
+                double dot = a[0] * j[0] + a[1] * j[1] + a[2] * j[2];
+                if (dot < 0) signMismatchRaw++;
+                int imax = 0; for (int c = 1; c < 3; c++) if (Math.Abs(a[c]) > Math.Abs(a[imax])) imax = c;
+                if (a[imax] < 0) rules["largest-|component| negative"]++; else rules["largest-|component| positive"]++;
+                if (a[0] < 0) rules["first component negative"]++; else rules["first component positive"]++;
+                if (a[0] + a[1] + a[2] < 0) rules["sum negative"]++; else rules["sum positive"]++;
+            }
+        }
+        int used = (trials - degenerateSkips) * 3;
+        Console.WriteLine($"vectors compared: {used} (skipped {degenerateSkips} near-degenerate clouds)");
+        Console.WriteLine($"raw Jacobi sign differs from Accord: {signMismatchRaw}");
+        foreach (var kv in rules) Console.WriteLine($"  Accord vector satisfies '{kv.Key}': {kv.Value}/{used}");
+    }
+
+    static double Gauss(Random r) => Math.Sqrt(-2 * Math.Log(1 - r.NextDouble())) * Math.Cos(2 * Math.PI * r.NextDouble());
+
+    static double[,] RandomRotation(Random r)
+    {
+        double a = r.NextDouble() * 2 * Math.PI, b = Math.Acos(2 * r.NextDouble() - 1), c = r.NextDouble() * 2 * Math.PI;
+        double ca = Math.Cos(a), sa = Math.Sin(a), cb = Math.Cos(b), sb = Math.Sin(b), cc = Math.Cos(c), sc = Math.Sin(c);
+        return new double[,] {
+            { ca * cc - sa * cb * sc, -ca * sc - sa * cb * cc, sa * sb },
+            { sa * cc + ca * cb * sc, -sa * sc + ca * cb * cc, -ca * sb },
+            { sb * sc, sb * cc, cb } };
+    }
+}

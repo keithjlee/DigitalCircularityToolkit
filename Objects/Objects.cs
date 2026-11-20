@@ -43,11 +43,64 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
         public Polyline Hull2D;
-        public Mesh Hull3D;
         public Box Localbox;
         public GeometryBase Geometry;
-        public GeometryBase TransformedGeometry;
         public string ID { get; set; }
+
+        // ---- Lazily computed members (P1 performance). Same values as the former eager fields; computed on first
+        // access, so objects that are never inspected never pay for them. A setter replaces the lazy value.
+
+        private Mesh _hull3D;
+        private Func<Mesh> _hull3DFactory;
+
+        /// <summary>3D convex hull of the sampled points (computed on first access).</summary>
+        public Mesh Hull3D
+        {
+            get
+            {
+                var factory = _hull3DFactory;
+                if (_hull3D == null && factory != null)
+                {
+                    _hull3D = factory();
+                    _hull3DFactory = null;
+                }
+                return _hull3D;
+            }
+            set { _hull3D = value; _hull3DFactory = null; }
+        }
+
+        /// <summary>Defer the 3D hull of <paramref name="points"/> until first access.</summary>
+        protected void SetHull3DLazy(Point3d[] points)
+        {
+            _hull3D = null;
+            _hull3DFactory = points == null ? (Func<Mesh>)null : () => Hulls.MakeHull(points);
+        }
+
+        private GeometryBase _transformedGeometry;
+        private Func<GeometryBase> _transformedGeometryFactory;
+
+        /// <summary>The geometry rotated into the world axes about its analysis pivot (computed on first access; not used by any component).</summary>
+        public GeometryBase TransformedGeometry
+        {
+            get
+            {
+                var factory = _transformedGeometryFactory;
+                if (_transformedGeometry == null && factory != null)
+                {
+                    _transformedGeometry = factory();
+                    _transformedGeometryFactory = null;
+                }
+                return _transformedGeometry;
+            }
+            set { _transformedGeometry = value; _transformedGeometryFactory = null; }
+        }
+
+        /// <summary>Defer the transformed geometry until first access.</summary>
+        protected void SetTransformedGeometryLazy(Func<GeometryBase> factory)
+        {
+            _transformedGeometry = null;
+            _transformedGeometryFactory = factory;
+        }
 
         public DesignObject() { }
 
@@ -133,7 +186,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject(List<Point3d> points, int _)
@@ -194,7 +247,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject(Mesh mesh, int _)
@@ -215,11 +268,8 @@ namespace DigitalCircularityToolkit.Objects
 
         public void Populate(Mesh mesh)
         {
-            // Initialize
-            Mesh transformed_mesh = mesh.DuplicateMesh();
-
             // Solve
-            PCA.SolvePCA(mesh, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, transformed_mesh);
+            PCA.SolvePCA(mesh, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, out Transform plane_transform);
 
             // Populate
             NSamples = mesh.Vertices.Count;
@@ -228,7 +278,12 @@ namespace DigitalCircularityToolkit.Objects
             PCA2 = pca_vectors[1];
             PCA3 = pca_vectors[2];
             Geometry = mesh;
-            TransformedGeometry = transformed_mesh;
+            SetTransformedGeometryLazy(() =>
+            {
+                Mesh transformed_mesh = mesh.DuplicateMesh();
+                transformed_mesh.Transform(plane_transform);
+                return transformed_mesh;
+            });
 
             // Get Centroid
             Centroid = PCA.GetCentroid(discretized_points.ToList());
@@ -241,7 +296,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject(Brep brep, int n)
@@ -262,11 +317,8 @@ namespace DigitalCircularityToolkit.Objects
 
         public void Populate(Brep brep, int n_target)
         {
-            // Initialize
-            Brep transformed_brep = brep.DuplicateBrep();
-
             // Solve
-            PCA.SolvePCA(brep, n_target, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, transformed_brep);
+            PCA.SolvePCA(brep, n_target, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points);
 
             // Populate
             NSamples = discretized_points.Length;
@@ -275,7 +327,8 @@ namespace DigitalCircularityToolkit.Objects
             PCA2 = pca_vectors[1];
             PCA3 = pca_vectors[2];
             Geometry = brep;
-            TransformedGeometry = transformed_brep;
+            Vector3d[] pca_copy = (Vector3d[])pca_vectors.Clone();
+            SetTransformedGeometryLazy(() => PCA.TransformedBrep(brep, pca_copy));
 
             // Get Centroid
             Centroid = PCA.GetCentroid(discretized_points.ToList());
@@ -288,7 +341,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject Rotate(int axis, double deg)
@@ -367,19 +420,38 @@ namespace DigitalCircularityToolkit.Objects
                 hull.Transform(t);
                 obj.Hull2D = hull;
             }
-            if (Hull3D != null)
+            if (_hull3D != null)
             {
-                Mesh hull3 = Hull3D.DuplicateMesh();
+                Mesh hull3 = _hull3D.DuplicateMesh();
                 hull3.Transform(t);
                 obj.Hull3D = hull3;
             }
+            else if (_hull3DFactory != null)
+            {
+                // Move the original's hull when first needed (a hull of the moved samples can triangulate
+                // coplanar faces differently).
+                DesignObject source = this;
+                obj._hull3D = null;
+                obj._hull3DFactory = () =>
+                {
+                    Mesh h = source.Hull3D?.DuplicateMesh();
+                    h?.Transform(t);
+                    return h;
+                };
+            }
 
             // TransformedGeometry (the geometry rotated into the world axes about the centroid) keeps its
-            // orientation; only its pivot moves. It is not read anywhere today.
-            if (TransformedGeometry != null)
+            // orientation; only its pivot moves. It is not read anywhere today, so it stays lazy.
+            if (_transformedGeometry != null || _transformedGeometryFactory != null)
             {
-                obj.TransformedGeometry = TransformedGeometry.Duplicate();
-                obj.TransformedGeometry.Translate(obj.Centroid - Centroid);
+                DesignObject source = this;
+                Vector3d delta = obj.Centroid - Centroid;
+                obj.SetTransformedGeometryLazy(() =>
+                {
+                    GeometryBase g = source.TransformedGeometry?.Duplicate();
+                    g?.Translate(delta);
+                    return g;
+                });
             }
 
             obj.TransformDerived(t);
@@ -398,8 +470,13 @@ namespace DigitalCircularityToolkit.Objects
             // transformed geometry
             Plane plane_global = new Plane(plane.Origin, Vector3d.XAxis, Vector3d.YAxis);
             Transform plane_transform = Transform.PlaneToPlane(plane, plane_global);
-            TransformedGeometry = Geometry.Duplicate();
-            TransformedGeometry.Transform(plane_transform);
+            GeometryBase geometry = Geometry;
+            SetTransformedGeometryLazy(() =>
+            {
+                GeometryBase transformed = geometry.Duplicate();
+                transformed.Transform(plane_transform);
+                return transformed;
+            });
             Boundingbox = Geometry.GetBoundingBox(plane, out Localbox);
 
             LocalPlane.Origin = Localbox.Center;
