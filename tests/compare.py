@@ -70,15 +70,19 @@ def main():
     ap.add_argument("new")
     ap.add_argument("--rtol", type=float, default=1e-6)
     ap.add_argument("--partial", action="store_true", help="ignore fixtures missing from the new recording")
+    ap.add_argument("--changed-out", help="write the names of differing fixtures to this file, one per line")
     ap.add_argument("--max", type=int, default=40, help="max differences printed per fixture")
     args = ap.parse_args()
     failed = False
+    changed = []
     base, new = recordings(args.base), recordings(args.new)
     for name in sorted(set(base) | set(new)):
         if args.partial and name not in new:
             continue
         if name not in base or name not in new:
             print("%-22s only in %s" % (name, args.base if name in base else args.new))
+            if name in new:
+                changed.append(name)
             failed = True
             continue
         A, B = load(base[name])["components"], load(new[name])["components"]
@@ -97,6 +101,8 @@ def main():
             if a["ms"] >= 5 or b["ms"] >= 5:
                 timing.append((comp, a["ms"], b["ms"]))
         status = "DIFF" if lines else "ok"
+        if lines:
+            changed.append(name)
         failed |= bool(lines)
         print("%-22s %s" % (name, status))
         for l in lines[: args.max]:
@@ -106,6 +112,9 @@ def main():
         for comp, ta, tb in sorted(timing, key=lambda t: -max(t[1], t[2]))[:6]:
             ratio = (ta / tb) if tb > 0 else math.inf
             print("    time %-26s %9.1f -> %9.1f ms  (%.1fx)" % (comp, ta, tb, ratio))
+    if args.changed_out:
+        with open(args.changed_out, "w") as f:
+            f.write("".join(n + "\n" for n in changed))
     sys.exit(1 if failed else 0)
 
 

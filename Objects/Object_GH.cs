@@ -50,6 +50,12 @@ namespace DigitalCircularityToolkit.Objects
             string id = "NoID";
 
             if (!DA.GetData(0, ref geo)) return;
+            geo = ObjectInput.Normalize(geo, out string geo_error);
+            if (geo == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, geo_error);
+                return;
+            }
             DA.GetData(1, ref n);
             DA.GetData(2, ref id);
 

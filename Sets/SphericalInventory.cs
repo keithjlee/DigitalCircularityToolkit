@@ -61,8 +61,12 @@ namespace DigitalCircularityToolkit.Sets
             List<Mesh> hulls = new List<Mesh>();
             List<string> ids = new List<string>();
 
+            int nulls = 0;
             for (int i = 0; i < objs.Count; i++)
             {
+                // Null entries (e.g. geometry a constructor rejected) are skipped; Indexer keeps input positions.
+                if (objs[i] == null) { nulls++; continue; }
+
                 int qty = objs[i].Quantity;
 
                 for (int j = 0; j < qty; j++)
@@ -75,6 +79,11 @@ namespace DigitalCircularityToolkit.Sets
                     hulls.Add(objs[i].Hull);
                     ids.Add(objs[i].ID);
                 }
+            }
+
+            if (nulls > 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("{0} null object(s) ignored", nulls));
             }
 
             DA.SetDataList(0, spheres);

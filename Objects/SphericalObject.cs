@@ -38,6 +38,13 @@ namespace DigitalCircularityToolkit.Objects
 
         public SphericalObject() { }
 
+        protected override void TransformDerived(Transform t)
+        {
+            Sphere sphere = EffectiveSphere;
+            sphere.Transform(t);
+            EffectiveSphere = sphere;
+        }
+
         public SphericalObject(DesignObject obj)
         {
             this.Centroid = obj.Centroid;

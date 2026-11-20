@@ -60,6 +60,12 @@ namespace DigitalCircularityToolkit.Objects
 
             // populate
             if (!DA.GetData(0, ref geo)) return;
+            geo = ObjectInput.Normalize(geo, out string geo_error);
+            if (geo == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, geo_error);
+                return;
+            }
             DA.GetData(1, ref n);
             DA.GetData(2, ref qty);
             DA.GetData(3, ref buffer1);
@@ -70,6 +76,7 @@ namespace DigitalCircularityToolkit.Objects
             if (buffer1 <= 0 || buffer2 <= 0 || buffer3 <= 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Buffer must be > 0");
+                return;
             }
 
             BoxObject obj = new BoxObject();

@@ -30,14 +30,20 @@ ln -sfn "$DCT_RECORD_DIR" "$ROOT/tests/out/latest"
 echo "recorded: $DCT_RECORD_DIR"
 STATUS=0
 if [[ -d "$ROOT/tests/goldens" ]] && ls "$ROOT/tests/goldens"/*.json.gz >/dev/null 2>&1; then
-  python3 "$ROOT/tests/compare.py" ${DCT_FIXTURES:+--partial} "$ROOT/tests/goldens" "$DCT_RECORD_DIR" || STATUS=$?
+  python3 "$ROOT/tests/compare.py" ${DCT_FIXTURES:+--partial} --changed-out "$DCT_RECORD_DIR/changed.txt" \
+    "$ROOT/tests/goldens" "$DCT_RECORD_DIR" || STATUS=$?
 else
   echo "no goldens yet (use --update to create them)"
+  ls "$DCT_RECORD_DIR"/*.json | xargs -n1 basename | sed 's/\.json$//' > "$DCT_RECORD_DIR/changed.txt"
 fi
 if [[ $UPDATE -eq 1 ]]; then
   mkdir -p "$ROOT/tests/goldens"
-  for f in "$DCT_RECORD_DIR"/*.json; do gzip -9 -n -c "$f" > "$ROOT/tests/goldens/$(basename "$f").gz"; done
-  echo "goldens updated from $DCT_RECORD_DIR"
+  # Only fixtures whose outputs/messages changed: timing-only differences do not rewrite goldens.
+  while read -r name; do
+    [[ -n "$name" ]] || continue
+    gzip -9 -n -c "$DCT_RECORD_DIR/$name.json" > "$ROOT/tests/goldens/$name.json.gz"
+    echo "golden updated: $name"
+  done < "$DCT_RECORD_DIR/changed.txt"
   STATUS=0
 fi
 exit $STATUS

@@ -21,7 +21,7 @@ import System
 from System.Drawing import PointF
 import Rhino.Geometry as rg
 import Grasshopper as gh
-from Grasshopper.Kernel import GH_Document, GH_DocumentIO, GH_ParameterSide
+from Grasshopper.Kernel import GH_Convert, GH_Document, GH_DocumentIO, GH_ParameterSide
 from Grasshopper.Kernel.Data import GH_Path
 from Grasshopper.Kernel import Parameters as P
 from Grasshopper.Kernel import Types as T
@@ -554,6 +554,31 @@ def fx_characterization():
     return c
 
 
+def fx_inputs():
+    """Constructor input handling: SubD / Extrusion / Surface conversion, an unsupported type (Point) (B8),
+    a user-supplied PlanarObject thickness (B7), and an invalid buffer."""
+    rng = random.Random(9)
+    c = Canvas()
+    box = box_from_dims(rand_plane(rng, rg.Point3d(0, 0, 0)), 2000.0, 400.0, 60.0)
+    subd = rg.SubD.CreateFromMesh(rg.Mesh.CreateFromBox(box, 2, 2, 1))
+    rect = rg.Rectangle3d(rg.Plane(rg.Point3d(5000, 0, 0), rg.Vector3d(1, 0.2, 0), rg.Vector3d(-0.2, 1, 0)), 1500.0, 500.0)
+    extrusion = rg.Extrusion.Create(rect.ToNurbsCurve(), 40.0, True)
+    surface = rg.PlaneSurface(rg.Plane(rg.Point3d(10000, 0, 0), rg.Vector3d(0, 0, 1)), rg.Interval(0, 1200), rg.Interval(0, 800))
+    items = [subd, extrusion, surface, rg.Point(rg.Point3d(1, 2, 3)), box.ToBrep()]
+    src = c.data(P.Param_Geometry, GH_Convert.ToGeometricGoo, items, "MixedGeometry", 0, 0)
+    o = c.comp("Object (DCT)", "Object", 250, 0)
+    c.wire(src, o, "Geometry")
+    po = c.comp("PlanarObject (DCT)", "PlanarObject_T30", 250, 150)
+    c.wire(src, po, "Geometry")
+    c.value(po, "Thickness", 30.0)
+    pset = c.comp("PlanarSet (DCT)", "PlanarSet_T30", 500, 150)
+    c.wire((po, "PlanarObject"), pset, "Objects")
+    lo = c.comp("LinearObject (DCT)", "LinearObject_Buffer0", 250, 300)
+    c.wire(src, lo, "Geometry")
+    c.value(lo, "LengthBuffer", 0.0)
+    return c
+
+
 FIXTURES = [
     ("linear_small", fx_linear_small),
     ("linear_shortage", fx_linear_shortage),
@@ -563,6 +588,7 @@ FIXTURES = [
     ("square_slabs", fx_square_slabs),
     ("modifiers", fx_modifiers),
     ("characterization", fx_characterization),
+    ("inputs", fx_inputs),
 ]
 
 

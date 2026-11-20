@@ -308,50 +308,86 @@ namespace DigitalCircularityToolkit.Objects
                 rotaxis = this.PCA3;
             }
 
-            // rotate the local plane
             double rad = deg / 180 * Math.PI;
             Transform rotater = Transform.Rotation(rad, rotaxis, this.Centroid);
 
-            // transform all relevant data
-            var rotated_geo = Geometry.Duplicate();
-            rotated_geo.Transform(rotater);
-
-            // figure out type and set
-            DesignObject obj = new DesignObject();
-
-            if (rotated_geo is Curve curve) obj = new DesignObject(curve, NSamples);
-
-            if (rotated_geo is Brep brep) obj = new DesignObject(brep, NSamples);
-
-            if (rotated_geo is Mesh mesh) obj = new DesignObject(mesh, NSamples);
-
-            if (rotated_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
-
-            obj.ID = ID;
-
-            return obj;
+            return TransformedCopy(rotater);
         }
 
         public DesignObject TransformObject(Transform t)
         {
+            return TransformedCopy(t);
+        }
 
-            var transformed_geo = Geometry.Duplicate();
-            transformed_geo.Transform(t);
+        /// <summary>
+        /// A copy of this object moved by the rigid transform <paramref name="t"/>, keeping its concrete type
+        /// and parameters (B5). The analysis is carried along instead of recomputed: the frame, box, samples
+        /// and hulls are equivariant under rigid motion (MODIFIER_SPEC rule 3). The original is not modified.
+        /// </summary>
+        public DesignObject TransformedCopy(Transform t)
+        {
+            if (t.IsRigid(1e-6) != TransformRigidType.Rigid)
+                throw new ArgumentException("Design objects can only be moved by rigid transforms (rotation + translation).");
 
-            DesignObject obj = new DesignObject();
+            DesignObject obj = ShallowCopy();
 
-            if (transformed_geo is Curve curve) obj = new DesignObject(curve, NSamples);
+            if (Geometry != null)
+            {
+                obj.Geometry = Geometry.Duplicate();
+                obj.Geometry.Transform(t);
+            }
 
-            if (transformed_geo is Brep brep) obj = new DesignObject(brep, NSamples);
+            Point3d centroid = Centroid;
+            centroid.Transform(t);
+            obj.Centroid = centroid;
 
-            if (transformed_geo is Mesh mesh) obj = new DesignObject(mesh, NSamples);
+            if (SampledPoints != null)
+            {
+                var pts = (Point3d[])SampledPoints.Clone();
+                for (int i = 0; i < pts.Length; i++) pts[i].Transform(t);
+                obj.SampledPoints = pts;
+            }
 
-            if (transformed_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
+            Vector3d v1 = PCA1, v2 = PCA2, v3 = PCA3;
+            v1.Transform(t); v2.Transform(t); v3.Transform(t);
+            obj.PCA1 = v1; obj.PCA2 = v2; obj.PCA3 = v3;
 
-            obj.ID = ID;
+            Plane plane = LocalPlane;
+            plane.Transform(t);
+            obj.LocalPlane = plane;
 
+            Box box = Localbox;
+            box.Transform(t);
+            obj.Localbox = box;
+            // Boundingbox is expressed in the local frame, so it does not change.
+
+            if (Hull2D != null)
+            {
+                var hull = new Polyline(Hull2D);
+                hull.Transform(t);
+                obj.Hull2D = hull;
+            }
+            if (Hull3D != null)
+            {
+                Mesh hull3 = Hull3D.DuplicateMesh();
+                hull3.Transform(t);
+                obj.Hull3D = hull3;
+            }
+
+            // TransformedGeometry (the geometry rotated into the world axes about the centroid) keeps its
+            // orientation; only its pivot moves. It is not read anywhere today.
+            if (TransformedGeometry != null)
+            {
+                obj.TransformedGeometry = TransformedGeometry.Duplicate();
+                obj.TransformedGeometry.Translate(obj.Centroid - Centroid);
+            }
+
+            obj.TransformDerived(t);
             return obj;
         }
+
+        /// <summary>Subclasses transform any stored world-space data of their own here (called on the copy).</summary>
+        protected virtual void TransformDerived(Transform t) { }
 
         public void Repopulate(Plane plane)
         {
