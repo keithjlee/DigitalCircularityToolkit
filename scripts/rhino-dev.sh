@@ -15,6 +15,11 @@
 # Snapshots live in ${TMPDIR}dct-dev/<time>-<git sha>/ (the newest 5 are kept). Because each launch loads its
 # own copy, you can keep editing and building while Rhino runs, and bin/Debug is never locked.
 #
+# If this repo's bin/Debug/... is registered in GrasshopperDeveloperSettings (Library Folders), Grasshopper already
+# loads DCT from there, and a snapshot would be a second copy with the same GUIDs. The script detects that and
+# builds into bin/Debug instead (so Rhino must be quit before building), launching without a snapshot.
+# Untick that folder to get snapshots back.
+#
 # Make sure no released DCT is installed (Package Manager or Grasshopper Libraries folder): identical component
 # GUIDs would collide with the dev build.
 set -euo pipefail
@@ -42,6 +47,26 @@ APP="Rhino $RHINO_VER"
 RHINO_BIN="/Applications/$APP.app/Contents/MacOS/Rhinoceros"
 [[ -x "$RHINO_BIN" ]] || { echo "Rhino not found: $RHINO_BIN" >&2; exit 1; }
 [[ -z "$GHFILE" || -f "$GHFILE" ]] || { echo "No such file: $GHFILE" >&2; exit 1; }
+
+# ---- DCT already registered in GrasshopperDeveloperSettings? ----
+# Folders are stored '|'-separated in Assemblies:Folders of grasshopper_kernel.xml. Only existing folders inside
+# this repo count (a stale bin/Debug/net7.0 entry loads nothing).
+GH_DEV_DIR=""
+for KERNEL in "$HOME/Library/Application Support/McNeel/Rhinoceros/$RHINO_VER.0/Plug-ins/Grasshopper ("*")/grasshopper_kernel.xml"; do
+  [[ -f "$KERNEL" ]] || continue
+  FOLDERS="$(sed -n 's/.*name="Assemblies:Folders"[^>]*>\(.*\)<\/item>.*/\1/p' "$KERNEL" | sed 's/&amp;/\&/g')"
+  IFS='|' read -r -a FOLDER_LIST <<< "$FOLDERS"
+  for F in ${FOLDER_LIST[@]+"${FOLDER_LIST[@]}"}; do
+    F="${F%/}"
+    [[ -d "$F" ]] || continue
+    case "$(cd "$F" && pwd -P)/" in "$(cd "$ROOT" && pwd -P)/"*) GH_DEV_DIR="$F"; break 2 ;; esac
+  done
+done
+if [[ -n "$GH_DEV_DIR" ]]; then
+  echo "GrasshopperDeveloperSettings already loads DCT from $GH_DEV_DIR"
+  echo "  -> building into bin/Debug and launching without a snapshot (untick that folder to use snapshots)."
+  IN_PLACE=1
+fi
 
 # ---- running Rhino? ----
 if pgrep -xq Rhinoceros && [[ $DRY_RUN -eq 0 ]]; then
@@ -93,6 +118,11 @@ if [[ -n "$GHFILE" ]]; then
 fi
 [[ -n "${DCT_MACRO:-}" ]] && MACRO="$DCT_MACRO"
 
+if [[ -n "$GH_DEV_DIR" ]]; then
+  echo "$RHINO_BIN -runscript=$MACRO"
+  [[ $DRY_RUN -eq 1 ]] && exit 0
+  exec "$RHINO_BIN" -nosplash "-runscript=$MACRO"
+fi
 echo "RHINO_PACKAGE_DIRS=$PKG_DIR"
 echo "$RHINO_BIN -runscript=$MACRO"
 [[ $DRY_RUN -eq 1 ]] && exit 0
