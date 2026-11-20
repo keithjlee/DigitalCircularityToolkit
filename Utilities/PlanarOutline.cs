@@ -67,6 +67,24 @@ namespace DigitalCircularityToolkit.Utilities
 
             if (obj.Geometry is PointCloud pc) shadow = GetShadow(pc, plane);
 
+            if (shadow == null && obj.Geometry != null && !(obj.Geometry is Curve) && !(obj.Geometry is PointCloud))
+            {
+                // Outline failed (B13): fall back to the convex hull of the vertices, and say so.
+                Point3d[] pts = OutlineFallbackPoints(obj.Geometry);
+                if (pts.Length >= 3)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Could not compute the exact outline; returning the planar convex hull instead");
+                    shadow = Hulls.MakeHull2d(pts, plane).ToPolylineCurve();
+                }
+            }
+
+            if (shadow == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not compute an outline for geometry of type " +
+                    (obj.Geometry == null ? "null" : obj.Geometry.GetType().Name));
+                return;
+            }
+
             DA.SetData(0, shadow);
 
 
@@ -99,25 +117,66 @@ namespace DigitalCircularityToolkit.Utilities
                 brep_mesh.Append(mesh);
             }
 
-            return GetShadow(brep_mesh, plane);
+            return GetShadow(brep_mesh, plane, geo.IsSolid);
         }
 
-        private Curve GetShadow(Mesh geo, Plane plane)
+        private Curve GetShadow(Mesh geo, Plane plane, bool closed = false)
         {
             Polyline[] outlines = geo.GetOutlines(plane);
+
+            if (outlines == null || outlines.Length == 0)
+            {
+                // GetOutlines fails when faces are edge-on to the plane or project onto each other (e.g. a box viewed
+                // along its own axes, B13). For a closed mesh the front-facing faces alone cover the whole shadow, so
+                // retry with those (edge-on and back faces dropped).
+                Mesh facing = FrontFacing(geo, plane.Normal, closed || geo.IsClosed);
+                if (facing != null) outlines = facing.GetOutlines(plane);
+            }
 
             return JoinOutlines(outlines);
         }
 
+        private static Mesh FrontFacing(Mesh geo, Vector3d normal, bool closed)
+        {
+            if (!closed) return null;
+            Mesh m = geo.DuplicateMesh();
+            m.FaceNormals.ComputeFaceNormals();
+            var drop = new List<int>();
+            for (int i = 0; i < m.Faces.Count; i++)
+            {
+                if (m.FaceNormals[i] * normal <= 1e-6) drop.Add(i);
+            }
+            if (drop.Count == 0 || drop.Count == m.Faces.Count) return null;
+            m.Faces.DeleteFaces(drop);
+            m.Compact();
+            return m;
+        }
+
+        private static Point3d[] OutlineFallbackPoints(GeometryBase geo)
+        {
+            if (geo is Mesh mesh) return mesh.Vertices.ToPoint3dArray();
+            if (geo is Brep brep)
+            {
+                var pts = new List<Point3d>();
+                foreach (var v in brep.Vertices) pts.Add(v.Location);
+                foreach (var m in Mesh.CreateFromBrep(brep, MeshingParameters.FastRenderMesh) ?? new Mesh[0])
+                    pts.AddRange(m.Vertices.ToPoint3dArray());
+                return pts.ToArray();
+            }
+            return new Point3d[0];
+        }
+
         private Curve JoinOutlines(Polyline[] outlines)
         {
+            if (outlines == null || outlines.Length == 0) return null;
+
             // convert to polylinecurve
             List<PolylineCurve> outline_curves = new List<PolylineCurve>();
             foreach (Polyline outline in outlines) outline_curves.Add(outline.ToPolylineCurve());
 
             Curve[] joined_curves = Curve.JoinCurves(outline_curves);
 
-            return joined_curves[0];
+            return joined_curves.Length > 0 ? joined_curves[0] : null;
         }
 
 

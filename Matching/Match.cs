@@ -54,43 +54,49 @@ namespace DigitalCircularityToolkit.Matching
             if (!DA.GetDataTree(0, out GH_Structure<GH_Integer> dm)) return;
             DA.GetData(1, ref auto);
 
-            int n_demand = dm.PathCount;
-            int n_supply = dm.get_Branch(0).Count;
+            string invalid = AssignmentHelpers.Validate(dm, out int n_demand, out int n_supply);
+            if (invalid != null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, invalid);
+                return;
+            }
 
             if (n_demand > n_supply)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "|demand| > |supply|, not all demands will be assigned a real supply item");
             }
 
-            Lapjv lap = new Lapjv();
-            if (auto){
-
+            if (auto)
+            {
                 int[,] cost_matrix_int = Distance.Utilities.CostTree2CostMatrix(dm, false);
-                double[,] cost_matrix = new double[cost_matrix_int.GetLength(0), cost_matrix_int.GetLength(1)];
+                double[,] cost_matrix = new double[n_demand, n_supply];
                 for (int i = 0; i < n_demand; i++)
                 {
                     for (int j = 0; j < n_supply; j++)
                     {
-                        cost_matrix[i, j] = (double)cost_matrix_int[i, j];
+                        cost_matrix[i, j] = cost_matrix_int[i, j];
                     }
                 }
-                
+
+                Lapjv lap = new Lapjv();
                 (int[] row_assignments, int[] _) = lap.lapjvCsharp(cost_matrix, true, double.PositiveInfinity);
                 assignments = row_assignments;
+                total_cost = AssignmentHelpers.AssignedCost(cost_matrix_int, assignments, out int unassigned);
 
-                total_cost = 0;
-
-                for (int i = 0; i < n_demand; i++)
+                if (unassigned > 0)
                 {
-                    total_cost += cost_matrix_int[i, assignments[i]];
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format(
+                        "{0} demand item(s) have no supply item: their Assignment is -1, and Cost excludes them", unassigned));
                 }
             }
-
-            
+            else if (assignments == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "AutoRun is false and no assignment has been computed yet. Set AutoRun to true (e.g. press the button) to run.");
+                return;
+            }
 
             DA.SetDataList(0, assignments);
             DA.SetData(1, total_cost);
-            
         }
 
         /// <summary>

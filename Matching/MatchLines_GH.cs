@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Matching
@@ -53,15 +54,38 @@ namespace DigitalCircularityToolkit.Matching
 
             if (pdemand.Count != ids.Count)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Length of demand points must equal length of assignment indices");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, string.Format(
+                    "Length of demand points ({0}) must equal length of assignment indices ({1})", pdemand.Count, ids.Count));
+                return;
             }
 
-            List<Line> lines = new List<Line>();
+            // One entry per demand point, so the output stays parallel to the demand list.
+            // Unassigned demand (index -1, demand > supply) gives a null entry.
+            var lines = new List<GH_Line>(pdemand.Count);
+            int unassigned = 0;
 
             for (int i = 0; i < pdemand.Count; i++)
             {
-                Line line = new Line(pdemand[i], psupply[ids[i]]);
-                lines.Add(line);
+                int j = ids[i];
+                if (j == -1)
+                {
+                    lines.Add(null);
+                    unassigned++;
+                    continue;
+                }
+                if (j < 0 || j >= psupply.Count)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, string.Format(
+                        "Assignment index {0} at position {1} is out of range: there are {2} supply points", j, i, psupply.Count));
+                    return;
+                }
+                lines.Add(new GH_Line(new Line(pdemand[i], psupply[j])));
+            }
+
+            if (unassigned > 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format(
+                    "{0} demand point(s) are unassigned (index -1); their lines are null", unassigned));
             }
 
             DA.SetDataList(0, lines);

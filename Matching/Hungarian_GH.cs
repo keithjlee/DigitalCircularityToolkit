@@ -53,28 +53,36 @@ namespace DigitalCircularityToolkit.Matching
             if (!DA.GetDataTree(0, out GH_Structure<GH_Integer> dm)) return;
             DA.GetData(1, ref auto);
 
-            int n_demand = dm.PathCount;
-            int n_supply = dm.get_Branch(0).Count;
+            string invalid = AssignmentHelpers.Validate(dm, out int n_demand, out int n_supply);
+            if (invalid != null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, invalid);
+                return;
+            }
 
             if (n_demand > n_supply)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "|demand| > |supply|, not all demands will be assigned a real supply item");
             }
 
-            if (auto){
-
-                int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
-            int[,] cost_matrix_clone = (int[,])cost_matrix.Clone();
-            int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
-            assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
-
-            total_cost = 0;
-
-            for (int i = 0; i < n_demand; i++)
+            if (auto)
             {
-                total_cost += cost_matrix_clone[i, assignments[i]];
-            }
+                int[,] cost_matrix = Distance.Utilities.CostTree2CostMatrix(dm);
+                int[,] cost_matrix_clone = (int[,])cost_matrix.Clone();
+                int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
+                assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
+                total_cost = AssignmentHelpers.AssignedCost(cost_matrix_clone, assignments, out int unassigned);
 
+                if (unassigned > 0)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format(
+                        "{0} demand item(s) have no supply item: their Assignment is -1, and Cost excludes them", unassigned));
+                }
+            }
+            else if (assignments == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "AutoRun is false and no assignment has been computed yet. Set AutoRun to true (e.g. press the button) to run.");
+                return;
             }
 
             DA.SetDataList(0, assignments);
