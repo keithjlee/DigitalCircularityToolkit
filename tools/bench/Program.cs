@@ -27,6 +27,7 @@ static class P {
   static void Main(string[] args){
     if (args.Length > 0 && args[0] == "pca") { PcaBench.Run(); return; }
     if (args.Length > 0 && args[0] == "pcasign") { PcaSignProbe.Run(); return; }
+    if (args.Length > 0 && args[0] == "eigcheck") { EigenCheck.Run(); return; }
     var rng=new Random(1);
     Console.WriteLine($"cores={Environment.ProcessorCount}");
     foreach(var (n,m,k) in new[]{(500,500,8),(2000,2000,8),(2000,2000,64)}){

@@ -24,7 +24,6 @@
     </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Accord.Statistics" Version="3.8.0" />
     <!-- Deliberately pinned to an old 8.x SR: a plugin will not load in a Rhino older than the SDK it references.
          Bump only when a newer API is actually needed. -->
     <PackageReference Include="Grasshopper" Version="8.14.24345.15001" IncludeAssets="compile;build" />

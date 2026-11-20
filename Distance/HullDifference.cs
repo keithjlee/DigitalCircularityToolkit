@@ -1,5 +1,4 @@
-﻿using Accord.Statistics.Kernels;
-using DigitalCircularityToolkit.Objects;
+﻿using DigitalCircularityToolkit.Objects;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Commands;

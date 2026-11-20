@@ -216,3 +216,49 @@ static class PcaSignProbe
             { sb * sc, sb * cc, cb } };
     }
 }
+
+/// <summary>
+/// Checks Orientation/SymmetricEigen3 (the Accord replacement) against Accord's PCA on random clouds:
+/// the axes must agree up to sign. Run: dotnet run -c Release --project tools/bench -- eigcheck
+/// </summary>
+static class EigenCheck
+{
+    public static void Run()
+    {
+        var rng = new Random(2);
+        double worst = 1; int compared = 0, skipped = 0;
+        for (int t = 0; t < 3000; t++)
+        {
+            int n = rng.Next(10, 500);
+            var data = new double[n][];
+            double sx = 1 + 9 * rng.NextDouble(), sy = 1 + 4 * rng.NextDouble(), sz = 0.05 + rng.NextDouble();
+            double a = rng.NextDouble() * 6.3, b = rng.NextDouble() * 3.1;
+            for (int i = 0; i < n; i++)
+            {
+                double x = (rng.NextDouble() - 0.5) * sx, y = (rng.NextDouble() - 0.5) * sy, z = (rng.NextDouble() - 0.5) * sz;
+                double x1 = Math.Cos(a) * x - Math.Sin(a) * y, y1 = Math.Sin(a) * x + Math.Cos(a) * y;
+                double y2 = Math.Cos(b) * y1 - Math.Sin(b) * z, z2 = Math.Sin(b) * y1 + Math.Cos(b) * z;
+                data[i] = new[] { x1 + 1000, y2 - 500, z2 + 20 };
+            }
+            var pca = new PrincipalComponentAnalysis { Method = PrincipalComponentMethod.Center };
+            var tr = pca.Learn(data);
+            double mx = 0, my = 0, mz = 0;
+            foreach (var p in data) { mx += p[0]; my += p[1]; mz += p[2]; }
+            mx /= n; my /= n; mz /= n;
+            var C = new double[3, 3];
+            foreach (var p in data)
+            {
+                double[] d = { p[0] - mx, p[1] - my, p[2] - mz };
+                for (int r = 0; r < 3; r++) for (int c = 0; c < 3; c++) C[r, c] += d[r] * d[c];
+            }
+            DigitalCircularityToolkit.Orientation.SymmetricEigen3.Decompose(C, out var vals, out var vecs);
+            if (vals[0] / vals[1] < 1.05 || vals[1] / vals[2] < 1.05) { skipped++; continue; }
+            for (int k = 0; k < 3; k++)
+            {
+                double dot = Math.Abs(tr.Weights[0][k] * vecs[k][0] + tr.Weights[1][k] * vecs[k][1] + tr.Weights[2][k] * vecs[k][2]);
+                worst = Math.Min(worst, dot); compared++;
+            }
+        }
+        Console.WriteLine($"axes compared {compared} (skipped {skipped} near-degenerate): worst |cos(Accord, Jacobi)| = {worst:F12}");
+    }
+}

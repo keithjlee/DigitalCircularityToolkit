@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.IntegralTransforms;
-using Accord;
 using Grasshopper.Kernel.Types;
 using System.Numerics;
 using MathNet.Numerics;
