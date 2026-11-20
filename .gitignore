@@ -377,3 +377,14 @@ tools/rhino-profile/*.error.txt
 # Local planning notes and agent instructions (not published)
 CLAUDE.md
 docs/
+
+# Regression fixtures (generated) and recordings
+tests/fixtures/generated/
+tests/out/
+
+# Unattended Rhino run artifacts
+tools/rhino-profile/*.log
+tools/rhino-profile/*.done
+tests/rhino/*.log
+tests/rhino/*.done
+tests/rhino/*.error.txt

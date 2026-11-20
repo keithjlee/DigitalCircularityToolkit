@@ -18,6 +18,11 @@ except BaseException:  # noqa: BLE001
     with open(os.path.splitext(target)[0] + ".error.txt", "w") as f:
         f.write(traceback.format_exc())
 
+# Completion marker: tools/rhino-profile/run.sh kills Rhino if it has not quit shortly after this appears
+# (the idle-exit below occasionally never fires).
+with open(os.path.splitext(target)[0] + ".done", "w") as f:
+    f.write("done\n")
+
 if os.environ.get("DCT_EXIT_WHEN_DONE") == "1":
     def _exit_on_idle(sender, e):
         Rhino.RhinoApp.Idle -= _exit_on_idle

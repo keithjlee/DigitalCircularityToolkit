@@ -61,9 +61,9 @@
 
   <!-- Side projects (benchmarks etc.) live under tools/ and must not be globbed into the plugin -->
   <ItemGroup>
-    <Compile Remove="tools/**" />
-    <None Remove="tools/**" />
-    <EmbeddedResource Remove="tools/**" />
+    <Compile Remove="tools/**;tests/**" />
+    <None Remove="tools/**;tests/**" />
+    <EmbeddedResource Remove="tools/**;tests/**" />
   </ItemGroup>
 
   <!-- Icons by convention (new components, see docs/DEV_WORKFLOW.md):
