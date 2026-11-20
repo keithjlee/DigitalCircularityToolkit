@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Rhino-free micro-benchmarks for distance-matrix construction and LAP solvers.
+       Run from repo root: dotnet run -c Release (project tools/bench) -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="LapjvCSharp" Version="1.0.2" />
+    <PackageReference Include="Accord.Statistics" Version="3.8.0" />
+    <PackageReference Include="MIConvexHull" Version="1.2.0" />
+    <Compile Include="../../Matching/ShortestPathSolver.cs" Link="ShortestPathSolver.cs" />
+  </ItemGroup>
+</Project>

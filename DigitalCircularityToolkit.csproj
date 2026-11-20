@@ -6,8 +6,9 @@
         Rhino 7: net48
         Rhino 8 Windows: net48, net7.0, net7.0-windows, net7.0-windows10.0.22000.0, etc
         Rhino 8 Mac: net7.0, net7.0-macos, net7.0-macos12.0, etc
+        Rhino 8.20+ / Rhino 9: net8.0 (rolls forward onto the .NET 10 runtime used by Rhino 8.36+ and Rhino 9)
     -->
-    <TargetFrameworks>net7.0-windows;net7.0;net48</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows;net8.0;net48</TargetFrameworks>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <TargetExt>.gha</TargetExt>
     <NoWarn>NU1701;NETSDK1086</NoWarn>
@@ -24,17 +25,13 @@
   
   <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
+    <!-- Deliberately pinned to an old 8.x SR: a plugin will not load in a Rhino older than the SDK it references.
+         Bump only when a newer API is actually needed. -->
     <PackageReference Include="Grasshopper" Version="8.14.24345.15001" IncludeAssets="compile;build" />
-    <PackageReference Include="HungarianAlgorithm" Version="2.2.10" />
-    <PackageReference Include="LapjvCSharp" Version="1.0.1" />
+    <PackageReference Include="HungarianAlgorithm" Version="2.3.9" />
+    <PackageReference Include="LapjvCSharp" Version="1.0.2" />
+    <PackageReference Include="MIConvexHull" Version="1.2.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="9.0.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="MIConvexHull">
-      <HintPath>Resources\MIConvexHull.dll</HintPath>
-    </Reference>
   </ItemGroup>
   
   <!-- <ItemGroup>
@@ -57,21 +54,34 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
-  <!-- Reference WinForms for .NET 7.0 on macOS -->
+  <!-- Reference WinForms (System.Drawing etc.) for the cross-platform net8.0 build (Rhino 8.11+) -->
   <ItemGroup Condition="!($(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4')))">
-    <!-- Rhino 8.11 and later you can use this -->
-    <!-- <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" /> -->
-    
-    <!-- Rhino 8.10 and earlier -->
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" ExcludeAssets="all" GeneratePathProperty="true" />
-    <Reference Include="$(PkgMicrosoft_NETFramework_ReferenceAssemblies_net48)\build\.NETFramework\v4.8\System.Windows.Forms.dll" Private="False" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" ExcludeAssets="runtime" />
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
   </ItemGroup>
 
-  <PropertyGroup>     
-  <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-  </PropertyGroup>
+  <!-- Side projects (benchmarks etc.) live under tools/ and must not be globbed into the plugin -->
+  <ItemGroup>
+    <Compile Remove="tools/**" />
+    <None Remove="tools/**" />
+    <EmbeddedResource Remove="tools/**" />
+  </ItemGroup>
 
+  <!-- Icons by convention (new components, see docs/DEV_WORKFLOW.md):
+       Icons/<ClassName>.svg|.pdf  ->  Resources/Icons/<ClassName>.png (generated, committed)  ->  embedded. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\*.png" />
+  </ItemGroup>
+
+  <!-- Render changed icon sources before resources are collected. Runs in the outer multi-TFM build (inner
+       builds then find the PNGs up to date) and in single-TFM builds (-f). Skipped on Windows: PNGs are committed. -->
+  <Target Name="GenerateIcons" BeforeTargets="DispatchToInnerBuilds;PrepareForBuild" Condition="'$(OS)' != 'Windows_NT'">
+    <Exec Command="bash &quot;$(MSBuildProjectDirectory)/scripts/icons.sh&quot;" />
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\Icons\*.png" Exclude="@(EmbeddedResource)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Legacy icons: loaded by explicit IconLoader properties -->
   <ItemGroup>
     <EmbeddedResource Include="Resources\ALIGNTOOBJECT.png" />
     <EmbeddedResource Include="Resources\ALIGNTOPLANE.png" />

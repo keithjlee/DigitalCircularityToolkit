@@ -51,6 +51,13 @@ namespace DigitalCircularityToolkit.Objects
 
         public DesignObject() { }
 
+        /// <summary>
+        /// Shallow copy that preserves the concrete subtype (a LinearObject stays a LinearObject).
+        /// Modifier components must copy before changing anything: Grasshopper hands every downstream
+        /// component the same instance. Replace fields on the copy; never mutate shared geometry in place.
+        /// </summary>
+        public DesignObject ShallowCopy() => (DesignObject)MemberwiseClone();
+
         public DesignObject(DesignObject other)
         {
             this.Centroid= other.Centroid;
