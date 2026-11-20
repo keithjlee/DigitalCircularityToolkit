@@ -53,12 +53,12 @@ namespace DigitalCircularityToolkit.Distance
                 return;
             }
 
-            // Same values as before: sum of |differences|, truncated by (int) (B11: other metrics use Ceiling).
+            // Sum of |differences|, rounded up like the other metrics (B11: it used to truncate).
             double[][] d = CostKernels.ToRows(demands);
             double[][] s = CostKernels.ToRows(supply);
             var paths = demands.Paths;
             GH_Structure<GH_Integer> distances = CostKernels.BuildTree(d.Length, s.Length,
-                (i, j) => CostKernels.SaturatingInt(CostKernels.ManhattanDist(d[i], s[j])),
+                (i, j) => CostKernels.SaturatingInt(Math.Ceiling(CostKernels.ManhattanDist(d[i], s[j]))),
                 i => paths[i]);
 
             DA.SetDataTree(0, distances);

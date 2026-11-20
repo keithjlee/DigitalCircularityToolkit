@@ -32,7 +32,7 @@ namespace DigitalCircularityToolkit
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("HausdorffDistancePoints", "HD", "Hausdorff distance between the two sets of points", GH_ParamAccess.item);
+            pManager.AddNumberParameter("HausdorffDistancePoints", "HD", "Hausdorff distance between the two sets of points (symmetric: the larger of the two directed distances)", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -46,6 +46,12 @@ namespace DigitalCircularityToolkit
 
             if (!DA.GetDataList(0, A)) return;
             if (!DA.GetDataList(1, B)) return;
+
+            if (A.Count == 0 || B.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Both point sets must contain at least one point");
+                return;
+            }
 
             double hd = Distance.Hausdorff.ComputeDistance(A.ToArray(), B.ToArray());
 
