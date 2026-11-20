@@ -17,10 +17,10 @@
   
     <PropertyGroup>
       <!-- Specifies information for Assembly and Yak -->
-      <Version>1.0</Version>
+      <Version>0.5.0</Version>
       <Title>DigitalCircularityToolkit</Title>
       <Company>DigitalCircularityToolkit Authors</Company>
-      <Description>Description of DigitalCircularityToolkit</Description>
+      <Description>Inventory-driven / circular structural design for Grasshopper: abstraction, characterization, distance matrices and optimal assignment of reclaimed objects.</Description>
     </PropertyGroup>
   
   <ItemGroup>

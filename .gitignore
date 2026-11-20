@@ -388,3 +388,6 @@ tools/rhino-profile/*.done
 tests/rhino/*.log
 tests/rhino/*.done
 tests/rhino/*.error.txt
+
+# Release packages
+dist/

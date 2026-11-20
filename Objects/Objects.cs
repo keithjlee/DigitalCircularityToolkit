@@ -379,7 +379,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         public DesignObject TransformedCopy(Transform t)
         {
-            if (t.IsRigid(1e-6) != TransformRigidType.Rigid)
+            if (!IsRigidMotion(t))
                 throw new ArgumentException("Design objects can only be moved by rigid transforms (rotation + translation).");
 
             DesignObject obj = ShallowCopy();
@@ -456,6 +456,24 @@ namespace DigitalCircularityToolkit.Objects
 
             obj.TransformDerived(t);
             return obj;
+        }
+
+        /// <summary>
+        /// Rotation + translation only: orthonormal 3×3 part with determinant +1 and an affine bottom row.
+        /// (Own check rather than Transform.IsRigid, to stay within the Rhino 7 API.)
+        /// </summary>
+        private static bool IsRigidMotion(Transform t)
+        {
+            const double tol = 1e-6;
+            if (Math.Abs(t.M30) > tol || Math.Abs(t.M31) > tol || Math.Abs(t.M32) > tol || Math.Abs(t.M33 - 1) > tol) return false;
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                {
+                    double dot = t[0, i] * t[0, j] + t[1, i] * t[1, j] + t[2, i] * t[2, j];
+                    if (Math.Abs(dot - (i == j ? 1 : 0)) > tol) return false;
+                }
+            double det = t.M00 * (t.M11 * t.M22 - t.M12 * t.M21) - t.M01 * (t.M10 * t.M22 - t.M12 * t.M20) + t.M02 * (t.M10 * t.M21 - t.M11 * t.M20);
+            return det > 0;
         }
 
         /// <summary>Subclasses transform any stored world-space data of their own here (called on the copy).</summary>
