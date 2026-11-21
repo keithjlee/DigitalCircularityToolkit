@@ -85,8 +85,12 @@ def main():
                 changed.append(name)
             failed = True
             continue
-        A, B = load(base[name])["components"], load(new[name])["components"]
+        ra, rb = load(base[name]), load(new[name])
+        A, B = ra["components"], rb["components"]
         lines, timing = [], []
+        # Warnings/errors while reading the .gh (e.g. a component's inputs no longer match the saved file).
+        if rb.get("io_messages"):
+            lines.append("  %-28s %s" % ("<file IO>", short(rb["io_messages"])))
         for comp in sorted(set(A) | set(B)):
             if comp not in A or comp not in B:
                 lines.append("  %-28s %s" % (comp, "added" if comp in B else "removed"))

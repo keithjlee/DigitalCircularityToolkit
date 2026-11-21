@@ -464,6 +464,13 @@
     "type": "Param_Integer",
     "access": "item",
     "optional": true
+   },
+   {
+    "name": "Normalize",
+    "nick": "Norm",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": false
    }
   ],
   "outputs": [
@@ -497,6 +504,13 @@
     "type": "Param_Integer",
     "access": "item",
     "optional": true
+   },
+   {
+    "name": "Normalize",
+    "nick": "Norm",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": false
    }
   ],
   "outputs": [

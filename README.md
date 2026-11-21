@@ -105,7 +105,7 @@ Features used:
 
 # Release Notes
 ## v0.5 (final Rhino 7 release)
-Bug fixes, much faster object analysis, and a few deliberate behaviour changes. Saved definitions open unchanged (no component or parameter changes).
+Bug fixes, much faster object analysis, and a few deliberate behaviour changes. Saved definitions open unchanged: no components or parameters were removed or renamed. The harmonics components gain one optional input.
 
 **Behaviour changes**
 - Principal axes are now computed with a built-in solver instead of Accord.NET (removed). The axes are the same, but their *directions* now follow a fixed rule: PCA1 points towards +X, PCA2 towards +Y, and PCA3 = PCA1 × PCA2 (always a right-handed frame). Some objects therefore have flipped axes compared with v0.4. Where an axis is mathematically undefined (straight lines, perfect squares, spheres), its direction may differ from v0.4.
@@ -114,6 +114,7 @@ Bug fixes, much faster object analysis, and a few deliberate behaviour changes. 
 - `HarmonicAnalysisReal` / `HarmonicAnalysisComplex` were reading the FFT output wrongly, and now return true Fourier descriptors, so values change. Values are in model units and no longer depend on the sample count.
   - Real: the amplitudes of harmonics 1, 2, 3, ... (N samples give N/2). Previously the real and imaginary parts were listed as separate values, starting with a constant 0, and the last 1–2 samples were dropped.
   - Complex: ordered |c1|, |c-1|, |c2|, |c-2|, ..., so a short `FVLength` keeps the lowest frequencies. The samples are oriented counter-clockwise first, so reversed and mirrored curves give the same descriptor (previously they did not, because the fitted plane's normal direction is arbitrary). `Signature` also accepts Grasshopper complex numbers.
+  - New optional `Normalize` input on both (default false, so existing definitions are unchanged). It makes the descriptor ignore size: Real divides by the mean radius, Complex by |c1| (its first value is then 1).
   - `RadialSignature`'s `DistanceSignature` is now the distance measured in the plane, as documented. It was the 3D distance; the two are the same for planar curves.
 - `RotatePCA`, `AlignToPlane`, `AlignToObject` and `Knoll` keep the object type (e.g. a `LinearObject` stays a `LinearObject`, with its quantity, buffers and area), so their outputs can go straight into the Set components. Objects are moved with their axes instead of being re-analysed.
 - The `Hulls` outputs of `BoxSet`/`SphereSet` and `VolumeHull` of `ObjectProperties` are only computed when connected or when the component preview is on.

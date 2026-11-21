@@ -16,7 +16,8 @@ import clr
 clr.AddReference("Grasshopper")
 import System
 import Rhino.Geometry as rg
-from Grasshopper.Kernel import GH_DocumentIO, GH_RuntimeMessageLevel, IGH_Component
+from GH_IO.Serialization import GH_Archive
+from Grasshopper.Kernel import GH_Document, GH_RuntimeMessageLevel, IGH_Component
 
 DCT_CATEGORY = "DigitalCircularityToolkit"
 FULL_LIMIT = 4000          # outputs with more items than this are stored as a digest
@@ -142,10 +143,16 @@ def record_component(comp):
 
 
 def record_fixture(path):
-    io = GH_DocumentIO()
-    if not io.Open(path):
-        raise IOError("could not open " + path)
-    doc = io.Document
+    # GH_Archive instead of GH_DocumentIO: no modal "IO generated N messages" dialog, and the messages are recorded
+    # (e.g. "Input parameter chunk is missing" when a component's inputs no longer match an old file).
+    archive = GH_Archive()
+    if not archive.ReadFromFile(path):
+        raise IOError("could not read " + path)
+    doc = GH_Document()
+    if not archive.ExtractObject(doc, "Definition"):
+        raise IOError("could not extract the definition from " + path)
+    io_msgs = sorted(set("%s: %s" % (m.Type, m.Message) for m in archive.Messages
+                         if str(m.Type).lower() in ("warning", "error")))
     doc.Enabled = True
     t0 = time.perf_counter()
     doc.NewSolution(True)
@@ -156,8 +163,12 @@ def record_fixture(path):
             comps[obj.NickName] = record_component(obj)
     doc.Enabled = False
     doc.Dispose()
-    return {"fixture": os.path.basename(path), "solve_wall_ms": round(wall * 1000, 1),
-            "rhino": str(Rhino.RhinoApp.Version), "components": dict(sorted(comps.items()))}
+    rec = {"fixture": os.path.basename(path), "solve_wall_ms": round(wall * 1000, 1),
+           "rhino": str(Rhino.RhinoApp.Version)}
+    if io_msgs:
+        rec["io_messages"] = io_msgs
+    rec["components"] = dict(sorted(comps.items()))
+    return rec
 
 
 def main():

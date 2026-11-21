@@ -519,6 +519,25 @@ def fx_characterization():
     hc_f = c.comp("HarmonicAnalysisComplex (DCT)", "HarmonicsComplex_Flipped", 750, 150)
     c.wire((rs_f, "ComplexSignature"), hc_f, "Signature")
     c.value(hc_f, "FVLength", 8)
+    # Normalize: the flipped outlines scaled by 2.5 must give the same normalized harmonics as the originals.
+    scaled = []
+    for g in flipped:
+        crv = g.Value.DuplicateCurve()
+        crv.Transform(rg.Transform.Scale(crv.PointAtStart, 2.5))
+        scaled.append(T.GH_Curve(crv))
+    out_s = c.data(P.Param_Curve, lambda g: g, scaled, "Outlines_Scaled", 0, 1000)
+    rs_s = c.comp("RadialSignature (DCT)", "RadialSignature_Scaled", 250, 1000)
+    c.wire(out_s, rs_s, "Curve")
+    c.value(rs_s, "NumSamples", 64)
+    for sig_src, tag in ((rs, ""), (rs_s, "_Scaled")):
+        hr_n = c.comp("HarmonicAnalysisReal (DCT)", "HarmonicsReal_Norm" + tag, 500, 1000 + (150 if tag else 0))
+        c.wire((sig_src, "DistanceSignature"), hr_n, "Signature")
+        c.value(hr_n, "FVLength", 8)
+        c.value(hr_n, "Normalize", True)
+        hc_n = c.comp("HarmonicAnalysisComplex (DCT)", "HarmonicsComplex_Norm" + tag, 750, 1000 + (150 if tag else 0))
+        c.wire((sig_src, "ComplexSignature"), hc_n, "Signature")
+        c.value(hc_n, "FVLength", 8)
+        c.value(hc_n, "Normalize", True)
 
     hd = c.comp("HausdorffDistanceCurve (DCT)", "HausdorffCurve", 250, 300)
     c.wire(ca, hd, "First curve")
