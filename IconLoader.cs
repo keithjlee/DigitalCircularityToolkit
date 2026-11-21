@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Drawing;
 
@@ -90,6 +91,24 @@ namespace DigitalCircularityToolkit
       var imageStream = assembly.GetManifestResourceStream(resourceName);
 
       return new Bitmap(imageStream);
+    }
+
+    // ---- Convention-based icons (new components) ----------------------------------------------
+    // Icons/<Name>.svg|.pdf  --(build: scripts/icons.sh)-->  Resources/Icons/<Name>.png  --(embedded)-->
+    // manifest name "DigitalCircularityToolkit.Resources.Icons.<Name>.png". DctComponent uses its class name.
+
+    private static readonly ConcurrentDictionary<string, Bitmap> _byName = new ConcurrentDictionary<string, Bitmap>();
+
+    /// <summary>
+    /// Icon embedded at Resources/Icons/&lt;name&gt;.png, or null (Grasshopper then draws its default icon).
+    /// </summary>
+    public static Bitmap Get(string name)
+    {
+      return _byName.GetOrAdd(name, n =>
+      {
+        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DigitalCircularityToolkit.Resources.Icons." + n + ".png");
+        return stream == null ? null : new Bitmap(stream);
+      });
     }
 
   }

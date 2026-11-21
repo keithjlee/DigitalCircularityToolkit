@@ -47,15 +47,9 @@ namespace DigitalCircularityToolkit.Objects
             if (!DA.GetData(0, ref obj)) return;
             if (!DA.GetData(1, ref plane)) return;
 
-            //if (obj is LinearObject) obj = new LinearObject(obj);
-            //if (obj is PlanarObject) obj = new PlanarObject(obj);
-            //if (obj is BoxObject) obj = new BoxObject(obj);
-            //if (obj is SphericalObject) obj = new SphericalObject(obj);
-
-            if (obj is LinearObject) obj = (LinearObject)obj;
-            if (obj is PlanarObject) obj = (PlanarObject)obj;
-            if (obj is BoxObject) obj = (BoxObject)obj;
-            if (obj is SphericalObject) obj = (SphericalObject)obj;
+            // Grasshopper hands this component the same instance as the upstream output: work on a copy (B4).
+            // ShallowCopy keeps the concrete type; Repopulate only assigns fields, so the copy is safe to change.
+            obj = obj.ShallowCopy();
 
             // assert that plane origin is centered
             plane.Origin = obj.Localbox.Center;

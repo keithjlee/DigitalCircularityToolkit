@@ -55,9 +55,20 @@ namespace DigitalCircularityToolkit
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Frechet distances will work best for open curves; consider using the Hausdorff distance instead.");
             }
 
+            if (N < 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Sample count must be at least 1");
+                return;
+            }
+
             //divide each curve
             A.DivideByCount(N, true, out Point3d[] Apoints);
             B.DivideByCount(N, true, out Point3d[] Bpoints);
+            if (Apoints == null || Bpoints == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not divide the curves");
+                return;
+            }
 
             double fd = Frechet.FrechetDistance(Apoints, Bpoints);
 

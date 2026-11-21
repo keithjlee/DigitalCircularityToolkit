@@ -4,10 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
-using Accord.Statistics;
-using Accord;
-using Accord.Statistics.Analysis;
-using Accord.Statistics.Models.Regression.Linear;
 using Rhino.Geometry.Collections;
 
 namespace DigitalCircularityToolkit.Orientation
@@ -75,9 +71,9 @@ namespace DigitalCircularityToolkit.Orientation
 
 
         /// <summary>
-        /// Flip PCA2 and PCA3 such that PCA2 is in the same direction as the global Y axis (if not perpendicular)
+        /// Former sign convention (kept for reference; no longer used): flip PCA2 and PCA3 together so that PCA2
+        /// points along +Y. It left PCA1's sign arbitrary and did not enforce a right-handed frame.
         /// </summary>
-        /// <param name="vectors"></param>
         public static void AlignY(Vector3d[] vectors)
         {
             if (vectors[1].Y < 0)
@@ -88,44 +84,71 @@ namespace DigitalCircularityToolkit.Orientation
         }
 
         /// <summary>
-        /// Get the spatial PCA vectors PCA1, PCA2, PCA
-        /// Optionally aligned such that PCA2 is aligned with global Y
+        /// Deterministic signs (ALIGNMENT_SPEC §6): PCA1 has a non-negative world-X component (ties: Y, then Z),
+        /// PCA2 a non-negative world-Y component (ties: Z, then X), and PCA3 = PCA1 × PCA2 (right-handed).
         /// </summary>
-        /// <param name="positions"></param>
-        /// <param name="align"></param>
-        /// <returns></returns>
+        public static void Canonicalize(Vector3d[] vectors)
+        {
+            vectors[0] = SignFirstNonZero(vectors[0], 0);
+            vectors[1] = SignFirstNonZero(vectors[1], 1);
+            vectors[2] = Vector3d.CrossProduct(vectors[0], vectors[1]);
+            vectors[2].Unitize();
+        }
+
+        private static Vector3d SignFirstNonZero(Vector3d v, int first)
+        {
+            const double eps = 1e-9;
+            for (int k = 0; k < 3; k++)
+            {
+                double c = v[(first + k) % 3];
+                if (Math.Abs(c) > eps) return c < 0 ? -v : v;
+            }
+            return v;
+        }
+
+        /// <summary>
+        /// Principal axes of a point set: eigenvectors of the covariance matrix, by decreasing variance.
+        /// Two passes (mean, then centred second moments) and a 3×3 Jacobi eigensolve; O(n), no per-point
+        /// allocation. Replaces Accord's PCA (P1). With <paramref name="align"/>, signs follow
+        /// <see cref="Canonicalize"/>; otherwise only the right-handed frame is enforced.
+        /// </summary>
+        public static Vector3d[] PCAvectors(IReadOnlyList<Point3d> points, bool align)
+        {
+            int n = points.Count;
+            double mx = 0, my = 0, mz = 0;
+            for (int i = 0; i < n; i++) { mx += points[i].X; my += points[i].Y; mz += points[i].Z; }
+            if (n > 0) { mx /= n; my /= n; mz /= n; }
+
+            double xx = 0, xy = 0, xz = 0, yy = 0, yz = 0, zz = 0;
+            for (int i = 0; i < n; i++)
+            {
+                double x = points[i].X - mx, y = points[i].Y - my, z = points[i].Z - mz;
+                xx += x * x; xy += x * y; xz += x * z; yy += y * y; yz += y * z; zz += z * z;
+            }
+            var cov = new double[,] { { xx, xy, xz }, { xy, yy, yz }, { xz, yz, zz } };
+
+            SymmetricEigen3.Decompose(cov, out double[] _, out double[][] vecs);
+            var pca_vectors = new Vector3d[3];
+            for (int k = 0; k < 3; k++) pca_vectors[k] = new Vector3d(vecs[k][0], vecs[k][1], vecs[k][2]);
+
+            if (align)
+            {
+                Canonicalize(pca_vectors);
+            }
+            else
+            {
+                pca_vectors[2] = Vector3d.CrossProduct(pca_vectors[0], pca_vectors[1]);
+                pca_vectors[2].Unitize();
+            }
+            return pca_vectors;
+        }
+
+        /// <summary>Compatibility overload: rows of [x, y, z].</summary>
         public static Vector3d[] PCAvectors(double[][] positions, bool align)
         {
-            // create a PCA class
-            var pca = new PrincipalComponentAnalysis()
-            {
-                Method = PrincipalComponentMethod.Center
-            };
-
-            // analyze data
-            MultivariateLinearRegression transform = pca.Learn(positions);
-
-            // get PCAs
-            Vector3d[] pca_vectors = new Vector3d[]
-            {
-                new Vector3d(),
-                new Vector3d(),
-                new Vector3d()
-            };
-
-            // populate vectors
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    pca_vectors[j][i] = transform.Weights[i][j];
-                }
-            }
-
-            // Flip PCA2 and PCA3 if we want to align PCA2 to global Y
-            if (align) AlignY(pca_vectors);
-
-            return pca_vectors;
+            var pts = new Point3d[positions.Length];
+            for (int i = 0; i < pts.Length; i++) pts[i] = new Point3d(positions[i][0], positions[i][1], positions[i][2]);
+            return PCAvectors(pts, align);
         }
 
         /// <summary>
@@ -242,11 +265,7 @@ namespace DigitalCircularityToolkit.Orientation
         /// <param name="transformed_points"></param>
         public static void SolvePCA(List<Point3d> points, bool align, out Vector3d[] pca_vectors, out Point3d[] transformed_points)
         {
-            //get xyz data
-            double[][] positions = Discretizer.PositionMatrix(points);
-
-            // get PCA vecvtors
-            pca_vectors = PCAvectors(positions, align);
+            pca_vectors = PCAvectors(points, align);
 
             // transform point set
             Transform plane_transform = GetPlaneTransformer(pca_vectors, points);
@@ -271,11 +290,7 @@ namespace DigitalCircularityToolkit.Orientation
             // sample points
             discretized_points = Discretizer.DiscretizeCurve(curve, n);
 
-            // data of x, y, z points
-            double[][] positions = Discretizer.PositionMatrix(discretized_points);
-
-            // get PCA vecvtors
-            pca_vectors = PCAvectors(positions, align);
+            pca_vectors = PCAvectors(discretized_points, align);
 
             // get the Transformation object to align curve to global XYZ
             Transform plane_transform = GetPlaneTransformer(pca_vectors, curve, discretized_points);
@@ -292,21 +307,45 @@ namespace DigitalCircularityToolkit.Orientation
         /// <param name="align"></param>
         /// <param name="pca_vectors"></param>
         /// <param name="discretized_points"></param>
+        /// <summary>PCA of a mesh; returns the plane transform instead of applying it to a copy (P1 performance).</summary>
+        public static void SolvePCA(Mesh mesh, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, out Transform plane_transform)
+        {
+            discretized_points = mesh.Vertices.ToPoint3dArray();
+            pca_vectors = PCAvectors(discretized_points, align);
+            plane_transform = GetPlaneTransformer(pca_vectors, discretized_points.ToList());
+        }
+
         public static void SolvePCA(Mesh mesh, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, Mesh transformed_mesh)
         {
             // Get mesh vertices
             discretized_points = mesh.Vertices.ToPoint3dArray();
 
-            //get xyz data
-            double[][] positions = Discretizer.PositionMatrix(discretized_points);
-
-            // get PCA vecvtors
-            pca_vectors = PCAvectors(positions, align);
+            pca_vectors = PCAvectors(discretized_points, align);
 
             // transform point set
             Transform plane_transform = GetPlaneTransformer(pca_vectors, discretized_points.ToList());
 
             transformed_mesh.Transform(plane_transform);
+        }
+
+        /// <summary>
+        /// PCA of a Brep without the transformed copy: no VolumeMassProperties (P1 performance).
+        /// Use <see cref="TransformedBrep"/> when the transformed geometry is actually needed.
+        /// </summary>
+        public static void SolvePCA(Brep brep, int n, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points)
+        {
+            discretized_points = Discretizer.DiscretizeBrep(brep, n).ToArray();
+            pca_vectors = PCAvectors(discretized_points, align);
+        }
+
+        /// <summary>The Brep rotated into the world axes about its volume centroid (as SolvePCA used to produce eagerly).</summary>
+        public static Brep TransformedBrep(Brep brep, Vector3d[] pca_vectors)
+        {
+            VolumeMassProperties props = VolumeMassProperties.Compute(brep);
+            Transform plane_transform = GetPlaneTransformer(pca_vectors, props.Centroid);
+            Brep transformed_brep = brep.DuplicateBrep();
+            transformed_brep.Transform(plane_transform);
+            return transformed_brep;
         }
 
         public static void SolvePCA(Brep brep, int n, bool align, out Vector3d[] pca_vectors, out Point3d[] discretized_points, Brep transformed_brep)
@@ -320,11 +359,7 @@ namespace DigitalCircularityToolkit.Orientation
             // get approx evenly distributed points on surfaces
             discretized_points = Discretizer.DiscretizeBrep(brep, n).ToArray();
 
-            // get PCA vectors
-            double[][] positions = Discretizer.PositionMatrix(discretized_points);
-
-            // get PCA vecvtors
-            pca_vectors = PCAvectors(positions, align);
+            pca_vectors = PCAvectors(discretized_points, align);
 
             // transform point set
             // get the centroid

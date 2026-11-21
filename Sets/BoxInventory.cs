@@ -39,7 +39,7 @@ namespace DigitalCircularityToolkit.Sets
             pManager.AddIntegerParameter("Indexer", "Inds", "Index of output with respect to input (when there are objects with more than one quantity)", GH_ParamAccess.list);
             pManager.AddGenericParameter("Objects", "Obj", "Collected objects", GH_ParamAccess.list);
             pManager.AddPointParameter("Centroids", "Centroid", "Object centroids", GH_ParamAccess.list);
-            pManager.AddMeshParameter("Hulls", "Hulls", "Object hulls", GH_ParamAccess.list);
+            pManager.AddMeshParameter("Hulls", "Hulls", "Object hulls (3D convex hulls; computed only when this output is connected or the component preview is on)", GH_ParamAccess.list);
             pManager.AddTextParameter("IDs", "IDs", "Object IDs", GH_ParamAccess.list);
 
             pManager.HideParameter(7);
@@ -66,8 +66,18 @@ namespace DigitalCircularityToolkit.Sets
             List<Mesh> hulls = new List<Mesh>();
             List<string> ids = new List<string>();
 
+            int nulls = 0;
+            bool need_hulls = Framework.OutputDemand.IsNeeded(this, 8);
+            if (need_hulls)
+            {
+                // Hulls are lazy and independent per object: build them in parallel up front.
+                System.Threading.Tasks.Parallel.For(0, objs.Count, k => { var _ = objs[k]?.Hull; });
+            }
             for (int i = 0; i < objs.Count; i++)
             {
+                // Null entries (e.g. geometry a constructor rejected) are skipped; Indexer keeps input positions.
+                if (objs[i] == null) { nulls++; continue; }
+
                 int qty = objs[i].Quantity;
 
                 for (int j = 0; j < qty; j++)
@@ -79,9 +89,14 @@ namespace DigitalCircularityToolkit.Sets
                     heights.Add(objs[i].EffectiveHeight);
                     indices.Add(i);
                     centroids.Add(objs[i].Localbox.Center);
-                    hulls.Add(objs[i].Hull);
+                    if (need_hulls) hulls.Add(objs[i].Hull);
                     ids.Add(objs[i].ID);
                 }
+            }
+
+            if (nulls > 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("{0} null object(s) ignored", nulls));
             }
 
             DA.SetDataList(0, boxes);

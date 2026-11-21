@@ -46,33 +46,20 @@ namespace DigitalCircularityToolkit.Distance
             if (!DA.GetDataTree(0, out GH_Structure<GH_Number> demands)) return;
             if (!DA.GetDataTree(1, out GH_Structure<GH_Number> supply)) return;
 
-            if (Utilities.CheckDims(demands, supply))
+            string dims_error = CostKernels.CheckDimensions(CostKernels.ToRows(demands), CostKernels.ToRows(supply));
+            if (dims_error != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Demand and supply feature vectors must be of same dimension");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, dims_error);
+                return;
             }
 
-            GH_Structure<GH_Integer> distances = new GH_Structure<GH_Integer>();
-
-            for (int i = 0; i < demands.PathCount; i++)
-            {
-                GH_Path path = demands.Paths[i];
-                List<GH_Integer> row = new List<GH_Integer>();
-
-                for (int j = 0; j < supply.PathCount; j++)
-                {
-                    GH_Path path2 = supply.Paths[j];
-                    double dist = 0;
-
-                    for (int k = 0; k < demands[path].Count; k++)
-                    {
-                        dist += Math.Abs(demands[path][k].Value - supply[path2][k].Value);
-                    }
-
-                    row.Add(new GH_Integer((int)dist));
-                }
-
-                distances.AppendRange(row, path);
-            }
+            // Sum of |differences|, rounded up like the other metrics (B11: it used to truncate).
+            double[][] d = CostKernels.ToRows(demands);
+            double[][] s = CostKernels.ToRows(supply);
+            var paths = demands.Paths;
+            GH_Structure<GH_Integer> distances = CostKernels.BuildTree(d.Length, s.Length,
+                (i, j) => CostKernels.SaturatingInt(Math.Ceiling(CostKernels.ManhattanDist(d[i], s[j]))),
+                i => paths[i]);
 
             DA.SetDataTree(0, distances);
         }

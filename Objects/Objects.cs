@@ -43,13 +43,73 @@ namespace DigitalCircularityToolkit.Objects
             }
         }
         public Polyline Hull2D;
-        public Mesh Hull3D;
         public Box Localbox;
         public GeometryBase Geometry;
-        public GeometryBase TransformedGeometry;
         public string ID { get; set; }
 
+        // ---- Lazily computed members (P1 performance). Same values as the former eager fields; computed on first
+        // access, so objects that are never inspected never pay for them. A setter replaces the lazy value.
+
+        private Mesh _hull3D;
+        private Func<Mesh> _hull3DFactory;
+
+        /// <summary>3D convex hull of the sampled points (computed on first access).</summary>
+        public Mesh Hull3D
+        {
+            get
+            {
+                var factory = _hull3DFactory;
+                if (_hull3D == null && factory != null)
+                {
+                    _hull3D = factory();
+                    _hull3DFactory = null;
+                }
+                return _hull3D;
+            }
+            set { _hull3D = value; _hull3DFactory = null; }
+        }
+
+        /// <summary>Defer the 3D hull of <paramref name="points"/> until first access.</summary>
+        protected void SetHull3DLazy(Point3d[] points)
+        {
+            _hull3D = null;
+            _hull3DFactory = points == null ? (Func<Mesh>)null : () => Hulls.MakeHull(points);
+        }
+
+        private GeometryBase _transformedGeometry;
+        private Func<GeometryBase> _transformedGeometryFactory;
+
+        /// <summary>The geometry rotated into the world axes about its analysis pivot (computed on first access; not used by any component).</summary>
+        public GeometryBase TransformedGeometry
+        {
+            get
+            {
+                var factory = _transformedGeometryFactory;
+                if (_transformedGeometry == null && factory != null)
+                {
+                    _transformedGeometry = factory();
+                    _transformedGeometryFactory = null;
+                }
+                return _transformedGeometry;
+            }
+            set { _transformedGeometry = value; _transformedGeometryFactory = null; }
+        }
+
+        /// <summary>Defer the transformed geometry until first access.</summary>
+        protected void SetTransformedGeometryLazy(Func<GeometryBase> factory)
+        {
+            _transformedGeometry = null;
+            _transformedGeometryFactory = factory;
+        }
+
         public DesignObject() { }
+
+        /// <summary>
+        /// Shallow copy that preserves the concrete subtype (a LinearObject stays a LinearObject).
+        /// Modifier components must copy before changing anything: Grasshopper hands every downstream
+        /// component the same instance. Replace fields on the copy; never mutate shared geometry in place.
+        /// </summary>
+        public DesignObject ShallowCopy() => (DesignObject)MemberwiseClone();
 
         public DesignObject(DesignObject other)
         {
@@ -126,7 +186,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject(List<Point3d> points, int _)
@@ -187,7 +247,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject(Mesh mesh, int _)
@@ -208,11 +268,8 @@ namespace DigitalCircularityToolkit.Objects
 
         public void Populate(Mesh mesh)
         {
-            // Initialize
-            Mesh transformed_mesh = mesh.DuplicateMesh();
-
             // Solve
-            PCA.SolvePCA(mesh, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, transformed_mesh);
+            PCA.SolvePCA(mesh, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, out Transform plane_transform);
 
             // Populate
             NSamples = mesh.Vertices.Count;
@@ -221,7 +278,12 @@ namespace DigitalCircularityToolkit.Objects
             PCA2 = pca_vectors[1];
             PCA3 = pca_vectors[2];
             Geometry = mesh;
-            TransformedGeometry = transformed_mesh;
+            SetTransformedGeometryLazy(() =>
+            {
+                Mesh transformed_mesh = mesh.DuplicateMesh();
+                transformed_mesh.Transform(plane_transform);
+                return transformed_mesh;
+            });
 
             // Get Centroid
             Centroid = PCA.GetCentroid(discretized_points.ToList());
@@ -234,7 +296,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject(Brep brep, int n)
@@ -255,11 +317,8 @@ namespace DigitalCircularityToolkit.Objects
 
         public void Populate(Brep brep, int n_target)
         {
-            // Initialize
-            Brep transformed_brep = brep.DuplicateBrep();
-
             // Solve
-            PCA.SolvePCA(brep, n_target, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points, transformed_brep);
+            PCA.SolvePCA(brep, n_target, true, out Vector3d[] pca_vectors, out Point3d[] discretized_points);
 
             // Populate
             NSamples = discretized_points.Length;
@@ -268,7 +327,8 @@ namespace DigitalCircularityToolkit.Objects
             PCA2 = pca_vectors[1];
             PCA3 = pca_vectors[2];
             Geometry = brep;
-            TransformedGeometry = transformed_brep;
+            Vector3d[] pca_copy = (Vector3d[])pca_vectors.Clone();
+            SetTransformedGeometryLazy(() => PCA.TransformedBrep(brep, pca_copy));
 
             // Get Centroid
             Centroid = PCA.GetCentroid(discretized_points.ToList());
@@ -281,7 +341,7 @@ namespace DigitalCircularityToolkit.Objects
             LocalPlane.Origin = Localbox.Center;
 
             Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
-            Hull3D = Hulls.MakeHull(SampledPoints);
+            SetHull3DLazy(SampledPoints);
         }
 
         public DesignObject Rotate(int axis, double deg)
@@ -301,50 +361,123 @@ namespace DigitalCircularityToolkit.Objects
                 rotaxis = this.PCA3;
             }
 
-            // rotate the local plane
             double rad = deg / 180 * Math.PI;
             Transform rotater = Transform.Rotation(rad, rotaxis, this.Centroid);
 
-            // transform all relevant data
-            var rotated_geo = Geometry.Duplicate();
-            rotated_geo.Transform(rotater);
-
-            // figure out type and set
-            DesignObject obj = new DesignObject();
-
-            if (rotated_geo is Curve curve) obj = new DesignObject(curve, NSamples);
-
-            if (rotated_geo is Brep brep) obj = new DesignObject(brep, NSamples);
-
-            if (rotated_geo is Mesh mesh) obj = new DesignObject(mesh, NSamples);
-
-            if (rotated_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
-
-            obj.ID = ID;
-
-            return obj;
+            return TransformedCopy(rotater);
         }
 
         public DesignObject TransformObject(Transform t)
         {
+            return TransformedCopy(t);
+        }
 
-            var transformed_geo = Geometry.Duplicate();
-            transformed_geo.Transform(t);
+        /// <summary>
+        /// A copy of this object moved by the rigid transform <paramref name="t"/>, keeping its concrete type
+        /// and parameters (B5). The analysis is carried along instead of recomputed: the frame, box, samples
+        /// and hulls are equivariant under rigid motion (MODIFIER_SPEC rule 3). The original is not modified.
+        /// </summary>
+        public DesignObject TransformedCopy(Transform t)
+        {
+            if (!IsRigidMotion(t))
+                throw new ArgumentException("Design objects can only be moved by rigid transforms (rotation + translation).");
 
-            DesignObject obj = new DesignObject();
+            DesignObject obj = ShallowCopy();
 
-            if (transformed_geo is Curve curve) obj = new DesignObject(curve, NSamples);
+            if (Geometry != null)
+            {
+                obj.Geometry = Geometry.Duplicate();
+                obj.Geometry.Transform(t);
+            }
 
-            if (transformed_geo is Brep brep) obj = new DesignObject(brep, NSamples);
+            Point3d centroid = Centroid;
+            centroid.Transform(t);
+            obj.Centroid = centroid;
 
-            if (transformed_geo is Mesh mesh) obj = new DesignObject(mesh, NSamples);
+            if (SampledPoints != null)
+            {
+                var pts = (Point3d[])SampledPoints.Clone();
+                for (int i = 0; i < pts.Length; i++) pts[i].Transform(t);
+                obj.SampledPoints = pts;
+            }
 
-            if (transformed_geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, NSamples);
+            Vector3d v1 = PCA1, v2 = PCA2, v3 = PCA3;
+            v1.Transform(t); v2.Transform(t); v3.Transform(t);
+            obj.PCA1 = v1; obj.PCA2 = v2; obj.PCA3 = v3;
 
-            obj.ID = ID;
+            Plane plane = LocalPlane;
+            plane.Transform(t);
+            obj.LocalPlane = plane;
 
+            Box box = Localbox;
+            box.Transform(t);
+            obj.Localbox = box;
+            // Boundingbox is expressed in the local frame, so it does not change.
+
+            if (Hull2D != null)
+            {
+                var hull = new Polyline(Hull2D);
+                hull.Transform(t);
+                obj.Hull2D = hull;
+            }
+            if (_hull3D != null)
+            {
+                Mesh hull3 = _hull3D.DuplicateMesh();
+                hull3.Transform(t);
+                obj.Hull3D = hull3;
+            }
+            else if (_hull3DFactory != null)
+            {
+                // Move the original's hull when first needed (a hull of the moved samples can triangulate
+                // coplanar faces differently).
+                DesignObject source = this;
+                obj._hull3D = null;
+                obj._hull3DFactory = () =>
+                {
+                    Mesh h = source.Hull3D?.DuplicateMesh();
+                    h?.Transform(t);
+                    return h;
+                };
+            }
+
+            // TransformedGeometry (the geometry rotated into the world axes about the centroid) keeps its
+            // orientation; only its pivot moves. It is not read anywhere today, so it stays lazy.
+            if (_transformedGeometry != null || _transformedGeometryFactory != null)
+            {
+                DesignObject source = this;
+                Vector3d delta = obj.Centroid - Centroid;
+                obj.SetTransformedGeometryLazy(() =>
+                {
+                    GeometryBase g = source.TransformedGeometry?.Duplicate();
+                    g?.Translate(delta);
+                    return g;
+                });
+            }
+
+            obj.TransformDerived(t);
             return obj;
         }
+
+        /// <summary>
+        /// Rotation + translation only: orthonormal 3×3 part with determinant +1 and an affine bottom row.
+        /// (Own check rather than Transform.IsRigid, to stay within the Rhino 7 API.)
+        /// </summary>
+        private static bool IsRigidMotion(Transform t)
+        {
+            const double tol = 1e-6;
+            if (Math.Abs(t.M30) > tol || Math.Abs(t.M31) > tol || Math.Abs(t.M32) > tol || Math.Abs(t.M33 - 1) > tol) return false;
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                {
+                    double dot = t[0, i] * t[0, j] + t[1, i] * t[1, j] + t[2, i] * t[2, j];
+                    if (Math.Abs(dot - (i == j ? 1 : 0)) > tol) return false;
+                }
+            double det = t.M00 * (t.M11 * t.M22 - t.M12 * t.M21) - t.M01 * (t.M10 * t.M22 - t.M12 * t.M20) + t.M02 * (t.M10 * t.M21 - t.M11 * t.M20);
+            return det > 0;
+        }
+
+        /// <summary>Subclasses transform any stored world-space data of their own here (called on the copy).</summary>
+        protected virtual void TransformDerived(Transform t) { }
 
         public void Repopulate(Plane plane)
         {
@@ -355,8 +488,13 @@ namespace DigitalCircularityToolkit.Objects
             // transformed geometry
             Plane plane_global = new Plane(plane.Origin, Vector3d.XAxis, Vector3d.YAxis);
             Transform plane_transform = Transform.PlaneToPlane(plane, plane_global);
-            TransformedGeometry = Geometry.Duplicate();
-            TransformedGeometry.Transform(plane_transform);
+            GeometryBase geometry = Geometry;
+            SetTransformedGeometryLazy(() =>
+            {
+                GeometryBase transformed = geometry.Duplicate();
+                transformed.Transform(plane_transform);
+                return transformed;
+            });
             Boundingbox = Geometry.GetBoundingBox(plane, out Localbox);
 
             LocalPlane.Origin = Localbox.Center;

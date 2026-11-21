@@ -1,0 +1,1820 @@
+[
+ {
+  "name": "AlignToObject (DCT)",
+  "nick": "AlignObj",
+  "guid": "f4e526f8-f0f9-4ea0-988a-2044de529a97",
+  "subcategory": "Matching",
+  "class": "DigitalCircularityToolkit.Matching.AlignToObject_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "SourceObject",
+    "nick": "Source",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "TargetObject",
+    "nick": "Target",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_Geometry",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Transform",
+    "nick": "T",
+    "type": "Param_Transform",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "AlignToPlane (DCT)",
+  "nick": "AlignPlane",
+  "guid": "fe70341c-0a3c-4224-b8e6-4c0994e8e4a2",
+  "subcategory": "Utilities",
+  "class": "DigitalCircularityToolkit.Utilities.AlignToPlane",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Object",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_Geometry",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Transform",
+    "nick": "T",
+    "type": "Param_Transform",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "AsymmEuclideanDistance (DCT)",
+  "nick": "DMAsymm",
+  "guid": "669170c3-521e-47a6-8cac-82e5d9cae3a0",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.AsymmEuclidean_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Power1",
+    "nick": "p",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Power2",
+    "nick": "q",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "type": "Param_Integer",
+    "access": "tree",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "BoxObject (DCT)",
+  "nick": "BoxObj",
+  "guid": "b6c628ad-3711-4c8d-aca7-ee12946dc14a",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Objects.BoxObject_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "LengthBuffer",
+    "nick": "fL",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "WidthBuffer",
+    "nick": "fW",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "HeightBuffer",
+    "nick": "fH",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "type": "Param_String",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "BoxObject",
+    "nick": "BoxObj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "EffectiveBox",
+    "nick": "Box",
+    "type": "Param_Box",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "BoxScore (DCT)",
+  "nick": "BoxScore",
+  "guid": "0343696c-be70-46fb-9f4b-26662c2d7d27",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.BoxScore",
+  "exposure": "secondary",
+  "inputs": [
+   {
+    "name": "BoxObject",
+    "nick": "BoxObj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "BoxScore",
+    "nick": "Score",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "BoxSet (DCT)",
+  "nick": "BoxSet",
+  "guid": "7c6c17a8-b363-46c3-bb56-174fe2555d6c",
+  "subcategory": "Sets",
+  "class": "DigitalCircularityToolkit.Sets.BoxInventory",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "BoxObjs",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectiveBox",
+    "nick": "Box",
+    "type": "Param_Box",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "EffectiveLength",
+    "nick": "L",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "EffectiveWidth",
+    "nick": "W",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "EffectiveHeight",
+    "nick": "H",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "type": "Param_Mesh",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "type": "Param_String",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "EuclideanDistance (DCT)",
+  "nick": "DMEuclidean",
+  "guid": "1d4c7587-5d12-44af-b21b-f4168018bb7b",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.Euclidean_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Power",
+    "nick": "p",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "type": "Param_Integer",
+    "access": "tree",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "FeatureVector (DCT)",
+  "nick": "FeatureVec",
+  "guid": "b006d02d-2e04-4875-a77d-a3d3b80e0700",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.FeatureVector",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "X1",
+    "nick": "X1",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "FeatureVector",
+    "nick": "FV",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "FrechetDistance (DCT)",
+  "nick": "Frechet",
+  "guid": "17cb1d16-9277-477b-955e-2c45aab7200f",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.FrechetDistance",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "First curve",
+    "nick": "A",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Second curve",
+    "nick": "B",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Sample count",
+    "nick": "N",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "FrechetDistance",
+    "nick": "FD",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "HarmonicAnalysisComplex (DCT)",
+  "nick": "HarmonicsComplex",
+  "guid": "a991fd8b-f03c-4924-88a4-c372b7e7383d",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.HarmonicAnalysisComplex_GH",
+  "exposure": "tertiary",
+  "inputs": [
+   {
+    "name": "Signature",
+    "nick": "ComplexSig",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "FVLength",
+    "nick": "|FV|",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Normalize",
+    "nick": "Norm",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HarmonicFeatureVector",
+    "nick": "FV",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "HarmonicAnalysisReal (DCT)",
+  "nick": "HarmonicsReal",
+  "guid": "0a5adc36-9e00-4de2-b1dc-784eee5e89a8",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.HarmonicAnalysisReal_GH",
+  "exposure": "tertiary",
+  "inputs": [
+   {
+    "name": "Signature",
+    "nick": "DistSig",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "FVLength",
+    "nick": "|FV|",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Normalize",
+    "nick": "Norm",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HarmonicFeatureVector",
+    "nick": "FV",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "HausdorffDistanceCurve (DCT)",
+  "nick": "HausdorffCurve",
+  "guid": "0ea65daf-d86a-485e-be41-e7bf102a5723",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.HausdorffDistanceCurve",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "First curve",
+    "nick": "A",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Second curve",
+    "nick": "B",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Sample count",
+    "nick": "N",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HausdorffDistanceCurve",
+    "nick": "HD",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "HausdorffDistancePoints (DCT)",
+  "nick": "HausdorffPoints",
+  "guid": "c1f08545-76d0-4e68-9c04-ec900e1fcc6e",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.HausdorffDistancePoints",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "First set of points",
+    "nick": "A",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Second set of points",
+    "nick": "B",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HausdorffDistancePoints",
+    "nick": "HD",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "Hungarian (DCT)",
+  "nick": "Hungarian",
+  "guid": "d93d70fa-f26f-4ed8-a35d-9ffe58e460d4",
+  "subcategory": "Matching",
+  "class": "DigitalCircularityToolkit.Matching.Hungarian_GH_OBSOLETE",
+  "exposure": "hidden",
+  "inputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "type": "Param_Integer",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "AutoRun",
+    "nick": "Auto",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Assignment",
+    "nick": "A",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Cost",
+    "nick": "C",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "Knoll (DCT)",
+  "nick": "Knoll",
+  "guid": "247f234b-8ae3-48ea-94fa-b5499bb2111e",
+  "subcategory": "Utilities",
+  "class": "DigitalCircularityToolkit.Utilities.Knoll",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "Objs",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "OriginPlane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "NumRows",
+    "nick": "nRows",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "RowSpacing",
+    "nick": "dRow",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "ColSpacing",
+    "nick": "dCol",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Objects",
+    "nick": "Objs",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Geo",
+    "nick": "Geo",
+    "type": "Param_Geometry",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "LineScore (DCT)",
+  "nick": "LineScore",
+  "guid": "7acdf6af-bb78-4ddb-b82b-3457f22be838",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.LineScore",
+  "exposure": "secondary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "LineScore",
+    "nick": "Score",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "LinearObject (DCT)",
+  "nick": "LineObj",
+  "guid": "750c489f-8d4e-41ce-ac2b-2c4ad80916be",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Objects.LinearObject_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "LengthBuffer",
+    "nick": "fL",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Area",
+    "nick": "Area",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "type": "Param_String",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "LinearObject",
+    "nick": "LinearObj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "EffectiveLine",
+    "nick": "Line",
+    "type": "Param_Line",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "LinearSet (DCT)",
+  "nick": "LinearSet",
+  "guid": "7248cb53-eb12-4122-82cd-313802d511f9",
+  "subcategory": "Sets",
+  "class": "DigitalCircularityToolkit.Sets.LinearInventory",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "LinearObjs",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectiveLine",
+    "nick": "Line",
+    "type": "Param_Line",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "EffectiveLength",
+    "nick": "L",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Area",
+    "nick": "A",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "CentroidPlane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "type": "Param_Curve",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "type": "Param_String",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "ManhattanDistance (DCT)",
+  "nick": "DMManhattan",
+  "guid": "3890d147-152c-425a-b8d0-6a1cc74eb403",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.ManhattanDistance",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "type": "Param_Integer",
+    "access": "tree",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "Match (DCT)",
+  "nick": "Match",
+  "guid": "00a166a1-0044-4e16-ab8e-415fe55e2e1f",
+  "subcategory": "Matching",
+  "class": "DigitalCircularityToolkit.Matching.Match",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "type": "Param_Integer",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "AutoRun",
+    "nick": "Auto",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Assignment",
+    "nick": "A",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Cost",
+    "nick": "C",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "MatchLines (DCT)",
+  "nick": "MatchLines",
+  "guid": "7b8f25e9-ba41-4a9a-87ca-811146dc3e46",
+  "subcategory": "Matching",
+  "class": "DigitalCircularityToolkit.Matching.MatchLines_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "DemandPoints",
+    "nick": "pDemand",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "SupplyPoints",
+    "nick": "pSupply",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "AssignmentIndices",
+    "nick": "A",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "MatchLines",
+    "nick": "Lines",
+    "type": "Param_Line",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "Normalize (DCT)",
+  "nick": "Normalize",
+  "guid": "668b29b5-30b5-4a4a-b676-6575df196f6f",
+  "subcategory": "Utilities",
+  "class": "DigitalCircularityToolkit.Utilities.Normalize",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Values",
+    "nick": "Vals",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "NormalizedValues",
+    "nick": "Vals",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "Object (DCT)",
+  "nick": "Obj",
+  "guid": "2a40404e-753e-4be2-8183-3dab27a28552",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Objects.Object_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "type": "Param_String",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_Geometry",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "ObjectProperties (DCT)",
+  "nick": "ObjProps",
+  "guid": "34017b92-0083-4d54-97bb-33d7c3d692a8",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Characterization.ObjectProperties",
+  "exposure": "secondary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Centroid",
+    "nick": "Centroid",
+    "type": "Param_Point",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "PCA1",
+    "nick": "PCA1",
+    "type": "Param_Vector",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "PCA2",
+    "nick": "PCA2",
+    "type": "Param_Vector",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "PCA3",
+    "nick": "PCA3",
+    "type": "Param_Vector",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Length",
+    "nick": "L",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Width",
+    "nick": "W",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Height",
+    "nick": "H",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "BoundingBox",
+    "nick": "BB",
+    "type": "Param_Box",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "LocalPlane",
+    "nick": "XY",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "PlanarHull",
+    "nick": "Hull2D",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "VolumeHull",
+    "nick": "Hull3D",
+    "type": "Param_Mesh",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "SampledPoints",
+    "nick": "Pts",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_Geometry",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "type": "Param_String",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "OverridePCA (DCT)",
+  "nick": "OverridePCA",
+  "guid": "fc6588c8-8ddf-4b65-b001-c3dd861ceed6",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Objects.OverridePCA",
+  "exposure": "secondary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "PrincipalPlane",
+    "nick": "XYPCA",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "PairNormalize (DCT)",
+  "nick": "PairNormalize",
+  "guid": "84d8e73f-8773-47b2-aaf2-226edff621f7",
+  "subcategory": "Utilities",
+  "class": "DigitalCircularityToolkit.Utilities.PairNormalize",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "A",
+    "nick": "A",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "B",
+    "nick": "B",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "NormalizedA",
+    "nick": "A",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "NormalizedB",
+    "nick": "B",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Normalizer",
+    "nick": "N",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "PlanarHull (DCT)",
+  "nick": "Hull2D",
+  "guid": "b2d34cc4-9bec-405f-9e2a-f969681b0d84",
+  "subcategory": "Utilities",
+  "class": "DigitalCircularityToolkit.Utilities.PlanarHull",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Hull",
+    "nick": "Hull",
+    "type": "Param_Brep",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "PlanarObject (DCT)",
+  "nick": "PlaneObj",
+  "guid": "21c2a735-15b5-4ded-af15-1075c3cd62d4",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Objects.PlanarObject_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "LengthBuffer",
+    "nick": "fL",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "WidthBuffer",
+    "nick": "fW",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Thickness",
+    "nick": "Thickness",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "type": "Param_String",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "PlanarObject",
+    "nick": "PlaneObj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "EffectivePlane",
+    "nick": "Plane",
+    "type": "Param_Surface",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "PlanarOutline (DCT)",
+  "nick": "PlanarOutline",
+  "guid": "24f26087-6c18-4763-b8b8-f63b12377d9f",
+  "subcategory": "Utilities",
+  "class": "DigitalCircularityToolkit.Utilities.PlanarOutline",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "ProjectedCurve",
+    "nick": "Curve",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "PlanarSet (DCT)",
+  "nick": "PlanarSet",
+  "guid": "e9dd4189-ee4d-4501-ae0f-2ef6d2352895",
+  "subcategory": "Sets",
+  "class": "DigitalCircularityToolkit.Sets.PlanarInventory",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "PlanarObjs",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectivePlane",
+    "nick": "PlaneSurface",
+    "type": "Param_Surface",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "EffectiveLength",
+    "nick": "L",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "EffectiveWidth",
+    "nick": "W",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Thickness",
+    "nick": "t",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "type": "Param_Curve",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "type": "Param_String",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "PlaneScore (DCT)",
+  "nick": "PlaneScore",
+  "guid": "24877a3a-6077-4ed3-9da4-9d0a2070d768",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.PlaneScore",
+  "exposure": "secondary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "PlaneScore",
+    "nick": "Score",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "RadialSignature (DCT)",
+  "nick": "RadialSig",
+  "guid": "2ae7fb99-c011-461f-870c-2c7a86055f2a",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.RadialSignature_GH",
+  "exposure": "tertiary",
+  "inputs": [
+   {
+    "name": "Curve",
+    "nick": "Curve",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "ComplexSignature",
+    "nick": "ComplexSig",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "DistanceSignature",
+    "nick": "DistSig",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "ProjectedCurve",
+    "nick": "Curve",
+    "type": "Param_Curve",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Rays",
+    "nick": "Rays",
+    "type": "Param_Line",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "RotatePCA (DCT)",
+  "nick": "RotatePCA",
+  "guid": "14bc0572-a73d-4f5f-bf8a-aef8be3bc520",
+  "subcategory": "Utilities",
+  "class": "DigitalCircularityToolkit.Utilities.RotatePCA",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "RotationAxis",
+    "nick": "Axis",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "RotationDegrees",
+    "nick": "Degree",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "RotatedObject",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "RotatedGeometry",
+    "nick": "Geo",
+    "type": "Param_Geometry",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "SphereScore (DCT)",
+  "nick": "SphereScore",
+  "guid": "4feea68b-24cb-4186-bd12-120cbcd9ab6b",
+  "subcategory": "Characterization",
+  "class": "DigitalCircularityToolkit.Characterization.SphereScore",
+  "exposure": "secondary",
+  "inputs": [
+   {
+    "name": "SphericalObject",
+    "nick": "SphereObj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "SphereScore",
+    "nick": "Score",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "SphereSet (DCT)",
+  "nick": "SphereSet",
+  "guid": "a69eeda3-eb23-4359-864f-20f7c1bcfb5d",
+  "subcategory": "Sets",
+  "class": "DigitalCircularityToolkit.Sets.SphericalInventory",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "SphereObjs",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectiveSphere",
+    "nick": "Sphere",
+    "type": "Param_Surface",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "type": "Param_Plane",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "EffectiveRadius",
+    "nick": "r",
+    "type": "Param_Number",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "type": "Param_GenericObject",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "type": "Param_Point",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "type": "Param_Mesh",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "type": "Param_String",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "SphericalObject (DCT)",
+  "nick": "SphereObj",
+  "guid": "67d25fa8-d4b8-452b-92d2-9d976a6bd1c5",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Objects.SphericalObject_GH",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "RadiusBuffer",
+    "nick": "fR",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "type": "Param_String",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "SphereObject",
+    "nick": "SphereObj",
+    "type": "Param_GenericObject",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "EffectiveSphere",
+    "nick": "Sphere",
+    "type": "Param_Brep",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ }
+]

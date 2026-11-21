@@ -6,7 +6,7 @@ using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class PlanarObject_GH : GH_Component
+    public class PlanarObject_GH : Framework.ObjectConstructorComponent
     {
         /// <summary>
         /// Initializes a new instance of the PlanarObject_GH class.
@@ -45,9 +45,9 @@ namespace DigitalCircularityToolkit.Objects
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        protected override Func<DesignObject> Prepare(IGH_DataAccess DA, out string error)
         {
-            // Initialize
+            error = null;
             GeometryBase geo = null;
             int n = 50;
             int qty = 1;
@@ -57,8 +57,9 @@ namespace DigitalCircularityToolkit.Objects
             Vector3d pca_user = new Vector3d(0, 0, 0);
             string id = "NoID";
 
-            // populate
-            if (!DA.GetData(0, ref geo)) return;
+            if (!DA.GetData(0, ref geo)) return null;
+            geo = ObjectInput.Normalize(geo, out error);
+            if (geo == null) return null;
             DA.GetData(1, ref n);
             DA.GetData(2, ref qty);
             DA.GetData(3, ref buffer1);
@@ -68,28 +69,26 @@ namespace DigitalCircularityToolkit.Objects
 
             if (buffer1 <= 0 || buffer2 <= 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Buffer must be > 0");
+                error = "Buffer must be > 0";
+                return null;
             }
 
-            PlanarObject obj = new PlanarObject();
+            return () =>
+            {
+                PlanarObject obj = new PlanarObject();
+                if (geo is Curve curve) obj = new PlanarObject(curve, n, qty, buffer1, buffer2, thickness, pca_user);
+                if (geo is Brep brep) obj = new PlanarObject(brep, n, qty, buffer1, buffer2, thickness, pca_user);
+                if (geo is Mesh mesh) obj = new PlanarObject(mesh, qty, buffer1, buffer2, thickness, pca_user);
+                if (geo is PointCloud pointcloud) obj = new PlanarObject(pointcloud, qty, buffer1, buffer2, thickness, pca_user);
+                obj.ID = id;
+                return obj;
+            };
+        }
 
-            var curve = geo as Curve;
-            if (curve != null) obj = new PlanarObject(curve, n, qty, buffer1, buffer2, thickness, pca_user);
-
-            var brep = geo as Brep;
-            if (brep != null) obj = new PlanarObject(brep, n, qty, buffer1, buffer2, thickness, pca_user);
-
-            var mesh = geo as Mesh;
-            if (mesh != null) obj = new PlanarObject(mesh, qty, buffer1, buffer2, thickness, pca_user);
-
-            var pointcloud = geo as PointCloud;
-            if (pointcloud != null) obj = new PlanarObject(pointcloud, qty, buffer1, buffer2, thickness, pca_user);
-
-            obj.ID = id;
-
-            // return
+        protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)
+        {
             DA.SetData(0, obj);
-            DA.SetData(1, obj.EffectivePlane);
+            DA.SetData(1, ((PlanarObject)obj).EffectivePlane);
         }
 
         /// <summary>

@@ -13,10 +13,12 @@ namespace DigitalCircularityToolkit.Objects
         public int Quantity;
         public double LengthBuffer;
         public double WidthBuffer;
+        // > 0: user-supplied thickness; otherwise the local-box height is used (B7: the setter used to be empty).
+        private double _thickness = -1;
         public double Thickness
         {
-            get { return Height; }
-            set { }
+            get { return _thickness > 0 ? _thickness : Height; }
+            set { _thickness = value; }
         }
         public double Dimension1
         {
@@ -63,7 +65,6 @@ namespace DigitalCircularityToolkit.Objects
             Quantity = 1;
             LengthBuffer = 1;
             WidthBuffer = 1;
-            Thickness = 1;
         }
 
         public PlanarObject (Curve curve, int n_samples, int qty, double length_buffer, double width_buffer, double thickness, Vector3d pca_override)

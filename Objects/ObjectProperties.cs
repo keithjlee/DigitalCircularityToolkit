@@ -42,7 +42,7 @@ namespace DigitalCircularityToolkit.Characterization
             pManager.AddBoxParameter("BoundingBox", "BB", "Bounding box", GH_ParamAccess.item);
             pManager.AddPlaneParameter("LocalPlane", "XY", "PCA XY plane", GH_ParamAccess.item);
             pManager.AddCurveParameter("PlanarHull", "Hull2D", "Convex hull on local XY plane", GH_ParamAccess.item);
-            pManager.AddMeshParameter("VolumeHull", "Hull3D", "Volumetric convex hull", GH_ParamAccess.item);
+            pManager.AddMeshParameter("VolumeHull", "Hull3D", "Volumetric convex hull (computed only when this output is connected or the component preview is on)", GH_ParamAccess.item);
             pManager.AddPointParameter("SampledPoints", "Pts", "Points used for PCA analysis", GH_ParamAccess.list);
             pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.list);
             pManager.AddTextParameter("IDs", "IDs", "Object IDs", GH_ParamAccess.list);
@@ -78,7 +78,7 @@ namespace DigitalCircularityToolkit.Characterization
             DA.SetData(7, obj.Localbox);
             DA.SetData(8, obj.LocalPlane);
             DA.SetData(9, obj.Hull2D);
-            DA.SetData(10, obj.Hull3D);
+            if (Framework.OutputDemand.IsNeeded(this, 10)) DA.SetData(10, obj.Hull3D);
             DA.SetDataList(11, obj.SampledPoints);
             DA.SetData(12, obj.Geometry);
             DA.SetData(13, obj.ID);

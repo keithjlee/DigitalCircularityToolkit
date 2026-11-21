@@ -47,9 +47,11 @@ namespace DigitalCircularityToolkit.Distance
             if (!DA.GetDataTree(0, out GH_Structure<GH_Number> demands)) return;
             if (!DA.GetDataTree(1, out GH_Structure<GH_Number> supply)) return;
 
-            if (Utilities.CheckDims(demands, supply))
+            string dims_error = CostKernels.CheckDimensions(CostKernels.ToRows(demands), CostKernels.ToRows(supply));
+            if (dims_error != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Demand and supply feature vectors must be of same dimension");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, dims_error);
+                return;
             }
 
             int pow = 1;

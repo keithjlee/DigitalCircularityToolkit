@@ -33,7 +33,7 @@ namespace DigitalCircularityToolkit
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("HausdorffDistanceCurve", "HD", "Hausdorff distance between the two curves", GH_ParamAccess.item);
+            pManager.AddNumberParameter("HausdorffDistanceCurve", "HD", "Hausdorff distance between the two curves (symmetric: the larger of the two directed distances)", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -50,9 +50,20 @@ namespace DigitalCircularityToolkit
             if (!DA.GetData(1, ref B)) return;
             if (!DA.GetData(2, ref N)) return;
 
+            if (N < 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Sample count must be at least 1");
+                return;
+            }
+
             //divide each curve
             A.DivideByCount(N, true, out Point3d[] Apoints);
             B.DivideByCount(N, true, out Point3d[] Bpoints);
+            if (Apoints == null || Bpoints == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not divide the curves");
+                return;
+            }
 
             double hd = Distance.Hausdorff.ComputeDistance(Apoints, Bpoints);
 

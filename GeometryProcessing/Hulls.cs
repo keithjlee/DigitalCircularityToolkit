@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Accord.Math.Distances;
 using MIConvexHull;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
@@ -17,11 +16,16 @@ namespace DigitalCircularityToolkit.GeometryProcessing
         {
             List<double[]> point_data = pts.Select(pt => new double[] { pt.X, pt.Y, pt.Z }).ToList();
 
-            var hull = ConvexHull.Create(point_data);
+            var result = ConvexHull.Create(point_data);
 
             Mesh hullmesh = new Mesh();
 
-            var faces = hull.Faces;
+            // MIConvexHull >= 1.1 reports degenerate (collinear / coplanar) input instead of
+            // returning a zero-volume hull; return an empty mesh in that case.
+            if (result.Outcome != ConvexHullCreationResultOutcome.Success || result.Result == null)
+                return hullmesh;
+
+            var faces = result.Result.Faces;
             int count = 0;
 
             foreach ( var face in faces)
