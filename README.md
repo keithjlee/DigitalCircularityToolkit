@@ -19,7 +19,7 @@ This toolkit provides a generalized approach to the Digital Circularity workflow
 ## Installation
 The latest build (v0.5) is available on [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en) or in the releases page. Two packages are available: .NET 4.8 (Rhino 7, Windows + Mac) and .NET 8 (Rhino 8, Windows + Mac).
 
-**v0.5 is the last release for Rhino 7.** Later versions target Rhino 8 and Rhino 9 only.
+**v0.5 is the last release with Rhino 7 support.** Later versions target Rhino 8 and Rhino 9 only. The v0.5 changes were developed and tested in Rhino 8; they have not been tested in Rhino 7.
 
 1. Find and download the latest build (.zip file) in the [releases](https://github.com/keithjlee/DigitalCircularityToolkit/releases) page.
 2. Find your Grasshopper components folder by opening Grasshopper, then `File>Special Folders>Components Folder`
@@ -105,6 +105,8 @@ Features used:
 
 # Release Notes
 ## v0.5 (final Rhino 7 release)
+> **Rhino 7:** this is the last release with Rhino 7 support. Its changes have not been tested in Rhino 7 (developed and tested in Rhino 8).
+
 Bug fixes, much faster object analysis, and a few deliberate behaviour changes. Saved definitions open unchanged: no components or parameters were removed or renamed. The harmonics components gain one optional input.
 
 **Behaviour changes**
