@@ -31,19 +31,19 @@ DCT runs in Rhino 8 (Windows and Mac). Download the latest release from the [Git
 When using or extending DCT for research, please cite it:
 
 ```
-@software{lee_2024_10724610,
+@software{lee_2024_10724609,
   author       = {Lee, Keith Janghyun},
   title        = {DigitalCircularityToolkit},
   month        = feb,
   year         = 2024,
   publisher    = {Zenodo},
   version      = {v0.5.1},
-  doi          = {10.5281/zenodo.10724610},
-  url          = {https://doi.org/10.5281/zenodo.10724610}
+  doi          = {10.5281/zenodo.10724609},
+  url          = {https://doi.org/10.5281/zenodo.10724609}
 }
 ```
 
-Citations in other styles are available on [Zenodo](https://zenodo.org/records/10724610). DCT provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
+Citations in other styles are available on [Zenodo](https://doi.org/10.5281/zenodo.10724609). DCT provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
 
 ## About
 

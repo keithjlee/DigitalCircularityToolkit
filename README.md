@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10724610.svg)](https://doi.org/10.5281/zenodo.10724610)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10724609.svg)](https://doi.org/10.5281/zenodo.10724609)
 
 ![](docs/src/assets/logo_front.png)
 
@@ -34,22 +34,22 @@ When using or extending this software for research purposes, please cite using t
 
 ### Bibtex
 ```
-@software{lee_2024_10724610,
+@software{lee_2024_10724609,
   author       = {Lee, Keith Janghyun},
   title        = {DigitalCircularityToolkit},
   month        = feb,
   year         = 2024,
   publisher    = {Zenodo},
   version      = {v0.5.1},
-  doi          = {10.5281/zenodo.10724610},
-  url          = {https://doi.org/10.5281/zenodo.10724610}
+  doi          = {10.5281/zenodo.10724609},
+  url          = {https://doi.org/10.5281/zenodo.10724609}
 }
 ```
 
 ### Other styles
-Or find a pre-written citation in the style of your choice [here](https://zenodo.org/records/10724610) (see the Citation box on the right side). E.g., for APA:
+Or find a pre-written citation in the style of your choice [here](https://doi.org/10.5281/zenodo.10724609) (see the Citation box on the right side). E.g., for APA:
 ```
-Lee, K. J. (2024). DigitalCircularityToolkit (v0.2). Zenodo. https://doi.org/10.5281/zenodo.10724610
+Lee, K. J. (2024). DigitalCircularityToolkit. Zenodo. https://doi.org/10.5281/zenodo.10724609
 ```
 
 # Examples
