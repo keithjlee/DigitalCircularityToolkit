@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Render component icons from vector sources to the 24x24 PNGs Grasshopper 1 embeds.
 #
-#   Icons/<ClassName>.svg | .pdf   ->   Resources/Icons/<ClassName>.png
+#   src/DCT.GH1/Icons/<ClassName>.svg | .pdf   ->   src/DCT.GH1/Resources/Icons/<ClassName>.png
 #
 #   scripts/icons.sh                 # render every source that is newer than its PNG
-#   scripts/icons.sh Icons/Foo.svg   # render specific sources (always)
+#   scripts/icons.sh src/DCT.GH1/Icons/Foo.svg   # render specific sources (always)
 #   scripts/icons.sh --force         # re-render everything
 #
 # Called automatically by `dotnet build` (target GenerateIcons in the csproj) on macOS/Linux.
@@ -13,8 +13,9 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SRC_DIR="$ROOT/Icons"
-OUT_DIR="$ROOT/Resources/Icons"
+PLUGIN="$ROOT/src/DCT.GH1"
+SRC_DIR="$PLUGIN/Icons"
+OUT_DIR="$PLUGIN/Resources/Icons"
 SIZE=24
 mkdir -p "$OUT_DIR"
 

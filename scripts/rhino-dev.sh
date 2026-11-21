@@ -8,7 +8,7 @@
 #   --rhino 8|9     Rhino version (default: 8)
 #   --restart       quit a running Rhino first (it asks to save, like Cmd-Q)
 #   --in-place      build into bin/Debug instead of a temp snapshot
-#   --all-tfms      build net48 + net8.0 + net8.0-windows (default: net8.0, the only one Rhino on macOS loads)
+#   --all-tfms      no-op since P2 (net8.0 is the only target); kept so old invocations still work
 #   --no-build      relaunch the most recent snapshot without building
 #   --dry-run       build and print the launch command, but do not start Rhino
 #
@@ -25,7 +25,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PROJECT="$ROOT/DigitalCircularityToolkit.csproj"
+PROJECT="$ROOT/src/DCT.GH1/DigitalCircularityToolkit.csproj"
 SNAP_ROOT="${TMPDIR:-/tmp/}dct-dev"
 RHINO_VER=8; RESTART=0; IN_PLACE=0; ALL_TFMS=0; NO_BUILD=0; DRY_RUN=0; GHFILE=""
 

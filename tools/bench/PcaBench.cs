@@ -251,7 +251,7 @@ static class EigenCheck
                 double[] d = { p[0] - mx, p[1] - my, p[2] - mz };
                 for (int r = 0; r < 3; r++) for (int c = 0; c < 3; c++) C[r, c] += d[r] * d[c];
             }
-            DigitalCircularityToolkit.Orientation.SymmetricEigen3.Decompose(C, out var vals, out var vecs);
+            DigitalCircularityToolkit.Numerics.SymmetricEigen3.Decompose(C, out var vals, out var vecs);
             if (vals[0] / vals[1] < 1.05 || vals[1] / vals[2] < 1.05) { skipped++; continue; }
             for (int k = 0; k < 3; k++)
             {

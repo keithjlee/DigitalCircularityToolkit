@@ -12,8 +12,8 @@
 #     --exposure primary|secondary|tertiary|...   (default: primary)
 #
 # Creates  <Subcategory>/<ClassName>.cs          (namespace DigitalCircularityToolkit.<Subcategory>)
-#          Icons/<ClassName>.svg                 (placeholder with initials; replace with the real drawing)
-# The next `dotnet build` renders Resources/Icons/<ClassName>.png and embeds it; DctComponent picks it up by name.
+#          src/DCT.GH1/Icons/<ClassName>.svg                 (placeholder with initials; replace with the real drawing)
+# The next `dotnet build` renders src/DCT.GH1/Resources/Icons/<ClassName>.png and embeds it; DctComponent picks it up by name.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -39,8 +39,9 @@ case "$SUBCAT" in Objects|Sets|Characterization|Distance|Matching|Utilities) ;; 
 TEMPLATE="$ROOT/scripts/templates/$KIND.cs.tmpl"
 [[ -f "$TEMPLATE" ]] || { echo "No template for kind '$KIND'" >&2; exit 1; }
 
-CS="$ROOT/$SUBCAT/$CLASS.cs"
-SVG="$ROOT/Icons/$CLASS.svg"
+PLUGIN="$ROOT/src/DCT.GH1"
+CS="$PLUGIN/$SUBCAT/$CLASS.cs"
+SVG="$PLUGIN/Icons/$CLASS.svg"
 [[ -e "$CS" ]] && { echo "$CS already exists" >&2; exit 1; }
 if grep -rqs --include='*.cs' "class $CLASS\b" "$ROOT" --exclude-dir=bin --exclude-dir=obj --exclude-dir=tools; then
   echo "A class named $CLASS already exists" >&2; exit 1
@@ -62,7 +63,7 @@ sed -e "s|__NAMESPACE__|DigitalCircularityToolkit.$SUBCAT|g" \
 # Placeholder icon in the style of the existing set: grey frame, light fill, blue initials.
 INITIALS="$(printf '%s' "$CLASS" | sed 's/[^A-Z]//g' | cut -c1-2)"
 [[ -z "$INITIALS" ]] && INITIALS="$(printf '%s' "$CLASS" | cut -c1-2)"
-mkdir -p "$ROOT/Icons"
+mkdir -p "$PLUGIN/Icons"
 if [[ ! -e "$SVG" ]]; then
   cat > "$SVG" <<EOF
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

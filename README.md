@@ -77,6 +77,11 @@ Each workflow is explained step by step in the [documentation](https://keithjlee
 - Public release coincides with the S2024 design workshop: *4.185 ODDS & MODS Castaways*
   
 # Release Notes
+## Unreleased (next: v0.6, Rhino 8 and Rhino 9 only)
+- **Rhino 7 is no longer supported** (the `net48` package is gone); use v0.5.x for Rhino 7.
+- The package now contains `DigitalCircularityToolkit.Numerics.dll` and `DigitalCircularityToolkit.Geometry.dll` next to the `.gha`: copy all files from the zip.
+- Planar hulls are correct on sampled geometry. Grasshopper's convex hull solver, used until now, sometimes returned self-overlapping outlines that were too long (a 1 m square slab's hull measured 7.85 m instead of 4 m), or outlines that left some sample points outside. Affects the `Hulls` outputs of the Set components, `PlanarHull`, `ObjectProperties.PlanarHull` and the `PlanarOutline` fallback. Hulls also have fewer redundant vertices.
+
 ## v0.5.2
 Documentation and citation only; the plugin's behaviour is unchanged from v0.5.1.
 - Citations use the Zenodo concept DOI [10.5281/zenodo.10724609](https://doi.org/10.5281/zenodo.10724609), which always resolves to the latest version (the README and docs cited the v0.2 record).
