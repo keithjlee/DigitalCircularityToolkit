@@ -324,9 +324,24 @@ def solve_report(doc):
     return rep
 
 
+def empty_outputs(doc):
+    """Component outputs without data. Must be none before rendering: empty sources draw orange 'empty' wires."""
+    empty = []
+    for obj in doc.Objects:
+        if isinstance(obj, IGH_ActiveObject) and hasattr(obj, "Params"):
+            empty += ["%s.%s" % (obj.NickName, p.Name) for p in obj.Params.Output if p.VolatileData.IsEmpty]
+    return empty
+
+
 def render(doc, path, zoom=1.5, margin=30):
     canvas = gh.Instances.ActiveCanvas
     canvas.Document = doc
+    # Attaching a document to the canvas can clear its solution (seen on the first example of a session): re-solve
+    # synchronously and refuse to render a canvas with empty outputs.
+    doc.NewSolution(True)
+    empty = empty_outputs(doc)
+    if empty:
+        raise RuntimeError("empty outputs before rendering %s: %s" % (os.path.basename(path), ", ".join(empty)))
     for o in doc.Objects:
         o.Attributes.ExpireLayout()
         o.Attributes.PerformLayout()
