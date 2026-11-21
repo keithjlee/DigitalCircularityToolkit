@@ -131,7 +131,7 @@ reference = componentpages(components)
 releasenotes()
 
 # Plugin version from the csproj (used for the search inventory).
-const VERSION_STRING = match(r"<Version>(.*?)</Version>", read(joinpath(ROOT, "DigitalCircularityToolkit.csproj"), String)).captures[1]
+const VERSION_STRING = match(r"<Version>(.*?)</Version>", read(joinpath(ROOT, "src", "DCT.GH1", "DigitalCircularityToolkit.csproj"), String)).captures[1]
 
 makedocs(
     sitename = "DigitalCircularityToolkit",
