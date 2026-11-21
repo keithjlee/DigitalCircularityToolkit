@@ -37,9 +37,9 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("ComplexSignature", "ComplexSig", "Curve signature where planar coordinates [u, v] is converted to complex number u + iv", GH_ParamAccess.list);
-            pManager.AddNumberParameter("DistanceSignature", "DistSig", "Curve signature that captures ordered distance from planar project point to curve centroid", GH_ParamAccess.list);
+            pManager.AddNumberParameter("DistanceSignature", "DistSig", "Distance from the curve centroid to each sample point, measured in the plane (= |ComplexSignature|)", GH_ParamAccess.list);
             pManager.AddCurveParameter("ProjectedCurve", "Curve", "Planar projection of curve", GH_ParamAccess.item);
-            pManager.AddLineParameter("Rays", "Rays", "Rays used in analysis", GH_ParamAccess.list);
+            pManager.AddLineParameter("Rays", "Rays", "Rays from the centroid to each projected sample point", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -53,22 +53,42 @@ namespace DigitalCircularityToolkit.Characterization
 
             int n = 20;
             DA.GetData(1, ref n);
+            if (n < 2)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "NumSamples must be at least 2");
+                return;
+            }
 
-            Plane plane = new Plane();
-
-            // divide curve and extract points
+            // Samples equally spaced by arc length: n points on a closed curve, n + 1 (both ends) on an open one.
             curve.DivideByCount(n, true, out Point3d[] points);
+            if (points == null || points.Length < 2)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not divide the curve");
+                return;
+            }
+            if (!curve.IsClosed)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Curve is open: the signature is treated as periodic, so the jump from end back to start adds high harmonics");
 
+            Plane plane = Plane.Unset;
             if (!DA.GetData(2, ref plane))
             {
                 // auto fit plane
-                Plane.FitPlaneToPoints(points, out plane);
+                if (Plane.FitPlaneToPoints(points, out plane) != PlaneFitResult.Success)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not fit a plane to the curve (is it a straight line?). Supply a Plane.");
+                    return;
+                }
             }
 
-            var centroid = LengthMassProperties.Compute(curve).Centroid;
-            plane.Origin = centroid;
+            var mass = LengthMassProperties.Compute(curve);
+            if (mass == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not compute the curve centroid");
+                return;
+            }
+            plane.Origin = mass.Centroid;
 
-            System.Numerics.Complex[] signature = HarmonicAnalysis.RadialSignature2DComplex(points, centroid, plane, out Line[] rays, out double[] lengths);
+            System.Numerics.Complex[] signature = HarmonicAnalysis.RadialSignature2DComplex(points, plane, out Line[] rays, out double[] lengths);
 
             // signature
             DA.SetDataList(0, signature);
@@ -76,7 +96,7 @@ namespace DigitalCircularityToolkit.Characterization
 
             // projected curve
             Transform projection = Transform.PlanarProjection(plane);
-            Curve projcurve = (Curve)curve.Duplicate();
+            Curve projcurve = curve.DuplicateCurve();
             projcurve.Transform(projection);
             DA.SetData(2, projcurve);
 

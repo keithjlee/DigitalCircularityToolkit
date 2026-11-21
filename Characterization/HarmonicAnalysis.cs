@@ -1,74 +1,90 @@
-﻿using DigitalCircularityToolkit.Objects;
-using Rhino.Geometry;
-using Rhino.Geometry.Intersect;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MathNet.Numerics.IntegralTransforms;
+﻿using System.Collections.Generic;
+using Complex = System.Numerics.Complex;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-using System.Numerics;
-using MathNet.Numerics;
+using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Characterization
 {
+    /// <summary>
+    /// Shared code for RadialSignature and the two Harmonics components. The Fourier math is in
+    /// <see cref="FourierDescriptors"/>, which is Rhino-free.
+    /// </summary>
     internal static class HarmonicAnalysis
     {
-        public static double[] Harmonic(double[] signature)
-        {
-            int n = signature.Length;
-
-            int ns = n % 2 == 0 ? n - 2 : n - 1;
-
-            Fourier.ForwardReal(signature, ns);
-
-            double[] descriptor = new double[ns/2-1];
-
-            for (int i = 1; i < ns/2; i++)
-            {
-                descriptor[i-1] = Math.Abs(signature[i]);
-            }
-
-            return descriptor;
-        }
-        public static double[] Harmonic(System.Numerics.Complex[] signature)
-        {
-            Fourier.Forward(signature);
-
-            double[] descriptor = new double[signature.Length-1];
-
-            for (int i = 1; i < signature.Length; i++)
-            {
-                descriptor[i-1] = signature[i].Magnitude;
-            }
-
-            return descriptor;
-        }
-
-
-        public static System.Numerics.Complex[] RadialSignature2DComplex(Point3d[] points, Point3d centroid, Rhino.Geometry.Plane plane, out Line[] rays, out double[] lengths)
+        /// <summary>
+        /// Projects the sample points into the plane, whose origin is the analysis centre. Outputs the complex signature
+        /// u + iv, the planar distances |u + iv|, and rays from the centre to each projected point.
+        /// </summary>
+        public static Complex[] RadialSignature2DComplex(Point3d[] points, Rhino.Geometry.Plane plane, out Line[] rays, out double[] lengths)
         {
             int n = points.Length;
-
-            System.Numerics.Complex[] signature = new System.Numerics.Complex[n];
+            var signature = new Complex[n];
             rays = new Line[n];
             lengths = new double[n];
-            
 
-            // extract distance on plane
             for (int i = 0; i < n; i++)
             {
-                plane.RemapToPlaneSpace(points[i], out Point3d planar_point);
-
-                rays[i] = new Line(centroid, points[i]);
-                lengths[i] = rays[i].Length;
-
-                signature[i] = new System.Numerics.Complex(planar_point.X, planar_point.Y);
+                plane.RemapToPlaneSpace(points[i], out Point3d uv);
+                signature[i] = new Complex(uv.X, uv.Y);
+                lengths[i] = signature[i].Magnitude;
+                rays[i] = new Line(plane.Origin, plane.PointAt(uv.X, uv.Y));
             }
-
             return signature;
         }
 
+        /// <summary>
+        /// Reads a list of complex numbers. Accepts System.Numerics.Complex (from RadialSignature), Grasshopper's own
+        /// complex numbers, and plain numbers (imaginary part 0). Returns null and sets <paramref name="error"/> on
+        /// anything else.
+        /// </summary>
+        public static List<Complex> ToComplex(List<IGH_Goo> items, out string error)
+        {
+            error = null;
+            var result = new List<Complex>(items.Count);
+            for (int i = 0; i < items.Count; i++)
+            {
+                IGH_Goo goo = items[i];
+                if (goo is GH_ComplexNumber ghc)
+                    result.Add(new Complex(ghc.Value.Real, ghc.Value.Imaginary));
+                else if (goo is GH_ObjectWrapper w && w.Value is Complex c)
+                    result.Add(c);
+                else if (goo is GH_Number num)
+                    result.Add(new Complex(num.Value, 0));
+                else
+                {
+                    error = string.Format("Signature item {0} is not a complex number ({1})", i, goo == null ? "null" : goo.TypeName);
+                    return null;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Writes the first FVLength values of the descriptor to output 0 (all of them when FVLength is not supplied).
+        /// Adds a Remark when FVLength is larger than the descriptor.
+        /// </summary>
+        public static void SetFeatureVector(GH_Component component, IGH_DataAccess DA, double[] descriptor)
+        {
+            int n = descriptor.Length;
+            if (DA.GetData(1, ref n))
+            {
+                if (n < 1)
+                {
+                    component.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "FVLength must be at least 1");
+                    return;
+                }
+                if (n > descriptor.Length)
+                {
+                    component.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format(
+                        "FVLength {0} is more than the {1} harmonics this signature has; output has {1}. Use more samples for more harmonics.",
+                        n, descriptor.Length));
+                    n = descriptor.Length;
+                }
+            }
+            var fv = new double[n];
+            System.Array.Copy(descriptor, fv, n);
+            DA.SetDataList(0, fv);
+        }
     }
 }

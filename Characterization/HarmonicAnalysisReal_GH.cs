@@ -13,7 +13,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         public HarmonicAnalysisReal_GH()
           : base("HarmonicAnalysisReal (DCT)", "HarmonicsReal",
-              "Get the 2D Fourier shape descriptor of a real-valued signature",
+              "Fourier shape descriptor of a real-valued signature (e.g. DistanceSignature): the amplitude of harmonics 1, 2, 3, ... in model units, independent of sample count. N samples give N/2 harmonics.",
               "DigitalCircularityToolkit", "Characterization")
         {
         }
@@ -24,7 +24,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddNumberParameter("Signature", "DistSig", "Shape signature as a list of real-valued numbers", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("FVLength", "|FV|", "Length of feature vector", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("FVLength", "|FV|", "Number of harmonics to keep (lowest first). Default: all", GH_ParamAccess.item);
 
             pManager[1].Optional = true;
         }
@@ -34,7 +34,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("HarmonicFeatureVector", "FV", "Invariant harmonic feature vector", GH_ParamAccess.list);
+            pManager.AddNumberParameter("HarmonicFeatureVector", "FV", "Amplitudes A1, A2, ... of r(t) = A0 + Σ Ak·cos(k·t + φk). Invariant to start point, direction, rotation and mirroring; not to scale.", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -43,26 +43,14 @@ namespace DigitalCircularityToolkit.Characterization
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<double> sig = new List<double>();
-
+            var sig = new List<double>();
             if (!DA.GetDataList(0, sig)) return;
-            double[] descriptor = HarmonicAnalysis.Harmonic(sig.ToArray());
-
-            int n_dimensions = descriptor.Length;
-            int n = n_dimensions;
-            DA.GetData(1, ref n);
-
-            if (n > n_dimensions)
+            if (sig.Count < 2)
             {
-                DA.SetDataList(0, descriptor);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Signature needs at least 2 samples");
+                return;
             }
-            else
-            {
-                List<double> FV = new List<double>();
-
-                for (int i = 0; i < n; i++) FV.Add(descriptor[i]);
-                DA.SetDataList(0, FV);
-            }
+            HarmonicAnalysis.SetFeatureVector(this, DA, FourierDescriptors.FromReal(sig));
         }
 
         /// <summary>

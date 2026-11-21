@@ -501,6 +501,24 @@ def fx_characterization():
     hc = c.comp("HarmonicAnalysisComplex (DCT)", "HarmonicsComplex", 500, 150)
     c.wire((rs, "ComplexSignature"), hc, "Signature")
     c.value(hc, "FVLength", 8)
+    # Same outlines reversed and mirrored: the harmonics must equal the ones above (direction/mirror invariance).
+    flipped = []
+    for g in outlines:
+        crv = g.Value.DuplicateCurve()
+        crv.Reverse()
+        o = crv.PointAtStart
+        crv.Transform(rg.Transform.Mirror(rg.Plane(o, rg.Vector3d.XAxis)))
+        flipped.append(T.GH_Curve(crv))
+    out_f = c.data(P.Param_Curve, lambda g: g, flipped, "Outlines_Flipped", 0, 150)
+    rs_f = c.comp("RadialSignature (DCT)", "RadialSignature_Flipped", 250, 150)
+    c.wire(out_f, rs_f, "Curve")
+    c.value(rs_f, "NumSamples", 64)
+    hr_f = c.comp("HarmonicAnalysisReal (DCT)", "HarmonicsReal_Flipped", 750, 0)
+    c.wire((rs_f, "DistanceSignature"), hr_f, "Signature")
+    c.value(hr_f, "FVLength", 8)
+    hc_f = c.comp("HarmonicAnalysisComplex (DCT)", "HarmonicsComplex_Flipped", 750, 150)
+    c.wire((rs_f, "ComplexSignature"), hc_f, "Signature")
+    c.value(hc_f, "FVLength", 8)
 
     hd = c.comp("HausdorffDistanceCurve (DCT)", "HausdorffCurve", 250, 300)
     c.wire(ca, hd, "First curve")
