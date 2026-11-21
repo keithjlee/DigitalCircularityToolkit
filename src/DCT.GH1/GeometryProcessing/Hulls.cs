@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using MIConvexHull;
 using Rhino.Geometry;
-using Grasshopper.Kernel;
 using Rhino.Collections;
 
 namespace DigitalCircularityToolkit.GeometryProcessing
@@ -47,34 +46,34 @@ namespace DigitalCircularityToolkit.GeometryProcessing
             return hullmesh;
         }
 
+        /// <summary>
+        /// Closed counter-clockwise convex hull of the points' XY coordinates, at Z = 0 (same result as Grasshopper's
+        /// ConvexHull.Solver, whose start vertex may differ; P2.5: no Grasshopper reference needed).
+        /// </summary>
         public static Polyline MakeHull2d(IEnumerable<Point3d> pts)
         {
-            var reduced_points = new Grasshopper.Kernel.Geometry.Node2List(pts);
-            Polyline hull = Grasshopper.Kernel.Geometry.ConvexHull.Solver.ComputeHull(reduced_points);
+            var list = pts as IList<Point3d> ?? new List<Point3d>(pts);
+            var x = new double[list.Count];
+            var y = new double[list.Count];
+            for (int i = 0; i < x.Length; i++) { x[i] = list[i].X; y[i] = list[i].Y; }
 
+            int[] idx = Numerics.ConvexHull2D.Indices(x, y);
+            var hull = new Polyline(idx.Length + 1);
+            foreach (int i in idx) hull.Add(x[i], y[i], 0);
+            if (idx.Length > 0) hull.Add(hull[0]);
             return hull;
         }
 
+        /// <summary>Convex hull of the points projected onto <paramref name="plane"/>, as a closed polyline in that plane.</summary>
         public static Polyline MakeHull2d(IEnumerable<Point3d> pts, Plane plane)
         {
             Point3dList ptlist = new Point3dList(pts);
-            Transform world_coords = Transform.PlaneToPlane(plane, Plane.WorldXY);
+            ptlist.Transform(Transform.PlaneToPlane(plane, Plane.WorldXY));   // plane coordinates (Z dropped by the hull)
 
-            //project to global XY plane
-            ptlist.Transform(world_coords);
-
-            Grasshopper.Kernel.Geometry.Node2List planar_points = new Grasshopper.Kernel.Geometry.Node2List(ptlist);
-
-            Polyline hull_global = Grasshopper.Kernel.Geometry.ConvexHull.Solver.ComputeHull(planar_points);
-
-            //project 
-            Transform local_coords = Transform.PlaneToPlane(Plane.WorldXY, plane);
-
-            hull_global.Transform(local_coords);
-
-            return hull_global;
+            Polyline hull = MakeHull2d(ptlist);
+            hull.Transform(Transform.PlaneToPlane(Plane.WorldXY, plane));
+            return hull;
         }
-
 
     }
 }

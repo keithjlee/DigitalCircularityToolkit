@@ -12,6 +12,10 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Reference outputs recorded inside Rhino (e.g. Grasshopper's convex hull), compared against DCT.Numerics -->
+    <None Include="data/**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="../../src/DCT.Numerics/DCT.Numerics.csproj" />
   </ItemGroup>
 </Project>
