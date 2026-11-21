@@ -8,7 +8,7 @@
 #   --rhino 8|9     Rhino version (default: 8)
 #   --restart       quit a running Rhino first (it asks to save, like Cmd-Q)
 #   --in-place      build into bin/Debug instead of a temp snapshot
-#   --all-tfms      build net48 + net8.0 + net8.0-windows (default: net8.0, the only one Rhino on macOS loads)
+#   --all-tfms      no-op since P2 (net8.0 is the only target); kept so old invocations still work
 #   --no-build      relaunch the most recent snapshot without building
 #   --dry-run       build and print the launch command, but do not start Rhino
 #

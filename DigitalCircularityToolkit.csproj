@@ -1,17 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	
   <PropertyGroup>
-    <!-- Select the framework(s) you wish to target.
-        Rhino 6: net45
-        Rhino 7: net48
-        Rhino 8 Windows: net48, net7.0, net7.0-windows, net7.0-windows10.0.22000.0, etc
-        Rhino 8 Mac: net7.0, net7.0-macos, net7.0-macos12.0, etc
-        Rhino 8.20+ / Rhino 9: net8.0 (rolls forward onto the .NET 10 runtime used by Rhino 8.36+ and Rhino 9)
-    -->
-    <TargetFrameworks>net8.0-windows;net8.0;net48</TargetFrameworks>
+    <!-- One cross-platform build for Rhino 8 (Windows + Mac, SR14+) and Rhino 9. net8.0 rolls forward onto the .NET 10
+         runtime of Rhino 8.36+ and Rhino 9. net48 (Rhino 7) was dropped after the v0.5.x line (P2); net8.0-windows was
+         never shipped. WinForms types (System.Drawing icons) come from the framework reference below. -->
+    <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <TargetExt>.gha</TargetExt>
-    <NoWarn>NU1701;NETSDK1086</NoWarn>
+    <!-- CA1416: System.Drawing is Windows-only in .NET, but Rhino provides it on macOS too (icons). -->
+    <NoWarn>NU1701;NETSDK1086;CA1416</NoWarn>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
   
@@ -48,13 +45,8 @@
     </EmbeddedResource>
   </ItemGroup> -->
   
-    <!-- For Windows only builds -->
-  <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4'))">
-    <UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-
   <!-- Reference WinForms (System.Drawing etc.) for the cross-platform net8.0 build (Rhino 8.11+) -->
-  <ItemGroup Condition="!($(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4')))">
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
   </ItemGroup>
 
@@ -71,9 +63,8 @@
     <EmbeddedResource Include="Resources\Icons\*.png" />
   </ItemGroup>
 
-  <!-- Render changed icon sources before resources are collected. Runs in the outer multi-TFM build (inner
-       builds then find the PNGs up to date) and in single-TFM builds (-f). Skipped on Windows: PNGs are committed. -->
-  <Target Name="GenerateIcons" BeforeTargets="DispatchToInnerBuilds;PrepareForBuild" Condition="'$(OS)' != 'Windows_NT'">
+  <!-- Render changed icon sources before resources are collected. Skipped on Windows: PNGs are committed. -->
+  <Target Name="GenerateIcons" BeforeTargets="PrepareForBuild" Condition="'$(OS)' != 'Windows_NT'">
     <Exec Command="bash &quot;$(MSBuildProjectDirectory)/scripts/icons.sh&quot;" />
     <ItemGroup>
       <EmbeddedResource Include="Resources\Icons\*.png" Exclude="@(EmbeddedResource)" />
