@@ -1,0 +1,26 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{cs,csx}]
+indent_style = space
+indent_size = 4
+# Prefer explicit braces and file-scoped namespaces in new code (not enforced on legacy files).
+csharp_prefer_braces = when_multiline:suggestion
+csharp_style_namespace_declarations = file_scoped:suggestion
+dotnet_sort_system_directives_first = true
+
+[*.{csproj,props,targets,xml,json,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+[*.{sh,py,jl,md}]
+indent_style = space
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false

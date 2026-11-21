@@ -1,0 +1,13 @@
+<Project>
+  <!-- Shared by every project under the repo root: the plugin, src/*, tests/*, tools/*. -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Deterministic>true</Deterministic>
+    <Authors>Keith J. Lee</Authors>
+    <Copyright>Keith J. Lee</Copyright>
+    <!-- .NET analyzers at their default (recommended-minimum) level. New projects add Nullable=enable themselves;
+         the legacy plugin code is not nullable-annotated yet. -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+</Project>
