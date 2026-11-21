@@ -10,6 +10,9 @@
     <!-- CA1416: System.Drawing is Windows-only in .NET, but Rhino provides it on macOS too (icons). -->
     <NoWarn>NU1701;NETSDK1086;CA1416</NoWarn>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <!-- Build output stays in <repo>/bin/<Configuration>/net8.0 (as before the src/ move), so the folder registered in
+         GrasshopperDeveloperSettings and the tooling keep working. rhino-dev.sh's snapshot overrides it with -p. -->
+    <BaseOutputPath>$(MSBuildThisFileDirectory)../../bin/</BaseOutputPath>
   </PropertyGroup>
   
     <PropertyGroup>
@@ -32,7 +35,7 @@
 
   <ItemGroup>
     <!-- Rhino-free maths (P2): DigitalCircularityToolkit.Numerics.dll, shipped next to the .gha -->
-    <ProjectReference Include="src/DCT.Numerics/DCT.Numerics.csproj" />
+    <ProjectReference Include="../DCT.Numerics/DCT.Numerics.csproj" />
   </ItemGroup>
   
   <!-- <ItemGroup>
@@ -55,11 +58,9 @@
     <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
   </ItemGroup>
 
-  <!-- Side projects (benchmarks etc.) live under tools/ and must not be globbed into the plugin -->
+  <!-- The plugin's own folder holds only plugin sources (src/DCT.GH1); other projects live in sibling folders. -->
   <ItemGroup>
-    <Compile Remove="tools/**;tests/**;src/**" />
-    <None Remove="tools/**;tests/**;src/**" />
-    <EmbeddedResource Remove="tools/**;tests/**;src/**" />
+    <Compile Remove="bin/**" />
   </ItemGroup>
 
   <!-- Icons by convention (new components, see docs/DEV_WORKFLOW.md):
@@ -70,7 +71,7 @@
 
   <!-- Render changed icon sources before resources are collected. Skipped on Windows: PNGs are committed. -->
   <Target Name="GenerateIcons" BeforeTargets="PrepareForBuild" Condition="'$(OS)' != 'Windows_NT'">
-    <Exec Command="bash &quot;$(MSBuildProjectDirectory)/scripts/icons.sh&quot;" />
+    <Exec Command="bash &quot;$(MSBuildProjectDirectory)/../../scripts/icons.sh&quot;" />
     <ItemGroup>
       <EmbeddedResource Include="Resources\Icons\*.png" Exclude="@(EmbeddedResource)" />
     </ItemGroup>

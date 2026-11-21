@@ -8,7 +8,7 @@
         "args": [
           "build",
           "-clp:NoSummary",
-          "${workspaceFolder}/DigitalCircularityToolkit.csproj"
+          "${workspaceFolder}/src/DCT.GH1/DigitalCircularityToolkit.csproj"
         ],
         "problemMatcher": "$msCompile",
         "presentation": {

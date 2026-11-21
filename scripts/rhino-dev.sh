@@ -25,7 +25,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PROJECT="$ROOT/DigitalCircularityToolkit.csproj"
+PROJECT="$ROOT/src/DCT.GH1/DigitalCircularityToolkit.csproj"
 SNAP_ROOT="${TMPDIR:-/tmp/}dct-dev"
 RHINO_VER=8; RESTART=0; IN_PLACE=0; ALL_TFMS=0; NO_BUILD=0; DRY_RUN=0; GHFILE=""
 
