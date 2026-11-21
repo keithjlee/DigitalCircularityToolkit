@@ -97,7 +97,7 @@ function componentpages(components)
             isempty(comps) && continue
             println(io, "## ", sub, "\n")
             println(io, "| | Component | Description |")
-            println(io, "|:-|:----------|:------------|")
+            println(io, "|:---|:----------|:------------|")   # Julia Markdown needs >= 3 dashes per column
             for c in comps
                 name = shortname(c)
                 icon = haskey(c, "icon") ? "![](../$(c["icon"]))" : ""
@@ -169,6 +169,14 @@ makedocs(
         "Release notes" => "release-notes.md",
     ],
 )
+
+# Julia's Markdown leaves a malformed table as a paragraph of pipes without any warning. Fail instead.
+for (dir, _, files) in walkdir(joinpath(DOCS, "build")), f in files
+    endswith(f, ".html") || continue
+    html = read(joinpath(dir, f), String)
+    m = match(r"<p>([^<]*\|\s*:?-)", html)   # a paragraph that starts like a table header + separator row
+    m === nothing || error("Unparsed Markdown table in $(relpath(joinpath(dir, f), DOCS)): $(m.captures[1])")
+end
 
 deploydocs(
     repo = "github.com/keithjlee/DigitalCircularityToolkit.git",
