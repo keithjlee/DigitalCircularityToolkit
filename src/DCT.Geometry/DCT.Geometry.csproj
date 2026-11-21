@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Geometry layer of DigitalCircularityToolkit (P2.5): design objects (DesignObject and its Linear/Planar/Box/
+       Spherical subtypes), sampling, PCA frames and hulls. RhinoCommon only (compile-time; Rhino provides it at
+       runtime), no Grasshopper, so a GH2 plugin can share it. Shipped next to the .gha as
+       DigitalCircularityToolkit.Geometry.dll. Namespaces are unchanged (DigitalCircularityToolkit.Objects, ...).
+       Design objects are never serialized into .gh files, so moving them between assemblies is safe. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>DigitalCircularityToolkit.Geometry</AssemblyName>
+    <RootNamespace>DigitalCircularityToolkit</RootNamespace>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Same SR as the plugin's Grasshopper reference (a plugin will not load in a Rhino older than its SDK). -->
+    <PackageReference Include="RhinoCommon" Version="8.14.24345.15001" IncludeAssets="compile;build" PrivateAssets="all" />
+    <PackageReference Include="MIConvexHull" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../DCT.Numerics/DCT.Numerics.csproj" />
+  </ItemGroup>
+</Project>

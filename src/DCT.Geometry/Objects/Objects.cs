@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DigitalCircularityToolkit.GeometryProcessing;
 using DigitalCircularityToolkit.Orientation;
-using DigitalCircularityToolkit.Utilities;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects

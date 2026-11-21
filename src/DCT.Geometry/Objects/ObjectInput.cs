@@ -6,7 +6,7 @@ namespace DigitalCircularityToolkit.Objects
     /// Input geometry for the object constructors (DESIGN_OBJECT_SPEC §4). The analysis supports Curve, Brep,
     /// Mesh and PointCloud; other types are converted here or rejected with a message (B8).
     /// </summary>
-    internal static class ObjectInput
+    public static class ObjectInput
     {
         /// <summary>
         /// Returns geometry the analysis can use, or null with <paramref name="error"/> set.

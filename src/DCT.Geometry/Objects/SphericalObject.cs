@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    internal class SphericalObject : DesignObject
+    public class SphericalObject : DesignObject
     {
         public int Quantity;
         public double RadiusBuffer;

@@ -36,6 +36,8 @@
   <ItemGroup>
     <!-- Rhino-free maths (P2): DigitalCircularityToolkit.Numerics.dll, shipped next to the .gha -->
     <ProjectReference Include="../DCT.Numerics/DCT.Numerics.csproj" />
+    <!-- Design objects, PCA, sampling, hulls (P2.5): DigitalCircularityToolkit.Geometry.dll -->
+    <ProjectReference Include="../DCT.Geometry/DCT.Geometry.csproj" />
   </ItemGroup>
   
   <!-- <ItemGroup>
