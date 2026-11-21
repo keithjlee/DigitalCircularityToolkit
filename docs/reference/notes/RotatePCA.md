@@ -6,6 +6,6 @@ Use it to correct the orientation of an object after [`AlignToPlane`](@ref comp-
 
 **Notes**
 
-- Any `RotationAxis` value other than 1 or 2 rotates about PCA3.
+- `RotationAxis` should be 1, 2 or 3. Any other value rotates about PCA3, as in earlier versions, with the warning "RotationAxis ... is not 1, 2 or 3; rotating about PCA3".
 - The pivot is the centroid, not the center of the bounding box (which [`AlignToPlane`](@ref comp-AlignToPlane) and [`Knoll`](@ref comp-Knoll) place). For an asymmetric object the two differ, so the bounding-box center can move after a rotation.
 - `RotatedGeometry` is a list. For a point-cloud object it holds the individual rotated points; for any other geometry it holds the single rotated geometry.

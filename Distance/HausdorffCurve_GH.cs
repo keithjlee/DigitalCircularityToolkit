@@ -25,7 +25,7 @@ namespace DigitalCircularityToolkit
         {
             pManager.AddCurveParameter("First curve", "A", "First curve", GH_ParamAccess.item);
             pManager.AddCurveParameter("Second curve", "B", "Second curve", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Sample count", "N", "Number of samples to use for the Hausdorff distance calculation", GH_ParamAccess.item, 50);
+            pManager.AddIntegerParameter("Sample count", "N", "Number of segments each curve is divided into (closed curves give N points, open curves N + 1)", GH_ParamAccess.item, 50);
         }
 
         /// <summary>

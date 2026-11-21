@@ -12,4 +12,4 @@ a_i' = a_i \cdot \frac{F}{M}, \qquad b_j' = b_j \cdot \frac{F}{M}
 
 **Notes**
 
-- The divisor is the largest value, not the largest absolute value. The component assumes positive data: if the shared maximum is zero the outputs are not finite, and if it is negative the signs flip.
+- The divisor is the largest value, not the largest absolute value. If the shared maximum is not positive, the component stops with the error "The largest value is ...; normalizing needs at least one positive value".

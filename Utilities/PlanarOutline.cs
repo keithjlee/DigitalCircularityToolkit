@@ -26,7 +26,7 @@ namespace DigitalCircularityToolkit.Utilities
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to analyze", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Plane", "Plane", "Plane to project to. Origin will be shifted to object centroid.", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Plane", "Plane", "Plane to project to (default: the object's local plane). Its origin is moved to the center of the object's oriented bounding box.", GH_ParamAccess.item);
 
             pManager[1].Optional = true;
         }
@@ -174,8 +174,21 @@ namespace DigitalCircularityToolkit.Utilities
             foreach (Polyline outline in outlines) outline_curves.Add(outline.ToPolylineCurve());
 
             Curve[] joined_curves = Curve.JoinCurves(outline_curves);
+            if (joined_curves.Length == 0) return null;
+            if (joined_curves.Length == 1) return joined_curves[0];
 
-            return joined_curves.Length > 0 ? joined_curves[0] : null;
+            // Several loops (holes or separate parts): return the outer boundary, i.e. the closed loop with the largest
+            // area. It used to be whichever loop came first.
+            Curve outer = null;
+            double best = -1;
+            foreach (Curve c in joined_curves)
+            {
+                double size = c.IsClosed ? (AreaMassProperties.Compute(c)?.Area ?? 0) : 0;
+                if (size > best) { best = size; outer = c; }
+            }
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format(
+                "The outline has {0} loops (holes or separate parts); ProjectedCurve is the largest one", joined_curves.Length));
+            return outer;
         }
 
 

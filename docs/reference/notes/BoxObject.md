@@ -14,5 +14,5 @@ A buffer below 1 shrinks the box (for example to keep only usable material); abo
 
 - Error: "Buffer must be > 0" when any buffer ≤ 0, plus the geometry errors listed under [`Object`](@ref comp-Object).
 - The box bounds the whole geometry, so a single protrusion enlarges it.
-- `Quantity` is not validated; a value ≤ 0 makes the object contribute no rows to [`BoxSet`](@ref comp-BoxSet).
+- `Quantity` 0 makes the object contribute no rows to [`BoxSet`](@ref comp-BoxSet); a negative `Quantity`, or `NumSamples` < 1 for a curve or Brep, is an error.
 - The effective box is derived from the current axes, so it follows changes made with [`OverridePCA`](@ref comp-OverridePCA).

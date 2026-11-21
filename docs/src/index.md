@@ -37,7 +37,7 @@ When using or extending DCT for research, please cite it:
   month        = feb,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {v0.5},
+  version      = {v0.5.1},
   doi          = {10.5281/zenodo.10724610},
   url          = {https://doi.org/10.5281/zenodo.10724610}
 }

@@ -14,5 +14,5 @@ and `EffectiveSphere` is the sphere with that center and radius. Both are comput
 
 - Error: "Buffer must be > 0" when `RadiusBuffer` ≤ 0, plus the geometry errors listed under [`Object`](@ref comp-Object).
 - The radius depends on the sampling: for meshes and point clouds all vertices or points are used; for curves and Breps more `NumSamples` gives a tighter estimate.
-- `Quantity` is not validated; a value ≤ 0 makes the object contribute no rows to [`SphereSet`](@ref comp-SphereSet).
-- The sphere is not recomputed if the axes are later changed with [`OverridePCA`](@ref comp-OverridePCA).
+- `Quantity` 0 makes the object contribute no rows to [`SphereSet`](@ref comp-SphereSet); a negative `Quantity`, or `NumSamples` < 1 for a curve or Brep, is an error.
+- When the axes are changed with [`OverridePCA`](@ref comp-OverridePCA), the sphere is recomputed about the new box center.

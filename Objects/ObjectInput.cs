@@ -12,6 +12,17 @@ namespace DigitalCircularityToolkit.Objects
         /// Returns geometry the analysis can use, or null with <paramref name="error"/> set.
         /// The input is never modified (conversions create new geometry).
         /// </summary>
+        /// <summary>
+        /// Null when the counts are usable, otherwise an error message. NumSamples only matters for curves and Breps
+        /// (meshes and point clouds use all their vertices/points).
+        /// </summary>
+        public static string CheckCounts(GeometryBase geo, int nSamples, int quantity)
+        {
+            if ((geo is Curve || geo is Brep) && nSamples < 1) return "NumSamples must be at least 1";
+            if (quantity < 0) return "Quantity must be 0 or more";
+            return null;
+        }
+
         public static GeometryBase Normalize(GeometryBase geo, out string error)
         {
             error = null;

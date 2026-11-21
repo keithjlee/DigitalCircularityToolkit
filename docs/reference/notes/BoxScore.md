@@ -15,5 +15,5 @@ An object that fills its box (a rectangular block, with all buffers at 1) scores
 
 - The hull is built from the sample points (for Breps these include all vertices), while the box encloses the full geometry. For curved objects a low `NumSamples` gives a smaller hull and a higher score.
 - The 3D hull is computed the first time a component needs it and then kept with the object.
-- For a flat object (all samples in one plane) the hull is an empty mesh and the box volume is zero or close to it, so the score is not meaningful; use [`PlaneScore`](@ref comp-PlaneScore).
-- `Factor` is a plain multiplier. The input description says it must be at least 100, but no check is made.
+- For a flat or straight object the box has no volume: the component gives the warning "The effective box has no volume ..." and no output. Use [`PlaneScore`](@ref comp-PlaneScore) or [`LineScore`](@ref comp-LineScore).
+- `Factor` is a plain multiplier (default 100, so the score reads as a percentage).

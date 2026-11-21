@@ -12,5 +12,6 @@ A perfectly slender object scores 0. With the default `Factor` of 100 the score 
 
 - The measured dimensions are used, not the effective ones: buffers such as `LengthBuffer` have no effect.
 - `PCA1` is the direction of greatest spread of the samples, so `Length` is normally the largest dimension, but this is not enforced; for unusual shapes the ratio can exceed 1.
-- `Factor` is a plain multiplier. The input description says it must be at least 100, but no check is made.
+- `Factor` is a plain multiplier (default 100, so the score reads as a percentage).
+- Warning "The object has no length ..." and no output when all samples coincide.
 - The score depends on the orientation of the local frame, so [`OverridePCA`](@ref comp-OverridePCA) changes it.

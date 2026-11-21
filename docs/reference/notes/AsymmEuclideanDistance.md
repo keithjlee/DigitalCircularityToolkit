@@ -13,5 +13,5 @@ with `p` = `Power1` and `q` = `Power2`. A pair is "valid" when the supply item i
 
 - Too-small supply is penalized, not forbidden: if it is cheaper overall, [`Match`](@ref comp-Match) can still assign an invalid pair. Check the result.
 - The order matters: `Demand` is the "from" set and `Supply` the "to" set; swapping them changes which pairs are valid.
-- Error if the sets are empty or the vectors differ in length. Warning "Are you sure you want a power <= 0?" for `Power1` ≤ 0; `Power2` is not checked.
+- Error if the sets are empty or the vectors differ in length. Warning "Are you sure you want a power <= 0?" for `Power1` ≤ 0, and a remark when `Power2` ≤ `Power1` (undersized supply is then not penalized more).
 - Costs saturate at 2147483647.

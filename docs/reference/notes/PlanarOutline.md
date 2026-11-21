@@ -5,7 +5,7 @@ Returns the "shadow" of a design object's geometry on a plane: the outline you w
 **How each geometry type is handled.**
 
 - Curve: the curve is projected onto the plane and returned as is. An open curve stays open; this is a projection, not an outline.
-- Mesh: the mesh outline on the plane (Rhino's `Mesh.GetOutlines`). The outline polylines are joined and the first joined curve is returned.
+- Mesh: the mesh outline on the plane (Rhino's `Mesh.GetOutlines`). The outline polylines are joined and the outer boundary is returned (see below).
 - Brep: the Brep is meshed with default meshing parameters, then treated as a mesh.
 - Point cloud: the 2D convex hull of the points in the plane.
 
@@ -17,5 +17,5 @@ If the mesh outline fails (it can when faces are edge-on to the plane or project
 
 - Warning: "Could not compute the exact outline; returning the planar convex hull instead". The result is then convex and may be larger than the true shadow.
 - Error: "Could not compute an outline for geometry of type …" when no curve could be produced; the output is empty.
-- Only one curve is returned. For a shadow with holes or several disconnected parts, the other loops are dropped.
+- Only one curve is returned. For a shadow with holes or several disconnected parts, it is the closed loop with the largest area (the outer boundary), and a remark says how many loops there were. Before v0.5.1 it was whichever loop came first.
 - The point-cloud result is always a convex hull, without a warning.

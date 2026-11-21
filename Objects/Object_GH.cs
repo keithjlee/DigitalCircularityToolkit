@@ -35,7 +35,7 @@ namespace DigitalCircularityToolkit.Objects
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Design object", GH_ParamAccess.item);
-            pManager.AddGeometryParameter("Geometry", "Geo", "Passed through geometry", GH_ParamAccess.item);
+            pManager.AddGeometryParameter("Geometry", "Geo", "The analyzed geometry: the input, or its conversion (surfaces and extrusions become Breps, SubDs meshes)", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -55,6 +55,9 @@ namespace DigitalCircularityToolkit.Objects
             if (geo == null) return null;
             DA.GetData(1, ref n);
             DA.GetData(2, ref id);
+
+            error = ObjectInput.CheckCounts(geo, n, 0);
+            if (error != null) return null;
 
             return () =>
             {

@@ -27,8 +27,8 @@ namespace DigitalCircularityToolkit.Distance
         {
             pManager.AddNumberParameter("Demand", "FVdemand", "Distance from", GH_ParamAccess.tree);
             pManager.AddNumberParameter("Supply", "FVsupply", "Distance to", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Power1", "p", "Power factor for positive differences", GH_ParamAccess.item, 1);
-            pManager.AddIntegerParameter("Power2", "q", "Power factor for negative differences", GH_ParamAccess.item, 2);
+            pManager.AddIntegerParameter("Power1", "p", "Power of the distance when the supply is at least as large as the demand in every feature", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("Power2", "q", "Power of the distance when the supply is smaller than the demand in any feature (penalty: use Power2 > Power1 with distances > 1)", GH_ParamAccess.item, 2);
         }
 
         /// <summary>
@@ -63,6 +63,10 @@ namespace DigitalCircularityToolkit.Distance
             if (p <= 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Are you sure you want a power <= 0?");
+            }
+            if (q <= p)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Power2 <= Power1: undersized supply is not penalized more than oversized supply");
             }
 
 

@@ -16,5 +16,5 @@ where `Length` is the extent of the geometry along `PCA1`. A `LengthBuffer` belo
 
 - Error: "Buffer must be > 0" when `LengthBuffer` ≤ 0, plus the geometry errors listed under [`Object`](@ref comp-Object).
 - For a straight line, or any curve lying in a plane, `Height` is 0 (and `Width` is 0 for a straight line), so the estimated area is 0. Supply `Area` explicitly in that case.
-- `Quantity` is not validated; a value ≤ 0 makes the object contribute no rows to [`LinearSet`](@ref comp-LinearSet).
-- The estimated area is not recomputed if the axes are later changed with [`OverridePCA`](@ref comp-OverridePCA).
+- `Quantity` 0 makes the object contribute no rows to [`LinearSet`](@ref comp-LinearSet); a negative `Quantity`, or `NumSamples` < 1 for a curve or Brep, is an error.
+- An estimated area (no `Area` given) is recomputed from the new box when the axes are changed with [`OverridePCA`](@ref comp-OverridePCA); a given `Area` is kept.

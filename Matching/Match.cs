@@ -29,7 +29,7 @@ namespace DigitalCircularityToolkit.Matching
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("DistanceMatrix", "DM", "Distance matrix as tree: number of branches = number of demand; count in each branch = number of supply. If assignment = -1, no real assignment occurred.", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("DistanceMatrix", "DM", "Distance matrix as tree: one branch per demand item, each with one cost per supply item", GH_ParamAccess.tree);
             pManager.AddBooleanParameter("AutoRun", "Auto", "Automatically run the algorithm. Set to false when working with large parametric problems so that you can manually perform the assignment between parameter changes. I.e., add a button here.", GH_ParamAccess.item, true);
 
             pManager[1].Optional = true;

@@ -54,14 +54,20 @@ namespace DigitalCircularityToolkit.Utilities
             
             //if plane is not provided, default to PCA XY
             Plane plane = new Plane(obj.Localbox.Center, obj.PCA1, obj.PCA2);
-            if (!DA.GetData(1, ref plane)) plane = plane;
+            DA.GetData(1, ref plane);
 
             //center to origin
             plane.Origin = obj.Localbox.Center;
 
             Polyline hull = Hulls.MakeHull2d(obj.SampledPoints, plane);
 
-            DA.SetData(0, Brep.CreatePlanarBreps(hull.ToNurbsCurve(), 1e-6)[0]);
+            Brep[] faces = hull != null && hull.Count >= 4 ? Brep.CreatePlanarBreps(hull.ToNurbsCurve(), 1e-6) : null;
+            if (faces == null || faces.Length == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The sample points have no area in this plane (they are collinear): no hull");
+                return;
+            }
+            DA.SetData(0, faces[0]);
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddGenericParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.item);
             pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
             pManager.AddIntegerParameter("Quantity", "qty", "Quantity of object", GH_ParamAccess.item, 1);
-            pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the plane length by fL", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the line length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Area", "Area", "Area of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
             pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
         }
@@ -60,6 +60,9 @@ namespace DigitalCircularityToolkit.Objects
             if (geo == null) return null;
             DA.GetData(1, ref n);
             DA.GetData(2, ref qty);
+
+            error = ObjectInput.CheckCounts(geo, n, qty);
+            if (error != null) return null;
             DA.GetData(3, ref buffer);
             DA.GetData(4, ref area);
             DA.GetData(5, ref id);

@@ -63,6 +63,9 @@ namespace DigitalCircularityToolkit.Objects
             if (geo == null) return null;
             DA.GetData(1, ref n);
             DA.GetData(2, ref qty);
+
+            error = ObjectInput.CheckCounts(geo, n, qty);
+            if (error != null) return null;
             DA.GetData(3, ref buffer1);
             DA.GetData(4, ref buffer2);
             DA.GetData(5, ref buffer3);

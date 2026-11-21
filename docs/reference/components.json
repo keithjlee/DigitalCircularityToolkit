@@ -21,7 +21,7 @@
    {
     "name": "Factor",
     "nick": "F",
-    "description": "Scale factor for distance, must be >= 100",
+    "description": "Multiplier applied to the score (default 100: the score reads as a percentage)",
     "type": "Number",
     "access": "item",
     "optional": false,
@@ -204,7 +204,7 @@
    {
     "name": "Factor",
     "nick": "F",
-    "description": "Scale factor for distance, must be >= 100",
+    "description": "Multiplier applied to the score (default 100: the score reads as a percentage)",
     "type": "Number",
     "access": "item",
     "optional": false,
@@ -248,7 +248,7 @@
    {
     "name": "Factor",
     "nick": "F",
-    "description": "Scale factor for distance, must be >= 100",
+    "description": "Multiplier applied to the score (default 100: the score reads as a percentage)",
     "type": "Number",
     "access": "item",
     "optional": false,
@@ -372,7 +372,7 @@
    {
     "name": "Factor",
     "nick": "F",
-    "description": "Scale factor for distance, must be >= 100",
+    "description": "Multiplier applied to the score (default 100: the score reads as a percentage)",
     "type": "Number",
     "access": "item",
     "optional": false,
@@ -425,7 +425,7 @@
    {
     "name": "Power1",
     "nick": "p",
-    "description": "Power factor for positive differences",
+    "description": "Power of the distance when the supply is at least as large as the demand in every feature",
     "type": "Integer",
     "access": "item",
     "optional": false,
@@ -436,7 +436,7 @@
    {
     "name": "Power2",
     "nick": "q",
-    "description": "Power factor for negative differences",
+    "description": "Power of the distance when the supply is smaller than the demand in any feature (penalty: use Power2 > Power1 with distances > 1)",
     "type": "Integer",
     "access": "item",
     "optional": false,
@@ -542,7 +542,7 @@
    {
     "name": "Sample count",
     "nick": "N",
-    "description": "Number of samples to use for the Frechet distance calculation",
+    "description": "Number of segments each curve is divided into (closed curves give N points, open curves N + 1)",
     "type": "Integer",
     "access": "item",
     "optional": false,
@@ -595,7 +595,7 @@
    {
     "name": "Sample count",
     "nick": "N",
-    "description": "Number of samples to use for the Hausdorff distance calculation",
+    "description": "Number of segments each curve is divided into (closed curves give N points, open curves N + 1)",
     "type": "Integer",
     "access": "item",
     "optional": false,
@@ -774,7 +774,7 @@
    {
     "name": "DistanceMatrix",
     "nick": "DM",
-    "description": "Distance matrix as tree: number of branches = number of demand; count in each branch = number of supply. If assignment = -1, no real assignment occurred.",
+    "description": "Distance matrix as tree: one branch per demand item, each with one cost per supply item",
     "type": "Integer",
     "access": "tree",
     "optional": false,
@@ -1017,7 +1017,7 @@
    {
     "name": "LengthBuffer",
     "nick": "fL",
-    "description": "Scale the plane length by fL",
+    "description": "Scale the line length by fL",
     "type": "Number",
     "access": "item",
     "optional": false,
@@ -1125,7 +1125,7 @@
    {
     "name": "Geometry",
     "nick": "Geo",
-    "description": "Passed through geometry",
+    "description": "The analyzed geometry: the input, or its conversion (surfaces and extrusions become Breps, SubDs meshes)",
     "type": "Geometry",
     "access": "item",
     "optional": false,
@@ -1416,7 +1416,7 @@
    {
     "name": "PlanarObject",
     "nick": "PlaneObj",
-    "description": "LinearObject class",
+    "description": "PlanarObject class",
     "type": "Generic Data",
     "access": "item",
     "optional": false,
@@ -1607,7 +1607,7 @@
    {
     "name": "Centroids",
     "nick": "Centroid",
-    "description": "Object centroids",
+    "description": "Center of each object's oriented bounding box (not the PCA centroid)",
     "type": "Point",
     "access": "list",
     "optional": false,
@@ -1712,7 +1712,7 @@
    {
     "name": "Centroids",
     "nick": "Centroid",
-    "description": "Object centroids",
+    "description": "Center of each object's oriented bounding box (not the PCA centroid)",
     "type": "Point",
     "access": "list",
     "optional": false,
@@ -1826,7 +1826,7 @@
    {
     "name": "Centroids",
     "nick": "Centroid",
-    "description": "Object centroids",
+    "description": "Center of each object's oriented bounding box (not the PCA centroid)",
     "type": "Point",
     "access": "list",
     "optional": false,
@@ -1922,7 +1922,7 @@
    {
     "name": "Centroids",
     "nick": "Centroid",
-    "description": "Object centroids",
+    "description": "Center of each object's oriented bounding box (not the PCA centroid)",
     "type": "Point",
     "access": "list",
     "optional": false,
@@ -2132,7 +2132,7 @@
    {
     "name": "NormalizedValues",
     "nick": "Vals",
-    "description": "Normalized values multiplied by optional factor",
+    "description": "Values multiplied by Factor / max(Values), so the largest becomes Factor",
     "type": "Number",
     "access": "list",
     "optional": false,
@@ -2185,7 +2185,7 @@
    {
     "name": "NormalizedA",
     "nick": "A",
-    "description": "Normalized values of A multiplied by optional factor",
+    "description": "A multiplied by Factor / Normalizer",
     "type": "Number",
     "access": "list",
     "optional": false,
@@ -2194,7 +2194,7 @@
    {
     "name": "NormalizedB",
     "nick": "B",
-    "description": "Normalized values of B multiplied by optional factor",
+    "description": "B multiplied by Factor / Normalizer",
     "type": "Number",
     "access": "list",
     "optional": false,
@@ -2203,7 +2203,7 @@
    {
     "name": "Normalizer",
     "nick": "N",
-    "description": "Value used for normalization",
+    "description": "The largest value in A and B (values are divided by it)",
     "type": "Number",
     "access": "item",
     "optional": false,
@@ -2276,7 +2276,7 @@
    {
     "name": "Plane",
     "nick": "Plane",
-    "description": "Plane to project to. Origin will be shifted to object centroid.",
+    "description": "Plane to project to (default: the object's local plane). Its origin is moved to the center of the object's oriented bounding box.",
     "type": "Plane",
     "access": "item",
     "optional": true,
@@ -2318,7 +2318,7 @@
    {
     "name": "RotationAxis",
     "nick": "Axis",
-    "description": "PCA axis of rotation",
+    "description": "PCA axis to rotate about: 1, 2 or 3",
     "type": "Integer",
     "access": "item",
     "optional": false,

@@ -499,9 +499,16 @@ namespace DigitalCircularityToolkit.Objects
 
             LocalPlane.Origin = Localbox.Center;
 
-            //new hull
-            Hull2D = Hulls.MakeHull2d(SampledPoints, plane);
+            // new hull, in the updated local plane (its origin is the new box center; the passed plane's origin is the old one)
+            Hull2D = Hulls.MakeHull2d(SampledPoints, LocalPlane);
 
+            RepopulateDerived();
         }
+
+        /// <summary>
+        /// Called at the end of <see cref="Repopulate"/>, after the frame and bounding box changed. Subtypes recompute
+        /// values they derived from the box at construction (e.g. a sphere's center and radius, an estimated area).
+        /// </summary>
+        protected virtual void RepopulateDerived() { }
     }
 }

@@ -38,6 +38,13 @@ namespace DigitalCircularityToolkit.Objects
 
         public SphericalObject() { }
 
+        protected override void RepopulateDerived()
+        {
+            // the box center moved with the new frame: recompute the enclosing sphere about it
+            Radius = GetTrueRadius();
+            EffectiveSphere = new Sphere(Localbox.Center, Radius * RadiusBuffer);
+        }
+
         protected override void TransformDerived(Transform t)
         {
             Sphere sphere = EffectiveSphere;
@@ -113,7 +120,8 @@ namespace DigitalCircularityToolkit.Objects
         public double GetTrueRadius()
         {
             double r = 0;
-            for (int i = 0; i < NSamples; i++)
+            // every sample point (NSamples undercounts open curves, which have n + 1 points)
+            for (int i = 0; i < SampledPoints.Length; i++)
             {
                 double dist = Localbox.Center.DistanceTo(SampledPoints[i]);
                 if (dist > r) r = dist;

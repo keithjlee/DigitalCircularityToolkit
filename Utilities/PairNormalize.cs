@@ -34,9 +34,9 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("NormalizedA", "A", "Normalized values of A multiplied by optional factor", GH_ParamAccess.list);
-            pManager.AddNumberParameter("NormalizedB", "B", "Normalized values of B multiplied by optional factor", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Normalizer", "N", "Value used for normalization", GH_ParamAccess.item);
+            pManager.AddNumberParameter("NormalizedA", "A", "A multiplied by Factor / Normalizer", GH_ParamAccess.list);
+            pManager.AddNumberParameter("NormalizedB", "B", "B multiplied by Factor / Normalizer", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Normalizer", "N", "The largest value in A and B (values are divided by it)", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -53,7 +53,14 @@ namespace DigitalCircularityToolkit.Utilities
             if (!DA.GetDataList(1, B)) return;
             DA.GetData(2, ref fac);
 
+            if (A.Count == 0 || B.Count == 0) return;
             double max = Math.Max(A.Max(), B.Max());
+            if (!(max > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, string.Format("The largest value is {0}; normalizing needs at least one positive value", max));
+                return;
+            }
+
             double factor = fac / max;
 
             var normalized_A = A.Select(x => x * factor);

@@ -39,7 +39,7 @@ namespace DigitalCircularityToolkit.Sets
             pManager.AddNumberParameter("Thickness", "t", "Thickness of plane", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Indexer", "Inds", "Index of output with respect to input (when there are objects with more than one quantity)", GH_ParamAccess.list);
             pManager.AddGenericParameter("Objects", "Obj", "Collected objects", GH_ParamAccess.list);
-            pManager.AddPointParameter("Centroids", "Centroid", "Object centroids", GH_ParamAccess.list);
+            pManager.AddPointParameter("Centroids", "Centroid", "Center of each object's oriented bounding box (not the PCA centroid)", GH_ParamAccess.list);
             pManager.AddCurveParameter("Hulls", "Hulls", "Object hulls", GH_ParamAccess.list);
             pManager.AddTextParameter("IDs", "IDs", "Object IDs", GH_ParamAccess.list);
 

@@ -19,9 +19,9 @@ A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workfl
 This toolkit provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
 
 ## Installation
-The latest build (v0.5) is available on [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en) or in the releases page. Two packages are available: .NET 4.8 (Rhino 7, Windows + Mac) and .NET 8 (Rhino 8, Windows + Mac).
+Major releases are on [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en); every release, including bug-fix releases, is on the [releases](https://github.com/keithjlee/DigitalCircularityToolkit/releases) page. Two packages are available: .NET 4.8 (Rhino 7, Windows + Mac) and .NET 8 (Rhino 8, Windows + Mac).
 
-**v0.5 is the last release with Rhino 7 support.** Later versions target Rhino 8 and Rhino 9 only. The v0.5 changes were developed and tested in Rhino 8; they have not been tested in Rhino 7.
+**v0.5.x is the last release line with Rhino 7 support.** Later versions target Rhino 8 and Rhino 9 only. The v0.5.x changes were developed and tested in Rhino 8; they have not been tested in Rhino 7.
 
 1. Find and download the latest build (.zip file) in the [releases](https://github.com/keithjlee/DigitalCircularityToolkit/releases) page.
 2. Find your Grasshopper components folder by opening Grasshopper, then `File>Special Folders>Components Folder`
@@ -40,7 +40,7 @@ When using or extending this software for research purposes, please cite using t
   month        = feb,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {v0.5},
+  version      = {v0.5.1},
   doi          = {10.5281/zenodo.10724610},
   url          = {https://doi.org/10.5281/zenodo.10724610}
 }
@@ -77,6 +77,28 @@ Each workflow is explained step by step in the [documentation](https://keithjlee
 - Public release coincides with the S2024 design workshop: *4.185 ODDS & MODS Castaways*
   
 # Release Notes
+## v0.5.1
+Bug fixes found while writing the [documentation](https://keithjlee.com/DigitalCircularityToolkit/). Saved definitions open unchanged (no component or parameter changes). Like v0.5, the Rhino 7 package is untested in Rhino 7.
+
+**Changed results**
+- `SphereScore` used π·r³ instead of (4/3)·π·r³ for the sphere volume (integer division) and counted hulls larger than that as empty, so well-sampled spheres scored worst. Scores change.
+- `RadialSignature` measures from the area centroid for closed planar curves (as design objects do), not the curve's length centroid. `DistanceSignature`, `Rays` and `HarmonicAnalysisReal` results change; `HarmonicAnalysisComplex` does not.
+- `OverridePCA` now updates values derived from the bounding box: the estimated `Area` of a `LinearObject`, the sphere of a `SphericalObject`, and the planar hull (which was offset from the new local plane).
+- `SphericalObject` includes the end point of open curves when computing the radius.
+- `PlanarOutline` returns the outer boundary (largest loop) when the outline has holes or several parts, with a remark; it returned whichever loop came first.
+- `ManhattanDistance` numbers its output branches `{0}, {1}, ...` like the other distance matrices.
+
+**Errors instead of crashes or invalid numbers**
+- `FeatureVector` stops with an error naming the input when the inputs have different lengths (it could crash).
+- `BoxScore`, `PlaneScore`, `LineScore` and `SphereScore` warn instead of returning infinite or NaN scores for flat, straight or degenerate objects.
+- `Normalize` and `PairNormalize` report an error when the largest value is not positive (it gave infinite values or flipped signs).
+- `PlanarHull` warns instead of failing when the sample points are collinear.
+- Object constructors report an error for `NumSamples` < 1 (curves and Breps) or a negative `Quantity`.
+- `RotatePCA` warns when `RotationAxis` is not 1, 2 or 3 (it still rotates about PCA3, as before).
+- `AsymmEuclideanDistance` adds a remark when `Power2` ≤ `Power1`.
+
+**Descriptions** corrected for `AsymmEuclideanDistance` (`Power1`/`Power2`), the score components (`Factor`), `Normalize`/`PairNormalize`, the Set components (`Centroids` is the bounding-box center), `PlanarOutline`, `Match`, `Object`, `LinearObject`, `PlanarObject`, `FrechetDistance` and `HausdorffDistanceCurve`.
+
 ## v0.5 (final Rhino 7 release)
 > **Rhino 7:** this is the last release with Rhino 7 support. Its changes have not been tested in Rhino 7 (developed and tested in Rhino 8).
 

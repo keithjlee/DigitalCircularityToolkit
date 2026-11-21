@@ -14,5 +14,5 @@ So the output has one branch per object, and every branch has as many values as 
 **Notes**
 
 - Values are used as they are, with no scaling. A property measured in large numbers dominates the distance; scale properties first with [`Normalize`](@ref comp-Normalize), or with [`PairNormalize`](@ref comp-PairNormalize) to give demand and supply the same scale.
-- All inputs must have the same number of items as `X1`; otherwise the component reports "Data inputs must have the same length". An input with fewer items also makes the solve fail.
+- All inputs must have the same number of items as `X1`; otherwise the component stops with the error "Data inputs must have the same length: ...", naming the input and both counts.
 - Every input has list access. Give each input a single flat list. The output paths `{0}`, `{1}`, ... are created by the component and do not carry over the branch paths of the inputs.

@@ -3,11 +3,11 @@
 ## Requirements
 
 - **Rhino 8** (Service Release 14 or later), Windows or Mac. Use the `Rhino8-net8.0` package.
-- **Rhino 7**: v0.5 is the last release with Rhino 7 support (`Rhino7-net48` package), and its changes have not been tested in Rhino 7. Later versions require Rhino 8 or newer.
+- **Rhino 7**: v0.5.x is the last release line with Rhino 7 support (`Rhino7-net48` package), and its changes have not been tested in Rhino 7. Later versions require Rhino 8 or newer.
 
 ## Installation
 
-1. Download the latest `.zip` from the [releases page](https://github.com/keithjlee/DigitalCircularityToolkit/releases) (or from [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en)).
+1. Download the latest `.zip` from the [releases page](https://github.com/keithjlee/DigitalCircularityToolkit/releases). [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en) has the major releases; bug-fix releases are only on GitHub.
 2. In Grasshopper, open the components folder: **File > Special Folders > Components Folder**.
 3. **Windows only:** right-click the downloaded `.zip`, choose **Properties**, and check **Unblock**.
 4. Extract the contents of the `.zip` into the components folder. Keep the `.gha` and the `.dll` files together.

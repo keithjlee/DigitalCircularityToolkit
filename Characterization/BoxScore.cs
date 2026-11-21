@@ -24,7 +24,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("BoxObject", "BoxObj", "Object to measure", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Factor", "F", "Scale factor for distance, must be >= 100", GH_ParamAccess.item, 100);
+            pManager.AddNumberParameter("Factor", "F", "Multiplier applied to the score (default 100: the score reads as a percentage)", GH_ParamAccess.item, 100);
         }
 
         /// <summary>
@@ -48,6 +48,11 @@ namespace DigitalCircularityToolkit.Characterization
             DA.GetData(1, ref factor);
 
             double vbox = obj.EffectiveBox.Volume;
+            if (!(vbox > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The effective box has no volume (the object is flat or straight): BoxScore is undefined. Use PlaneScore or LineScore.");
+                return;
+            }
             double vhull = obj.Hull.Volume();
 
             double score = (vbox - vhull) / vbox * factor;

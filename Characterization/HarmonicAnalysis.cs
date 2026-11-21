@@ -77,7 +77,7 @@ namespace DigitalCircularityToolkit.Characterization
                 if (n > descriptor.Length)
                 {
                     component.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, string.Format(
-                        "FVLength {0} is more than the {1} harmonics this signature has; output has {1}. Use more samples for more harmonics.",
+                        "FVLength {0} is more than the {1} values this signature gives; output has {1}. Use more samples for more harmonics.",
                         n, descriptor.Length));
                     n = descriptor.Length;
                 }

@@ -37,7 +37,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PlanarObject", "PlaneObj", "LinearObject class", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PlanarObject", "PlaneObj", "PlanarObject class", GH_ParamAccess.item);
             pManager.AddSurfaceParameter("EffectivePlane", "Plane", "Effective plane representation of object", GH_ParamAccess.item);
         }
 
@@ -62,6 +62,9 @@ namespace DigitalCircularityToolkit.Objects
             if (geo == null) return null;
             DA.GetData(1, ref n);
             DA.GetData(2, ref qty);
+
+            error = ObjectInput.CheckCounts(geo, n, qty);
+            if (error != null) return null;
             DA.GetData(3, ref buffer1);
             DA.GetData(4, ref buffer2);
             DA.GetData(5, ref thickness);

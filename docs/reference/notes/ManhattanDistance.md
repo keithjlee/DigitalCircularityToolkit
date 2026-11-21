@@ -10,6 +10,6 @@ Use it where differences in separate features should simply add up, for example 
 
 **Notes**
 
-- The output branches reuse the paths of the `Demand` tree (the Euclidean components renumber them `{0}`, `{1}`, ...). [`Match`](@ref comp-Match) reads branches in order, so either works.
+- The output branches are numbered `{0}`, `{1}`, ... like the Euclidean components. (Before v0.5.1 they reused the paths of the `Demand` tree; [`Match`](@ref comp-Match) reads branches in order, so either works.)
 - Error if the sets are empty or the vectors differ in length.
 - Since v0.5 the sum is rounded up like the other metrics; earlier versions rounded down.

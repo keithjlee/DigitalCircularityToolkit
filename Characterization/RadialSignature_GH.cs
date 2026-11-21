@@ -80,13 +80,17 @@ namespace DigitalCircularityToolkit.Characterization
                 }
             }
 
-            var mass = LengthMassProperties.Compute(curve);
-            if (mass == null)
+            // Centre: the area centroid for a closed planar outline (as for design objects, PCA.GetCentroid), otherwise
+            // the length centroid of the curve. It used to be the length centroid always.
+            Point3d? centre = null;
+            if (curve.IsClosed && curve.IsPlanar()) centre = AreaMassProperties.Compute(curve)?.Centroid;
+            if (centre == null) centre = LengthMassProperties.Compute(curve)?.Centroid;
+            if (centre == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not compute the curve centroid");
                 return;
             }
-            plane.Origin = mass.Centroid;
+            plane.Origin = centre.Value;
 
             System.Numerics.Complex[] signature = HarmonicAnalysis.RadialSignature2DComplex(points, plane, out Line[] rays, out double[] lengths);
 

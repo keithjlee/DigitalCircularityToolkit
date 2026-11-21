@@ -56,10 +56,9 @@ namespace DigitalCircularityToolkit.Distance
             // Sum of |differences|, rounded up like the other metrics (B11: it used to truncate).
             double[][] d = CostKernels.ToRows(demands);
             double[][] s = CostKernels.ToRows(supply);
-            var paths = demands.Paths;
             GH_Structure<GH_Integer> distances = CostKernels.BuildTree(d.Length, s.Length,
                 (i, j) => CostKernels.SaturatingInt(Math.Ceiling(CostKernels.ManhattanDist(d[i], s[j]))),
-                i => paths[i]);
+                i => new GH_Path(i));   // {0}, {1}, ... like the Euclidean metrics (it used to copy the Demand paths)
 
             DA.SetDataTree(0, distances);
         }

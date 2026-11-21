@@ -69,7 +69,10 @@ namespace DigitalCircularityToolkit.Characterization
                 DA.GetDataList(i_input, data_collector[i_input]);
                 if (data_collector[i_input].Count != n)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Data inputs must have the same length");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, string.Format(
+                        "Data inputs must have the same length: {0} has {1} items, {2} has {3}",
+                        Params.Input[i_input].NickName, data_collector[i_input].Count, Params.Input[0].NickName, n));
+                    return;
                 }
             }
 

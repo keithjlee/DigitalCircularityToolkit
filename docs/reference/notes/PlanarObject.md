@@ -16,5 +16,5 @@ Because the surface passes through the box center, it lies at mid-thickness of t
 
 - Error: "Buffer must be > 0" when `LengthBuffer` or `WidthBuffer` ≤ 0, plus the geometry errors listed under [`Object`](@ref comp-Object).
 - For a curve or point set lying in a plane, `Height` is 0, so the automatic thickness is 0. Supply `Thickness` explicitly in that case.
-- `Quantity` is not validated; a value ≤ 0 makes the object contribute no rows to [`PlanarSet`](@ref comp-PlanarSet).
+- `Quantity` 0 makes the object contribute no rows to [`PlanarSet`](@ref comp-PlanarSet); a negative `Quantity`, or `NumSamples` < 1 for a curve or Brep, is an error.
 - The output `PlanarObject` carries all of the above and can also be read with [`ObjectProperties`](@ref comp-ObjectProperties), which reports the unbuffered dimensions.

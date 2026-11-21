@@ -16,4 +16,4 @@ With the default `Factor` of 100, the largest value becomes 100 and the others b
 **Notes**
 
 - Each call uses its own maximum. If demand and supply are normalized with two separate Normalize components, they are scaled by different numbers and their distances are no longer comparable. Use [`PairNormalize`](@ref comp-PairNormalize) to scale both by a shared maximum.
-- The divisor is the largest value, not the largest absolute value. The component assumes positive data: if the maximum is zero the output is not finite, and if all values are negative the signs flip.
+- The divisor is the largest value, not the largest absolute value. If it is not positive (all values zero or negative), the component stops with the error "The largest value is ...; normalizing needs at least one positive value".

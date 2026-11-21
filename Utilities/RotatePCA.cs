@@ -26,7 +26,7 @@ namespace DigitalCircularityToolkit.Utilities
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to rotate", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("RotationAxis", "Axis", "PCA axis of rotation", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("RotationAxis", "Axis", "PCA axis to rotate about: 1, 2 or 3", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RotationDegrees", "Degree", "Amount to rotate (degrees)", GH_ParamAccess.item, 0);
 
             Param_Integer param = pManager[1] as Param_Integer;
@@ -57,6 +57,13 @@ namespace DigitalCircularityToolkit.Utilities
             if (!DA.GetData(0, ref obj)) return;
             DA.GetData(1, ref axis);
             DA.GetData(2, ref deg);
+
+            if (axis < 1 || axis > 3)
+            {
+                // Kept for saved definitions: any other value has always meant PCA3. Warn instead of failing.
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format(
+                    "RotationAxis {0} is not 1, 2 or 3; rotating about PCA3", axis));
+            }
 
             DesignObject rotated_object = obj.Rotate(axis, deg);
 

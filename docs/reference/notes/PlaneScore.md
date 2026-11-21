@@ -11,6 +11,6 @@ A perfectly flat object (including a planar curve) scores 0. With the default `F
 **Notes**
 
 - The measured dimensions are used, not the effective ones: buffers and the `Thickness` of a [`PlanarObject`](@ref comp-PlanarObject) have no effect.
-- For a straight object `Width` is 0, so the second ratio divides by zero and the score is not a finite number.
-- `Factor` is a plain multiplier. The input description says it must be at least 100, but no check is made.
+- For a straight object `Width` is 0: the component gives the warning "The object has no width (it is straight) ..." and no output. Use [`LineScore`](@ref comp-LineScore).
+- `Factor` is a plain multiplier (default 100, so the score reads as a percentage).
 - The score depends on the orientation of the local frame, so [`OverridePCA`](@ref comp-OverridePCA) changes it.

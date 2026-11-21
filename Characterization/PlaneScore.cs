@@ -24,7 +24,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Object", "Obj", "Object to measure", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Factor", "F", "Scale factor for distance, must be >= 100", GH_ParamAccess.item, 100);
+            pManager.AddNumberParameter("Factor", "F", "Multiplier applied to the score (default 100: the score reads as a percentage)", GH_ParamAccess.item, 100);
         }
 
         /// <summary>
@@ -47,6 +47,11 @@ namespace DigitalCircularityToolkit.Characterization
             double factor = 100;
             DA.GetData(1, ref factor);
 
+            if (!(obj.Width > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The object has no width (it is straight): PlaneScore is undefined. Use LineScore.");
+                return;
+            }
             double ratio1 = obj.Height / obj.Length;
             double ratio2 = obj.Height / obj.Width;
 

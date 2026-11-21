@@ -141,8 +141,17 @@ namespace DigitalCircularityToolkit.Objects
             return new Plane(Localbox.Center, PCA2, PCA3);
         }
 
+        // True when Area was estimated from the bounding box rather than given (then it follows a new frame).
+        private bool _areaEstimated;
+
+        protected override void RepopulateDerived()
+        {
+            if (_areaEstimated) GetApproxArea();
+        }
+
         private void GetApproxArea()
         {
+            _areaEstimated = true;
             Area = Width * Height;
         }
 

@@ -32,7 +32,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("NormalizedValues", "Vals", "Normalized values multiplied by optional factor", GH_ParamAccess.list);
+            pManager.AddNumberParameter("NormalizedValues", "Vals", "Values multiplied by Factor / max(Values), so the largest becomes Factor", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -47,7 +47,14 @@ namespace DigitalCircularityToolkit.Utilities
             if (!DA.GetDataList(0, vals)) return;
             DA.GetData(1, ref fac);
 
-            double factor = fac / vals.Max();
+            if (vals.Count == 0) return;
+            double max = vals.Max();
+            if (!(max > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, string.Format("The largest value is {0}; normalizing needs at least one positive value", max));
+                return;
+            }
+            double factor = fac / max;
 
             var normalized_vals = vals.Select(x => x * factor);
 
