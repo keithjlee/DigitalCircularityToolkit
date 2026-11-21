@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grasshopper.Kernel;
+using DigitalCircularityToolkit.Numerics;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 
@@ -91,7 +92,7 @@ namespace DigitalCircularityToolkit.Distance
             double[][] d = CostKernels.ToRows(demands);
             double[][] s = CostKernels.ToRows(supply);
             return CostKernels.BuildTree(d.Length, s.Length,
-                (i, j) => CostKernels.SaturatingInt(Math.Ceiling(Math.Pow(CostKernels.EuclideanDist(d[i], s[j]), power))),
+                (i, j) => Metrics.SaturatingInt(Math.Ceiling(Math.Pow(Metrics.Euclidean(d[i], s[j]), power))),
                 i => new GH_Path(i));
         }
 
@@ -108,7 +109,7 @@ namespace DigitalCircularityToolkit.Distance
             double[][] d = CostKernels.ToRows(demands);
             double[][] s = CostKernels.ToRows(supply);
             return CostKernels.BuildTree(d.Length, s.Length,
-                (i, j) => CostKernels.SaturatingInt(Math.Ceiling(CostKernels.AsymmEuclideanDist(d[i], s[j], p, q))),
+                (i, j) => Metrics.SaturatingInt(Math.Ceiling(Metrics.AsymmetricEuclidean(d[i], s[j], p, q))),
                 i => new GH_Path(i));
         }
 

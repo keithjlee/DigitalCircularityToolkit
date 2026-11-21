@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using MathNet.Numerics.IntegralTransforms;
 
-namespace DigitalCircularityToolkit.Characterization
+namespace DigitalCircularityToolkit.Numerics
 {
     /// <summary>
     /// Fourier shape descriptors of a sampled curve signature (Rhino-free).

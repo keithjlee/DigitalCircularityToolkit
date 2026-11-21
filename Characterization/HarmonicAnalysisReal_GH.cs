@@ -54,7 +54,7 @@ namespace DigitalCircularityToolkit.Characterization
             }
             bool normalize = false;
             DA.GetData(2, ref normalize);
-            double[] descriptor = FourierDescriptors.FromReal(sig, normalize, out double scale);
+            double[] descriptor = Numerics.FourierDescriptors.FromReal(sig, normalize, out double scale);
             if (normalize && !(scale > 0))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot normalize: the signature's mean is 0");

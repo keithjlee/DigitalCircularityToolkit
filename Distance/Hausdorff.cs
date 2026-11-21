@@ -11,30 +11,13 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         public static double ComputeDistance(Point3d[] A, Point3d[] B)
         {
-            return Math.Max(Directed(A, B), Directed(B, A));
+            return Numerics.SequenceDistances.Hausdorff(A.Length, B.Length, (i, j) => A[i].DistanceTo(B[j]));
         }
 
         /// <summary>Directed distance h(A,B) = max over a in A of min over b in B of |a - b|.</summary>
         public static double Directed(Point3d[] A, Point3d[] B)
         {
-            double maxDist = 0;
-            foreach (Point3d a in A)
-            {
-                double minDist = double.PositiveInfinity;
-                foreach (Point3d b in B)
-                {
-                    double dist = a.DistanceTo(b);
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                    }
-                }
-                if (minDist > maxDist)
-                {
-                    maxDist = minDist;
-                }
-            }
-            return maxDist;
+            return Numerics.SequenceDistances.DirectedHausdorff(A.Length, B.Length, (i, j) => A[i].DistanceTo(B[j]));
         }
     }
 }

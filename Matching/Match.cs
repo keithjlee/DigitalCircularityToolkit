@@ -81,7 +81,7 @@ namespace DigitalCircularityToolkit.Matching
                 Lapjv lap = new Lapjv();
                 (int[] row_assignments, int[] _) = lap.lapjvCsharp(cost_matrix, true, double.PositiveInfinity);
                 assignments = row_assignments;
-                total_cost = AssignmentHelpers.AssignedCost(cost_matrix_int, assignments, out int unassigned);
+                total_cost = DigitalCircularityToolkit.Numerics.Assignment.AssignedCost(cost_matrix_int, assignments, out int unassigned);
 
                 if (unassigned > 0)
                 {

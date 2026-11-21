@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using DigitalCircularityToolkit.Numerics;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -48,7 +49,7 @@ namespace DigitalCircularityToolkit.Distance
             if (!DA.GetDataTree(0, out GH_Structure<GH_Number> demands)) return;
             if (!DA.GetDataTree(1, out GH_Structure<GH_Number> supply)) return;
 
-            string dims_error = CostKernels.CheckDimensions(CostKernels.ToRows(demands), CostKernels.ToRows(supply));
+            string dims_error = Metrics.CheckDimensions(CostKernels.ToRows(demands), CostKernels.ToRows(supply));
             if (dims_error != null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, dims_error);

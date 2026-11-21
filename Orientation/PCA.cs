@@ -127,7 +127,7 @@ namespace DigitalCircularityToolkit.Orientation
             }
             var cov = new double[,] { { xx, xy, xz }, { xy, yy, yz }, { xz, yz, zz } };
 
-            SymmetricEigen3.Decompose(cov, out double[] _, out double[][] vecs);
+            Numerics.SymmetricEigen3.Decompose(cov, out double[] _, out double[][] vecs);
             var pca_vectors = new Vector3d[3];
             for (int k = 0; k < 3; k++) pca_vectors[k] = new Vector3d(vecs[k][0], vecs[k][1], vecs[k][2]);
 

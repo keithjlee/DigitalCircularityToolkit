@@ -71,7 +71,7 @@ namespace DigitalCircularityToolkit.Matching
                 int[,] cost_matrix_clone = (int[,])cost_matrix.Clone();
                 int[] full_assignments = HungarianAlgorithm.HungarianAlgorithm.FindAssignments(cost_matrix);
                 assignments = Distance.Utilities.AssignmentIndices(full_assignments, n_demand, n_supply);
-                total_cost = AssignmentHelpers.AssignedCost(cost_matrix_clone, assignments, out int unassigned);
+                total_cost = DigitalCircularityToolkit.Numerics.Assignment.AssignedCost(cost_matrix_clone, assignments, out int unassigned);
 
                 if (unassigned > 0)
                 {

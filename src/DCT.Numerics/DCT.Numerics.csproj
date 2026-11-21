@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Rhino-free numerics for DigitalCircularityToolkit: eigen-solver, Fourier descriptors, cost metrics, assignment,
+       discrete curve distances. No RhinoCommon/Grasshopper references, so it is unit-tested with plain `dotnet test`
+       (tests/DCT.Numerics.Tests) and benchmarked in tools/bench. Shipped next to the .gha as
+       DigitalCircularityToolkit.Numerics.dll. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>DigitalCircularityToolkit.Numerics</AssemblyName>
+    <RootNamespace>DigitalCircularityToolkit.Numerics</RootNamespace>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+  </ItemGroup>
+</Project>

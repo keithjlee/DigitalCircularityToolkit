@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DigitalCircularityToolkit.Matching
+namespace DigitalCircularityToolkit.Numerics
 {
     public class ShortestPathSolver
     {

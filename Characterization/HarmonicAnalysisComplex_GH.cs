@@ -61,7 +61,7 @@ namespace DigitalCircularityToolkit.Characterization
             }
             bool normalize = false;
             DA.GetData(2, ref normalize);
-            double[] descriptor = FourierDescriptors.FromComplex(sig, normalize, out double scale);
+            double[] descriptor = Numerics.FourierDescriptors.FromComplex(sig, normalize, out double scale);
             if (normalize && !(scale > 0))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot normalize: |c1| (the fundamental) is 0");

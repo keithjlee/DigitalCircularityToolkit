@@ -1,6 +1,6 @@
 using System;
 
-namespace DigitalCircularityToolkit.Orientation
+namespace DigitalCircularityToolkit.Numerics
 {
     /// <summary>
     /// Eigen-decomposition of a symmetric 3×3 matrix by cyclic Jacobi rotations (Rhino-free, allocation-light).

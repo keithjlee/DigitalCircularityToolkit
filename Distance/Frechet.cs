@@ -12,27 +12,7 @@ namespace DigitalCircularityToolkit
         /// </summary>
         public static double FrechetDistance(Point3d[] A, Point3d[] B)
         {
-            int n = A.Length, m = B.Length;
-            var prev = new double[m];
-            var curr = new double[m];
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < m; j++)
-                {
-                    double d = A[i].DistanceTo(B[j]);
-                    if (i == 0 && j == 0)
-                        curr[j] = d;
-                    else if (i > 0 && j == 0)
-                        curr[j] = Math.Max(prev[0], d);
-                    else if (i == 0)
-                        curr[j] = Math.Max(curr[j - 1], d);
-                    else
-                        curr[j] = Math.Max(Math.Min(prev[j], Math.Min(prev[j - 1], curr[j - 1])), d);
-                }
-                var t = prev; prev = curr; curr = t;
-            }
-            return prev[m - 1];
+            return Numerics.SequenceDistances.DiscreteFrechet(A.Length, B.Length, (i, j) => A[i].DistanceTo(B[j]));
         }
     }
 }
