@@ -376,7 +376,14 @@ tools/rhino-profile/*.error.txt
 
 # Local planning notes and agent instructions (not published)
 CLAUDE.md
-docs/
+# docs/: only the documentation site is tracked (Documenter.jl, published to keithjlee.com/DigitalCircularityToolkit).
+# Everything else in docs/ (PLAN.md, specs/, DEV_WORKFLOW.md, ...) is local notes and stays ignored by default.
+docs/*
+!docs/make.jl
+!docs/Project.toml
+!docs/reference/
+!docs/src/
+docs/build/
 
 # Regression fixtures (generated) and recordings
 tests/fixtures/generated/
@@ -391,3 +398,7 @@ tests/rhino/*.error.txt
 
 # Release packages
 dist/
+
+# Generated documentation pages (docs/make.jl)
+docs/src/components/
+docs/src/release-notes.md

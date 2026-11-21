@@ -1,0 +1,38 @@
+name: Documentation
+
+# Builds the documentation site (docs/make.jl, Documenter.jl) and publishes it to the gh-pages branch, which GitHub
+# Pages serves at https://keithjlee.com/DigitalCircularityToolkit/.
+#   push to master -> /dev/      tag vX.Y[.Z] -> /vX.Y[.Z]/ and /stable/      pull request -> build check only
+# The site is plain Markdown plus docs/reference/components.json (generated from the plugin inside Rhino, committed),
+# so CI needs Julia only: no .NET or Rhino.
+
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+permissions:
+  contents: write
+  statuses: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1'
+      - uses: julia-actions/cache@v2
+      - name: Install docs dependencies
+        run: julia --project=docs -e 'using Pkg; Pkg.instantiate()'
+      - name: Build and deploy docs
+        run: julia --project=docs docs/make.jl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

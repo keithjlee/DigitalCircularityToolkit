@@ -1,8 +1,10 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10724610.svg)](https://doi.org/10.5281/zenodo.10724610)
 
-![](Resources/logo_front.png)
+![](docs/src/assets/logo_front.png)
 
 Available on [Food4Rhino](https://www.food4rhino.com/en/app/digitalcircularitytoolkit?lang=en).
+
+**Documentation:** [keithjlee.com/DigitalCircularityToolkit](https://keithjlee.com/DigitalCircularityToolkit/dev/): concepts, worked workflows with example files, and a reference for every component.
 # DigitalCircularityToolkit
 A Grasshopper plugin to facilitate circular/reuse/inventory-driven design workflows, including:
 - Extracting principal axes from arbitrary geometry
@@ -51,50 +53,22 @@ Lee, K. J. (2024). DigitalCircularityToolkit (v0.2). Zenodo. https://doi.org/10.
 ```
 
 # Examples
+Each workflow is explained step by step in the [documentation](https://keithjlee.com/DigitalCircularityToolkit/dev/), with a downloadable example definition.
+
 ## Matching lengths to truss design
-![](Resources/trusses.gif)
-See `Examples>01_trusses>01_trusses`
+[![](docs/src/assets/media/trusses.jpg)](https://keithjlee.com/DigitalCircularityToolkit/dev/workflows/linear.html)
 
-Features used:
-- `LinearObject` class
-- Adding `qty` for duplications of objects
-- Creating `FeatureVector`s
-- `EuclideanDistance` for distance matrix generation
-- `Hungarian` for matching
-- `AlignToObject` for aligning matched inventory objects to drawn design
-- `MatchLines` to draw matching lines
-
-## Incorporating structural analysis to truss matching
-![](Resources/karamba.gif)
-See `Examples>01b_trusses>01b_trusses_karamba`
-
-Features used:
-- `LinearObject` class
-- Adding `qty` for duplications of objects
-- Integrating with Karamba3d and other plugins
-- Creating custom `FeatureVector`s to have multiple dimensions
-- `EuclideanDistance` for distance matrix generation
-- `Hungarian` for matching
-- `AlignToObject` for aligning matched inventory objects to drawn design
-- `MatchLines` to draw matching lines
+[Linear members from stock](https://keithjlee.com/DigitalCircularityToolkit/dev/workflows/linear.html): `LinearObject` with quantities, `FeatureVector`, `AsymmEuclideanDistance`, `Match`, `AlignToObject`, `MatchLines`. Structural analysis (e.g. Karamba3D) can supply further features.
 
 ## Beading curves with rocks
-![](Resources/beading.gif)
-See `Examples>02_rock_beading>02a_linear_beading` and `02b_box_beading`
+[![](docs/src/assets/media/beading.jpg)](https://keithjlee.com/DigitalCircularityToolkit/dev/workflows/scans.html)
 
-Features used:
-- `LinearObject` and `BoxObject`
-- `OverridePCA` to set a custom orientation for objects
+[Scanned objects](https://keithjlee.com/DigitalCircularityToolkit/dev/workflows/scans.html): `LinearObject` and `BoxObject` from scanned meshes, `BoxScore`, `Knoll`, `OverridePCA` for custom orientations.
 
 ## Tiling rocks into a Voronoi plane
-![](Resources/tiling.gif)
-See `Examples>03_rock_tiling>03_rock_tiling`
+[![](docs/src/assets/media/tiling.jpg)](https://keithjlee.com/DigitalCircularityToolkit/dev/workflows/shapes.html)
 
-Features used:
-- `PlanarObject` to abstract objects as planes
-- `PlanarOutline` to get the 2D curve representation of an object
-- `RadialSignature` to perform ray sampling of the planar outlines
-- `HarmonicsAnalysisComplex` to extract feature vectors from complex radial signatures
+[Matching by shape](https://keithjlee.com/DigitalCircularityToolkit/dev/workflows/shapes.html): `PlanarObject`, `PlanarOutline`, `RadialSignature` and `HarmonicAnalysisComplex` feature vectors from the stones' outlines.
 
 # Development Notes
 - This plugin was developed by Keith J. Lee, PhD Candidate (Associaton: MIT > Architecture > Building Technology > Digital Structures >).
@@ -143,4 +117,4 @@ Bug fixes, much faster object analysis, and a few deliberate behaviour changes. 
 ## Feb 28 2024
 - `v0.2` was released to enable Zenodo DOI and add minor description changes in some components. No functional changes.
 
-![](Resources/logo_axo.png)
+![](docs/src/assets/logo_axo.png)

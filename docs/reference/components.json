@@ -1,0 +1,2363 @@
+[
+ {
+  "name": "BoxScore (DCT)",
+  "nick": "BoxScore",
+  "description": "Measure how well a box abstracts an input object",
+  "guid": "0343696c-be70-46fb-9f4b-26662c2d7d27",
+  "subcategory": "Characterization",
+  "class": "BoxScore",
+  "exposure": "secondary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "BoxObject",
+    "nick": "BoxObj",
+    "description": "Object to measure",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "description": "Scale factor for distance, must be >= 100",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "100"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "BoxScore",
+    "nick": "Score",
+    "description": "Box score. Optimal value is 0.",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/BoxScore.png"
+ },
+ {
+  "name": "FeatureVector (DCT)",
+  "nick": "FeatureVec",
+  "description": "Create a feature vector for an object",
+  "guid": "b006d02d-2e04-4875-a77d-a3d3b80e0700",
+  "subcategory": "Characterization",
+  "class": "FeatureVector",
+  "exposure": "primary",
+  "variable_inputs": true,
+  "inputs": [
+   {
+    "name": "X1",
+    "nick": "X1",
+    "description": "Object property",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "FeatureVector",
+    "nick": "FV",
+    "description": "Feature vector",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/FeatureVector.png"
+ },
+ {
+  "name": "HarmonicAnalysisComplex (DCT)",
+  "nick": "HarmonicsComplex",
+  "description": "Fourier shape descriptor of a complex signature (e.g. ComplexSignature): the radius of each harmonic in model units, independent of sample count, ordered |c1|, |c-1|, |c2|, |c-2|, ... N samples give N-1 values.",
+  "guid": "a991fd8b-f03c-4924-88a4-c372b7e7383d",
+  "subcategory": "Characterization",
+  "class": "HarmonicAnalysisComplex_GH",
+  "exposure": "tertiary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Signature",
+    "nick": "ComplexSig",
+    "description": "Shape signature as a list of complex numbers (u + iv per sample)",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "FVLength",
+    "nick": "|FV|",
+    "description": "Number of values to keep (lowest frequencies first). Default: all",
+    "type": "Integer",
+    "access": "item",
+    "optional": true,
+    "default": []
+   },
+   {
+    "name": "Normalize",
+    "nick": "Norm",
+    "description": "Divide by |c1| (the radius of the best-fitting circle), so the descriptor ignores size; the first value is then 1",
+    "type": "Boolean",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "False"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HarmonicFeatureVector",
+    "nick": "FV",
+    "description": "|c1|, |c-1|, |c2|, |c-2|, ... after orienting the samples counter-clockwise. Invariant to position, rotation, start point, direction and mirroring; to scale only with Normalize.",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/HarmonicAnalysisComplex_GH.png"
+ },
+ {
+  "name": "HarmonicAnalysisReal (DCT)",
+  "nick": "HarmonicsReal",
+  "description": "Fourier shape descriptor of a real-valued signature (e.g. DistanceSignature): the amplitude of harmonics 1, 2, 3, ... in model units, independent of sample count. N samples give N/2 harmonics.",
+  "guid": "0a5adc36-9e00-4de2-b1dc-784eee5e89a8",
+  "subcategory": "Characterization",
+  "class": "HarmonicAnalysisReal_GH",
+  "exposure": "tertiary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Signature",
+    "nick": "DistSig",
+    "description": "Shape signature as a list of real-valued numbers",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "FVLength",
+    "nick": "|FV|",
+    "description": "Number of harmonics to keep (lowest first). Default: all",
+    "type": "Integer",
+    "access": "item",
+    "optional": true,
+    "default": []
+   },
+   {
+    "name": "Normalize",
+    "nick": "Norm",
+    "description": "Divide by the mean of the signature (for DistanceSignature: the mean radius), so the descriptor ignores size",
+    "type": "Boolean",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "False"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HarmonicFeatureVector",
+    "nick": "FV",
+    "description": "Amplitudes A1, A2, ... of r(t) = A0 + Σ Ak·cos(k·t + φk). Invariant to start point, direction, rotation and mirroring; to scale only with Normalize.",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/HarmonicAnalysisReal_GH.png"
+ },
+ {
+  "name": "LineScore (DCT)",
+  "nick": "LineScore",
+  "description": "Measure how well a line abstracts an input object",
+  "guid": "7acdf6af-bb78-4ddb-b82b-3457f22be838",
+  "subcategory": "Characterization",
+  "class": "LineScore",
+  "exposure": "secondary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object to measure",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "description": "Scale factor for distance, must be >= 100",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "100"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "LineScore",
+    "nick": "Score",
+    "description": "Line score. Optimal value is 0.",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/LineScore.png"
+ },
+ {
+  "name": "PlaneScore (DCT)",
+  "nick": "PlaneScore",
+  "description": "Measure how well a plane abstracts an input object",
+  "guid": "24877a3a-6077-4ed3-9da4-9d0a2070d768",
+  "subcategory": "Characterization",
+  "class": "PlaneScore",
+  "exposure": "secondary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object to measure",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "description": "Scale factor for distance, must be >= 100",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "100"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "PlaneScore",
+    "nick": "Score",
+    "description": "Plane score. Optimal value is 0.",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/PlaneScore.png"
+ },
+ {
+  "name": "RadialSignature (DCT)",
+  "nick": "RadialSig",
+  "description": "Perform a radial signature analysis on a curve.",
+  "guid": "2ae7fb99-c011-461f-870c-2c7a86055f2a",
+  "subcategory": "Characterization",
+  "class": "RadialSignature_GH",
+  "exposure": "tertiary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Curve",
+    "nick": "Curve",
+    "description": "Curve to analyze",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "description": "Number of radial samples to take",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "20"
+    ]
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "description": "Analysis plane. If not supplied, auto-fit will occur",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "ComplexSignature",
+    "nick": "ComplexSig",
+    "description": "Curve signature where planar coordinates [u, v] is converted to complex number u + iv",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "DistanceSignature",
+    "nick": "DistSig",
+    "description": "Distance from the curve centroid to each sample point, measured in the plane (= |ComplexSignature|)",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "ProjectedCurve",
+    "nick": "Curve",
+    "description": "Planar projection of curve",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Rays",
+    "nick": "Rays",
+    "description": "Rays from the centroid to each projected sample point",
+    "type": "Line",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/RadialSignature_GH.png"
+ },
+ {
+  "name": "SphereScore (DCT)",
+  "nick": "SphereScore",
+  "description": "Measure how well a sphere abstracts an input object",
+  "guid": "4feea68b-24cb-4186-bd12-120cbcd9ab6b",
+  "subcategory": "Characterization",
+  "class": "SphereScore",
+  "exposure": "secondary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "SphericalObject",
+    "nick": "SphereObj",
+    "description": "Object to measure",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "description": "Scale factor for distance, must be >= 100",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "100"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "SphereScore",
+    "nick": "Score",
+    "description": "Sphere score. Optimal value is 0.",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/SphereScore.png"
+ },
+ {
+  "name": "AsymmEuclideanDistance (DCT)",
+  "nick": "DMAsymm",
+  "description": "Generate a distance matrix of asymmetric Euclidean distances between two feature vector sets",
+  "guid": "669170c3-521e-47a6-8cac-82e5d9cae3a0",
+  "subcategory": "Distance",
+  "class": "AsymmEuclidean_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "description": "Distance from",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "description": "Distance to",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Power1",
+    "nick": "p",
+    "description": "Power factor for positive differences",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "Power2",
+    "nick": "q",
+    "description": "Power factor for negative differences",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "2"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "description": "Distance matrix data where row[i,j] is cost from demand[i] to supply[j]",
+    "type": "Integer",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/AsymmEuclidean_GH.png"
+ },
+ {
+  "name": "EuclideanDistance (DCT)",
+  "nick": "DMEuclidean",
+  "description": "Generate a distance matrix of Euclidean distances between two feature vector sets",
+  "guid": "1d4c7587-5d12-44af-b21b-f4168018bb7b",
+  "subcategory": "Distance",
+  "class": "Euclidean_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "description": "Distance from",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "description": "Distance to",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Power",
+    "nick": "p",
+    "description": "Power factor for distance",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "description": "Distance matrix data where row[i,j] is cost from demand[i] to supply[j]",
+    "type": "Integer",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/Euclidean_GH.png"
+ },
+ {
+  "name": "FrechetDistance (DCT)",
+  "nick": "Frechet",
+  "description": "Compute the Frechet distance between two curves",
+  "guid": "17cb1d16-9277-477b-955e-2c45aab7200f",
+  "subcategory": "Distance",
+  "class": "FrechetDistance",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "First curve",
+    "nick": "A",
+    "description": "First curve",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Second curve",
+    "nick": "B",
+    "description": "Second curve",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Sample count",
+    "nick": "N",
+    "description": "Number of samples to use for the Frechet distance calculation",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "50"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "FrechetDistance",
+    "nick": "FD",
+    "description": "Frechet distance between the two curves",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/FrechetDistance.png"
+ },
+ {
+  "name": "HausdorffDistanceCurve (DCT)",
+  "nick": "HausdorffCurve",
+  "description": "Compute the Hausdorff distance between two curves",
+  "guid": "0ea65daf-d86a-485e-be41-e7bf102a5723",
+  "subcategory": "Distance",
+  "class": "HausdorffDistanceCurve",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "First curve",
+    "nick": "A",
+    "description": "First curve",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Second curve",
+    "nick": "B",
+    "description": "Second curve",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Sample count",
+    "nick": "N",
+    "description": "Number of samples to use for the Hausdorff distance calculation",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "50"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HausdorffDistanceCurve",
+    "nick": "HD",
+    "description": "Hausdorff distance between the two curves (symmetric: the larger of the two directed distances)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/HausdorffDistanceCurve.png"
+ },
+ {
+  "name": "HausdorffDistancePoints (DCT)",
+  "nick": "HausdorffPoints",
+  "description": "Compute the Hausdorff distance between two sets of points",
+  "guid": "c1f08545-76d0-4e68-9c04-ec900e1fcc6e",
+  "subcategory": "Distance",
+  "class": "HausdorffDistancePoints",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "First set of points",
+    "nick": "A",
+    "description": "First set of points",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Second set of points",
+    "nick": "B",
+    "description": "Second set of points",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "HausdorffDistancePoints",
+    "nick": "HD",
+    "description": "Hausdorff distance between the two sets of points (symmetric: the larger of the two directed distances)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/HausdorffDistancePoints.png"
+ },
+ {
+  "name": "ManhattanDistance (DCT)",
+  "nick": "DMManhattan",
+  "description": "Generate a distance matrix of manhattan distances between two feature vector sets",
+  "guid": "3890d147-152c-425a-b8d0-6a1cc74eb403",
+  "subcategory": "Distance",
+  "class": "ManhattanDistance",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "description": "Distance from",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "description": "Distance to",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "description": "Distance matrix data where row[i,j] is cost from demand[i] to supply[j]",
+    "type": "Integer",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/ManhattanDistance.png"
+ },
+ {
+  "name": "AlignToObject (DCT)",
+  "nick": "AlignObj",
+  "description": "Align an object to another",
+  "guid": "f4e526f8-f0f9-4ea0-988a-2044de529a97",
+  "subcategory": "Matching",
+  "class": "AlignToObject_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "SourceObject",
+    "nick": "Source",
+    "description": "Source object to align",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "TargetObject",
+    "nick": "Target",
+    "description": "Object to align to",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Aligned object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of aligned object",
+    "type": "Geometry",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Transform",
+    "nick": "T",
+    "description": "Transformation used to align object",
+    "type": "Transform",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/AlignToObject_GH.png"
+ },
+ {
+  "name": "Match (DCT)",
+  "nick": "Match",
+  "description": "Perform linear assignment of supply to demand using the Jonker-Volgenant algorithm",
+  "guid": "00a166a1-0044-4e16-ab8e-415fe55e2e1f",
+  "subcategory": "Matching",
+  "class": "Match",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "description": "Distance matrix as tree: number of branches = number of demand; count in each branch = number of supply. If assignment = -1, no real assignment occurred.",
+    "type": "Integer",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "AutoRun",
+    "nick": "Auto",
+    "description": "Automatically run the algorithm. Set to false when working with large parametric problems so that you can manually perform the assignment between parameter changes. I.e., add a button here.",
+    "type": "Boolean",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "True"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Assignment",
+    "nick": "A",
+    "description": "Assignment indices. A[i] = j: assign inventory element j to demand element i",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Cost",
+    "nick": "C",
+    "description": "Total cost of assignment",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/Match.png"
+ },
+ {
+  "name": "MatchLines (DCT)",
+  "nick": "MatchLines",
+  "description": "Get the lines that connect supply-demand assignments",
+  "guid": "7b8f25e9-ba41-4a9a-87ca-811146dc3e46",
+  "subcategory": "Matching",
+  "class": "MatchLines_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "DemandPoints",
+    "nick": "pDemand",
+    "description": "Points that represent the demand elements",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "SupplyPoints",
+    "nick": "pSupply",
+    "description": "Points that represent the inventory elements",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "AssignmentIndices",
+    "nick": "A",
+    "description": "Assignment indices of supply elements",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "MatchLines",
+    "nick": "Lines",
+    "description": "Matching lines",
+    "type": "Line",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/MatchLines_GH.png"
+ },
+ {
+  "name": "BoxObject (DCT)",
+  "nick": "BoxObj",
+  "description": "A volumetric box object",
+  "guid": "b6c628ad-3711-4c8d-aca7-ee12946dc14a",
+  "subcategory": "Objects",
+  "class": "BoxObject_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "description": "Target number of samples for analysis",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "50"
+    ]
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "description": "Quantity of object",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "LengthBuffer",
+    "nick": "fL",
+    "description": "Scale the box length by fL",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "WidthBuffer",
+    "nick": "fW",
+    "description": "Scale the box width by fW",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "HeightBuffer",
+    "nick": "fH",
+    "description": "Scale the box height by fH",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "description": "Object identifier",
+    "type": "Text",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "NoID"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "BoxObject",
+    "nick": "BoxObj",
+    "description": "BoxObject class",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveBox",
+    "nick": "Box",
+    "description": "Effective box representation of object",
+    "type": "Box",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/BoxObject_GH.png"
+ },
+ {
+  "name": "LinearObject (DCT)",
+  "nick": "LineObj",
+  "description": "A linear object",
+  "guid": "750c489f-8d4e-41ce-ac2b-2c4ad80916be",
+  "subcategory": "Objects",
+  "class": "LinearObject_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "description": "Target number of samples for analysis",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "50"
+    ]
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "description": "Quantity of object",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "LengthBuffer",
+    "nick": "fL",
+    "description": "Scale the plane length by fL",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "Area",
+    "nick": "Area",
+    "description": "Area of element (-1 for auto estimation)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "-1"
+    ]
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "description": "Object identifier",
+    "type": "Text",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "NoID"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "LinearObject",
+    "nick": "LinearObj",
+    "description": "LinearObject class",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveLine",
+    "nick": "Line",
+    "description": "Effective line representation of object",
+    "type": "Line",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/LinearObject_GH.png"
+ },
+ {
+  "name": "Object (DCT)",
+  "nick": "Obj",
+  "description": "A design object",
+  "guid": "2a40404e-753e-4be2-8183-3dab27a28552",
+  "subcategory": "Objects",
+  "class": "Object_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "description": "Target number of samples for analysis",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "50"
+    ]
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "description": "Object identifier",
+    "type": "Text",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "NoID"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Design object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Passed through geometry",
+    "type": "Geometry",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/Object_GH.png"
+ },
+ {
+  "name": "ObjectProperties (DCT)",
+  "nick": "ObjProps",
+  "description": "Properties of a design object",
+  "guid": "34017b92-0083-4d54-97bb-33d7c3d692a8",
+  "subcategory": "Objects",
+  "class": "ObjectProperties",
+  "exposure": "secondary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object to analyze",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Centroid",
+    "nick": "Centroid",
+    "description": "Centroid of object",
+    "type": "Point",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "PCA1",
+    "nick": "PCA1",
+    "description": "Principal component vector 1",
+    "type": "Vector",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "PCA2",
+    "nick": "PCA2",
+    "description": "Principal component vector 2",
+    "type": "Vector",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "PCA3",
+    "nick": "PCA3",
+    "description": "Principal component vector 3",
+    "type": "Vector",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Length",
+    "nick": "L",
+    "description": "Length (PCA1)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Width",
+    "nick": "W",
+    "description": "Width (PCA2)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Height",
+    "nick": "H",
+    "description": "Height (PCA3)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "BoundingBox",
+    "nick": "BB",
+    "description": "Bounding box",
+    "type": "Box",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "LocalPlane",
+    "nick": "XY",
+    "description": "PCA XY plane",
+    "type": "Plane",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "PlanarHull",
+    "nick": "Hull2D",
+    "description": "Convex hull on local XY plane",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "VolumeHull",
+    "nick": "Hull3D",
+    "description": "Volumetric convex hull (computed only when this output is connected or the component preview is on)",
+    "type": "Mesh",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "SampledPoints",
+    "nick": "Pts",
+    "description": "Points used for PCA analysis",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of object",
+    "type": "Geometry",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "description": "Object IDs",
+    "type": "Text",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/ObjectProperties.png"
+ },
+ {
+  "name": "OverridePCA (DCT)",
+  "nick": "OverridePCA",
+  "description": "Override the calculated principal components with a plane whose X,Y components = PCA1, PCA2",
+  "guid": "fc6588c8-8ddf-4b65-b001-c3dd861ceed6",
+  "subcategory": "Objects",
+  "class": "OverridePCA",
+  "exposure": "secondary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object to modify",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "PrincipalPlane",
+    "nick": "XYPCA",
+    "description": "A plane that whose X,Y components represent the overriding PCA1, PCA2",
+    "type": "Plane",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object with overriden principal component",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/OverridePCA.png"
+ },
+ {
+  "name": "PlanarObject (DCT)",
+  "nick": "PlaneObj",
+  "description": "A planar object",
+  "guid": "21c2a735-15b5-4ded-af15-1075c3cd62d4",
+  "subcategory": "Objects",
+  "class": "PlanarObject_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "description": "Target number of samples for analysis",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "50"
+    ]
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "description": "Quantity of object",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "LengthBuffer",
+    "nick": "fL",
+    "description": "Scale the plane length by fL",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "WidthBuffer",
+    "nick": "fW",
+    "description": "Scale the plane width by fW",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "Thickness",
+    "nick": "Thickness",
+    "description": "Thickness of element (-1 for auto estimation)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "-1"
+    ]
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "description": "Object identifier",
+    "type": "Text",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "NoID"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "PlanarObject",
+    "nick": "PlaneObj",
+    "description": "LinearObject class",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectivePlane",
+    "nick": "Plane",
+    "description": "Effective plane representation of object",
+    "type": "Surface",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/PlanarObject_GH.png"
+ },
+ {
+  "name": "SphericalObject (DCT)",
+  "nick": "SphereObj",
+  "description": "A spherical object",
+  "guid": "67d25fa8-d4b8-452b-92d2-9d976a6bd1c5",
+  "subcategory": "Objects",
+  "class": "SphericalObject_GH",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "NumSamples",
+    "nick": "n",
+    "description": "Target number of samples for analysis",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "50"
+    ]
+   },
+   {
+    "name": "Quantity",
+    "nick": "qty",
+    "description": "Quantity of object",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "RadiusBuffer",
+    "nick": "fR",
+    "description": "Scale the sphere radius by fR",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "ID",
+    "nick": "ID",
+    "description": "Object identifier",
+    "type": "Text",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "NoID"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "SphereObject",
+    "nick": "SphereObj",
+    "description": "SphericalObject class",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveSphere",
+    "nick": "Sphere",
+    "description": "Effective sphere representation of object",
+    "type": "Brep",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/SphericalObject_GH.png"
+ },
+ {
+  "name": "BoxSet (DCT)",
+  "nick": "BoxSet",
+  "description": "A set of box elements",
+  "guid": "7c6c17a8-b363-46c3-bb56-174fe2555d6c",
+  "subcategory": "Sets",
+  "class": "BoxInventory",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "BoxObjs",
+    "description": "Set of objects that form an inventory",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectiveBox",
+    "nick": "Box",
+    "description": "Representative box of object",
+    "type": "Box",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "description": "Representative plane centered on object",
+    "type": "Plane",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveLength",
+    "nick": "L",
+    "description": "Length of box (PCA1)",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveWidth",
+    "nick": "W",
+    "description": "Width of box (PCA2)",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveHeight",
+    "nick": "H",
+    "description": "Height of box",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "description": "Index of output with respect to input (when there are objects with more than one quantity)",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "description": "Collected objects",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "description": "Object centroids",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "description": "Object hulls (3D convex hulls; computed only when this output is connected or the component preview is on)",
+    "type": "Mesh",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "description": "Object IDs",
+    "type": "Text",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/BoxInventory.png"
+ },
+ {
+  "name": "LinearSet (DCT)",
+  "nick": "LinearSet",
+  "description": "A set of linear elements",
+  "guid": "7248cb53-eb12-4122-82cd-313802d511f9",
+  "subcategory": "Sets",
+  "class": "LinearInventory",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "LinearObjs",
+    "description": "Set of objects that form an inventory",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectiveLine",
+    "nick": "Line",
+    "description": "Representative line of object",
+    "type": "Line",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveLength",
+    "nick": "L",
+    "description": "Length (PCA1)",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Area",
+    "nick": "A",
+    "description": "Cross-section area of object",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "CentroidPlane",
+    "nick": "Plane",
+    "description": "Plane centered at middle of line with Z axis parallel to PCA1",
+    "type": "Plane",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "description": "Index of output with respect to input (when there are objects with more than one quantity)",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "description": "Collected objects",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "description": "Object centroids",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "description": "Object hulls",
+    "type": "Curve",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "description": "Object IDs",
+    "type": "Text",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/LinearInventory.png"
+ },
+ {
+  "name": "PlanarSet (DCT)",
+  "nick": "PlanarSet",
+  "description": "A set of planar elements",
+  "guid": "e9dd4189-ee4d-4501-ae0f-2ef6d2352895",
+  "subcategory": "Sets",
+  "class": "PlanarInventory",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "PlanarObjs",
+    "description": "Set of objects that form an inventory",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectivePlane",
+    "nick": "PlaneSurface",
+    "description": "Representative plane of object",
+    "type": "Surface",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "description": "Representative plane centered on object",
+    "type": "Plane",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveLength",
+    "nick": "L",
+    "description": "Length of plane (PCA1)",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveWidth",
+    "nick": "W",
+    "description": "Width of plane (PCA2)",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Thickness",
+    "nick": "t",
+    "description": "Thickness of plane",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "description": "Index of output with respect to input (when there are objects with more than one quantity)",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "description": "Collected objects",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "description": "Object centroids",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "description": "Object hulls",
+    "type": "Curve",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "description": "Object IDs",
+    "type": "Text",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/PlanarInventory.png"
+ },
+ {
+  "name": "SphereSet (DCT)",
+  "nick": "SphereSet",
+  "description": "A set of spherical elements",
+  "guid": "a69eeda3-eb23-4359-864f-20f7c1bcfb5d",
+  "subcategory": "Sets",
+  "class": "SphericalInventory",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "SphereObjs",
+    "description": "Set of objects that form an inventory",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "EffectiveSphere",
+    "nick": "Sphere",
+    "description": "Representative sphere of object",
+    "type": "Surface",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "description": "Object plane centered in sphere",
+    "type": "Plane",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "EffectiveRadius",
+    "nick": "r",
+    "description": "Radius of effective sphere",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Indexer",
+    "nick": "Inds",
+    "description": "Index of output with respect to input (when there are objects with more than one quantity)",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Objects",
+    "nick": "Obj",
+    "description": "Collected objects",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Centroids",
+    "nick": "Centroid",
+    "description": "Object centroids",
+    "type": "Point",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Hulls",
+    "nick": "Hulls",
+    "description": "Object hulls (3D convex hulls; computed only when this output is connected or the component preview is on)",
+    "type": "Mesh",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "IDs",
+    "nick": "IDs",
+    "description": "Object IDs",
+    "type": "Text",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/SphericalInventory.png"
+ },
+ {
+  "name": "AlignToPlane (DCT)",
+  "nick": "AlignPlane",
+  "description": "Align an object to a plane",
+  "guid": "fe70341c-0a3c-4224-b8e6-4c0994e8e4a2",
+  "subcategory": "Utilities",
+  "class": "AlignToPlane",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Object",
+    "description": "Object to align",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "description": "Plane to align to",
+    "type": "Plane",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "World XY"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Aligned object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Geometry",
+    "nick": "Geo",
+    "description": "Geometry of aligned object",
+    "type": "Geometry",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Transform",
+    "nick": "T",
+    "description": "Transformation object used in alignment",
+    "type": "Transform",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/AlignToPlane.png"
+ },
+ {
+  "name": "Knoll (DCT)",
+  "nick": "Knoll",
+  "description": "Knoll a collection of objects",
+  "guid": "247f234b-8ae3-48ea-94fa-b5499bb2111e",
+  "subcategory": "Utilities",
+  "class": "Knoll",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Objects",
+    "nick": "Objs",
+    "description": "Collection of objects to knoll",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "OriginPlane",
+    "nick": "Plane",
+    "description": "Plane that defines the starting origin of grid",
+    "type": "Plane",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "World XY"
+    ]
+   },
+   {
+    "name": "NumRows",
+    "nick": "nRows",
+    "description": "Number of rows in knoll",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "RowSpacing",
+    "nick": "dRow",
+    "description": "Spacing of rows",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "ColSpacing",
+    "nick": "dCol",
+    "description": "Spacing of columns",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Objects",
+    "nick": "Objs",
+    "description": "Knolled objects",
+    "type": "Generic Data",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Geo",
+    "nick": "Geo",
+    "description": "Geometry of knolled objects",
+    "type": "Geometry",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/Knoll.png"
+ },
+ {
+  "name": "Normalize (DCT)",
+  "nick": "Normalize",
+  "description": "Normalize a list of numbers by its max value",
+  "guid": "668b29b5-30b5-4a4a-b676-6575df196f6f",
+  "subcategory": "Utilities",
+  "class": "Normalize",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Values",
+    "nick": "Vals",
+    "description": "Values to normalize",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "description": "Factor to multiply after normalization",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "100"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "NormalizedValues",
+    "nick": "Vals",
+    "description": "Normalized values multiplied by optional factor",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/Normalize.png"
+ },
+ {
+  "name": "PairNormalize (DCT)",
+  "nick": "PairNormalize",
+  "description": "Normalize two lists of number by the overall maximum value",
+  "guid": "84d8e73f-8773-47b2-aaf2-226edff621f7",
+  "subcategory": "Utilities",
+  "class": "PairNormalize",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "A",
+    "nick": "A",
+    "description": "First list of numbers",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "B",
+    "nick": "B",
+    "description": "Second list of numbers",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Factor",
+    "nick": "F",
+    "description": "Factor to multiply after normalization",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "100"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "NormalizedA",
+    "nick": "A",
+    "description": "Normalized values of A multiplied by optional factor",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "NormalizedB",
+    "nick": "B",
+    "description": "Normalized values of B multiplied by optional factor",
+    "type": "Number",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Normalizer",
+    "nick": "N",
+    "description": "Value used for normalization",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/PairNormalize.png"
+ },
+ {
+  "name": "PlanarHull (DCT)",
+  "nick": "Hull2D",
+  "description": "Get the planar convex hull of an object",
+  "guid": "b2d34cc4-9bec-405f-9e2a-f969681b0d84",
+  "subcategory": "Utilities",
+  "class": "PlanarHull",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object to analyze",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "description": "PCA Plane to project to",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Hull",
+    "nick": "Hull",
+    "description": "Planar hull",
+    "type": "Brep",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/PlanarHull.png"
+ },
+ {
+  "name": "PlanarOutline (DCT)",
+  "nick": "PlanarOutline",
+  "description": "Get the planar shadow outline of an object",
+  "guid": "24f26087-6c18-4763-b8b8-f63b12377d9f",
+  "subcategory": "Utilities",
+  "class": "PlanarOutline",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object to analyze",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Plane",
+    "nick": "Plane",
+    "description": "Plane to project to. Origin will be shifted to object centroid.",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "ProjectedCurve",
+    "nick": "Curve",
+    "description": "Projected outline of object geometry",
+    "type": "Curve",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/PlanarOutline.png"
+ },
+ {
+  "name": "RotatePCA (DCT)",
+  "nick": "RotatePCA",
+  "description": "Rotate an object about one of its PCAs",
+  "guid": "14bc0572-a73d-4f5f-bf8a-aef8be3bc520",
+  "subcategory": "Utilities",
+  "class": "RotatePCA",
+  "exposure": "primary",
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Object",
+    "nick": "Obj",
+    "description": "Object to rotate",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "RotationAxis",
+    "nick": "Axis",
+    "description": "PCA axis of rotation",
+    "type": "Integer",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "RotationDegrees",
+    "nick": "Degree",
+    "description": "Amount to rotate (degrees)",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": [
+     "0"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "RotatedObject",
+    "nick": "Obj",
+    "description": "New rotated object",
+    "type": "Generic Data",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "RotatedGeometry",
+    "nick": "Geo",
+    "description": "Rotated geometry",
+    "type": "Geometry",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/RotatePCA.png"
+ }
+]

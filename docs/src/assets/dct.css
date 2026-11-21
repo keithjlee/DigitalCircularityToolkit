@@ -1,0 +1,6 @@
+/* Small additions to the Documenter theme. */
+video.dct-video { width: 100%; border-radius: 4px; margin: 0.5em 0 1em; }
+.dct-figure img { max-width: 100%; }
+/* Component reference: keep parameter tables compact. */
+.content table td, .content table th { font-size: 0.9em; }
+.content table td:nth-child(1) code { white-space: nowrap; }
