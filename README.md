@@ -40,7 +40,7 @@ When using or extending this software for research purposes, please cite using t
   month        = feb,
   year         = 2024,
   publisher    = {Zenodo},
-  version      = {v0.5.1},
+  version      = {v0.5.2},
   doi          = {10.5281/zenodo.10724609},
   url          = {https://doi.org/10.5281/zenodo.10724609}
 }
@@ -77,6 +77,11 @@ Each workflow is explained step by step in the [documentation](https://keithjlee
 - Public release coincides with the S2024 design workshop: *4.185 ODDS & MODS Castaways*
   
 # Release Notes
+## v0.5.2
+Documentation and citation only; the plugin's behaviour is unchanged from v0.5.1.
+- Citations use the Zenodo concept DOI [10.5281/zenodo.10724609](https://doi.org/10.5281/zenodo.10724609), which always resolves to the latest version (the README and docs cited the v0.2 record).
+- Makes this the latest version on Zenodo again: v0.5 and v0.5.1 were archived out of order after the Zenodo–GitHub connection was repaired.
+
 ## v0.5.1
 Bug fixes found while writing the [documentation](https://keithjlee.com/DigitalCircularityToolkit/). Saved definitions open unchanged (no component or parameter changes). Like v0.5, the Rhino 7 package is untested in Rhino 7.
 
