@@ -31,19 +31,28 @@ DCT runs in Rhino 8 (Windows and Mac). Download the latest release from the [Git
 When using or extending DCT for research, please cite it:
 
 ```
-@software{lee_2024_10724609,
-  author       = {Lee, Keith Janghyun},
-  title        = {DigitalCircularityToolkit},
-  month        = feb,
-  year         = 2024,
+@software{keith_j_lee_2026_24426828,
+  author       = {Keith J. Lee and
+                  Karl-Johan Soerensen},
+  title        = {keithjlee/DigitalCircularityToolkit:
+                   DigitalCircularityToolkit v0.5.2
+                  },
+  month        = nov,
+  year         = 2026,
   publisher    = {Zenodo},
   version      = {v0.5.2},
-  doi          = {10.5281/zenodo.10724609},
-  url          = {https://doi.org/10.5281/zenodo.10724609}
+  doi          = {10.5281/zenodo.24426828},
+  url          = {https://doi.org/10.5281/zenodo.24426828},
 }
 ```
 
-Citations in other styles are available on [Zenodo](https://doi.org/10.5281/zenodo.10724609). DCT provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
+APA:
+
+```
+Keith J. Lee, & Karl-Johan Soerensen. (2026). keithjlee/DigitalCircularityToolkit: DigitalCircularityToolkit v0.5.2 (Version v0.5.2) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.24426828
+```
+
+This cites the latest release, v0.5.2 ([10.5281/zenodo.24426828](https://doi.org/10.5281/zenodo.24426828)). To cite DCT without a specific version, use the concept DOI [10.5281/zenodo.10724609](https://doi.org/10.5281/zenodo.10724609), which always resolves to the newest release. Other citation styles are on the [Zenodo record](https://doi.org/10.5281/zenodo.24426828). DCT provides a generalized approach to the Digital Circularity workflow outlined by [Cousin et al](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=0RMLrVgAAAAJ&sortby=pubdate&citation_for_view=0RMLrVgAAAAJ:VLnqNzywnoUC).
 
 ## About
 

@@ -30,27 +30,31 @@ Major releases are on [Food4Rhino](https://www.food4rhino.com/en/app/digitalcirc
 5. Restart Rhino/Grasshopper
 
 ## Citing
-When using or extending this software for research purposes, please cite using the following:
+When using or extending this software for research purposes, please cite using the following (from [Zenodo](https://doi.org/10.5281/zenodo.24426828)):
 
 ### Bibtex
 ```
-@software{lee_2024_10724609,
-  author       = {Lee, Keith Janghyun},
-  title        = {DigitalCircularityToolkit},
-  month        = feb,
-  year         = 2024,
+@software{keith_j_lee_2026_24426828,
+  author       = {Keith J. Lee and
+                  Karl-Johan Soerensen},
+  title        = {keithjlee/DigitalCircularityToolkit:
+                   DigitalCircularityToolkit v0.5.2
+                  },
+  month        = nov,
+  year         = 2026,
   publisher    = {Zenodo},
   version      = {v0.5.2},
-  doi          = {10.5281/zenodo.10724609},
-  url          = {https://doi.org/10.5281/zenodo.10724609}
+  doi          = {10.5281/zenodo.24426828},
+  url          = {https://doi.org/10.5281/zenodo.24426828},
 }
 ```
 
-### Other styles
-Or find a pre-written citation in the style of your choice [here](https://doi.org/10.5281/zenodo.10724609) (see the Citation box on the right side). E.g., for APA:
+### APA
 ```
-Lee, K. J. (2024). DigitalCircularityToolkit. Zenodo. https://doi.org/10.5281/zenodo.10724609
+Keith J. Lee, & Karl-Johan Soerensen. (2026). keithjlee/DigitalCircularityToolkit: DigitalCircularityToolkit v0.5.2 (Version v0.5.2) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.24426828
 ```
+
+This cites the latest release, v0.5.2 ([10.5281/zenodo.24426828](https://doi.org/10.5281/zenodo.24426828)). To cite DCT without a specific version, use the concept DOI [10.5281/zenodo.10724609](https://doi.org/10.5281/zenodo.10724609), which always resolves to the newest release. Other citation styles: see the Citation box on the [Zenodo record](https://doi.org/10.5281/zenodo.24426828).
 
 # Examples
 Each workflow is explained step by step in the [documentation](https://keithjlee.com/DigitalCircularityToolkit/dev/), with a downloadable example definition.
