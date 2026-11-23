@@ -7,6 +7,7 @@
   "subcategory": "Characterization",
   "class": "BoxScore",
   "exposure": "secondary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -51,6 +52,7 @@
   "subcategory": "Characterization",
   "class": "FeatureVector",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": true,
   "inputs": [
    {
@@ -84,6 +86,7 @@
   "subcategory": "Characterization",
   "class": "HarmonicAnalysisComplex_GH",
   "exposure": "tertiary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -137,6 +140,7 @@
   "subcategory": "Characterization",
   "class": "HarmonicAnalysisReal_GH",
   "exposure": "tertiary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -190,6 +194,7 @@
   "subcategory": "Characterization",
   "class": "LineScore",
   "exposure": "secondary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -234,6 +239,7 @@
   "subcategory": "Characterization",
   "class": "PlaneScore",
   "exposure": "secondary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -278,6 +284,7 @@
   "subcategory": "Characterization",
   "class": "RadialSignature_GH",
   "exposure": "tertiary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -358,6 +365,7 @@
   "subcategory": "Characterization",
   "class": "SphereScore",
   "exposure": "secondary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -395,13 +403,90 @@
   "icon": "assets/icons/SphereScore.png"
  },
  {
+  "name": "AsymmEuclideanCost (DCT)",
+  "nick": "CostAsym",
+  "description": "Cost matrix of asymmetric Euclidean distances: one power when the supply covers the demand, another (or forbidden) when it falls short",
+  "guid": "fd022099-ada8-4c3e-b854-2dba3849dcef",
+  "subcategory": "Distance",
+  "class": "AsymmEuclideanCost",
+  "exposure": "primary",
+  "obsolete": false,
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "description": "Demand feature vectors: one branch per demand item",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "description": "Supply feature vectors: one branch per supply item, same length as the demand vectors",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Power1",
+    "nick": "p",
+    "description": "Cost = distance^p when the supply is at least the demand in every feature (> 0)",
+    "type": "Number",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "1"
+    ]
+   },
+   {
+    "name": "Power2",
+    "nick": "q",
+    "description": "Cost = distance^q when the supply is smaller in any feature (> 0). With distances below 1, a larger power gives a smaller cost",
+    "type": "Number",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "2"
+    ]
+   },
+   {
+    "name": "ForbidShortfall",
+    "nick": "Forbid",
+    "description": "True: a supply smaller than the demand in any feature can never be assigned (cost ∞), and Power2 is ignored",
+    "type": "Boolean",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "False"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "description": "Cost of serving demand i (row) with supply j (column), in double precision",
+    "type": "CostMatrix",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/AsymmEuclideanCost.png"
+ },
+ {
   "name": "AsymmEuclideanDistance (DCT)",
   "nick": "DMAsymm",
-  "description": "Generate a distance matrix of asymmetric Euclidean distances between two feature vector sets",
+  "description": "Generate a distance matrix of asymmetric Euclidean distances between two feature vector sets (obsolete: integer costs; use AsymmEuclideanCost)",
   "guid": "669170c3-521e-47a6-8cac-82e5d9cae3a0",
   "subcategory": "Distance",
   "class": "AsymmEuclidean_GH",
-  "exposure": "primary",
+  "exposure": "hidden",
+  "obsolete": true,
   "variable_inputs": false,
   "inputs": [
    {
@@ -459,13 +544,114 @@
   "icon": "assets/icons/AsymmEuclidean_GH.png"
  },
  {
+  "name": "CostMatrix (DCT)",
+  "nick": "CM",
+  "description": "Cost matrix: rows = demand, columns = supply",
+  "guid": "86abd24a-74fd-49fb-ba90-d35607ce5d60",
+  "subcategory": "Distance",
+  "class": "Param_CostMatrix",
+  "exposure": "hidden",
+  "obsolete": false,
+  "variable_inputs": false,
+  "icon": "assets/icons/Param_CostMatrix.png"
+ },
+ {
+  "name": "CostMatrixToTree (DCT)",
+  "nick": "CM2Tree",
+  "description": "Cost matrix as a tree of numbers: one branch per demand, one item per supply",
+  "guid": "b8d68aab-a674-4218-a9f2-12612c6a349b",
+  "subcategory": "Distance",
+  "class": "CostMatrixToTree",
+  "exposure": "secondary",
+  "obsolete": false,
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "description": "Cost matrix to inspect",
+    "type": "CostMatrix",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Costs",
+    "nick": "C",
+    "description": "One branch {i} per demand item, one cost per supply item (∞ = forbidden)",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/CostMatrixToTree.png"
+ },
+ {
+  "name": "EuclideanCost (DCT)",
+  "nick": "CostEuc",
+  "description": "Cost matrix of Euclidean distances between demand and supply feature vectors",
+  "guid": "0b64f7db-d657-46b8-8712-db2ef9ff53e2",
+  "subcategory": "Distance",
+  "class": "EuclideanCost",
+  "exposure": "primary",
+  "obsolete": false,
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "description": "Demand feature vectors: one branch per demand item",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "description": "Supply feature vectors: one branch per supply item, same length as the demand vectors",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Power",
+    "nick": "p",
+    "description": "Cost = distance^p (p > 0; decimals allowed)",
+    "type": "Number",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "1"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "description": "Cost of serving demand i (row) with supply j (column), in double precision",
+    "type": "CostMatrix",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/EuclideanCost.png"
+ },
+ {
   "name": "EuclideanDistance (DCT)",
   "nick": "DMEuclidean",
-  "description": "Generate a distance matrix of Euclidean distances between two feature vector sets",
+  "description": "Generate a distance matrix of Euclidean distances between two feature vector sets (obsolete: integer costs; use EuclideanCost)",
   "guid": "1d4c7587-5d12-44af-b21b-f4168018bb7b",
   "subcategory": "Distance",
   "class": "Euclidean_GH",
-  "exposure": "primary",
+  "exposure": "hidden",
+  "obsolete": true,
   "variable_inputs": false,
   "inputs": [
    {
@@ -519,6 +705,7 @@
   "subcategory": "Distance",
   "class": "FrechetDistance",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -572,6 +759,7 @@
   "subcategory": "Distance",
   "class": "HausdorffDistanceCurve",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -625,6 +813,7 @@
   "subcategory": "Distance",
   "class": "HausdorffDistancePoints",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -660,13 +849,57 @@
   "icon": "assets/icons/HausdorffDistancePoints.png"
  },
  {
+  "name": "ManhattanCost (DCT)",
+  "nick": "CostMan",
+  "description": "Cost matrix of Manhattan distances between demand and supply feature vectors",
+  "guid": "857a4bd8-c8d8-4a2d-bac3-145fa6473410",
+  "subcategory": "Distance",
+  "class": "ManhattanCost",
+  "exposure": "primary",
+  "obsolete": false,
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "description": "Demand feature vectors: one branch per demand item",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "description": "Supply feature vectors: one branch per supply item, same length as the demand vectors",
+    "type": "Number",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "outputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "description": "Cost of serving demand i (row) with supply j (column), in double precision",
+    "type": "CostMatrix",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/ManhattanCost.png"
+ },
+ {
   "name": "ManhattanDistance (DCT)",
   "nick": "DMManhattan",
-  "description": "Generate a distance matrix of manhattan distances between two feature vector sets",
+  "description": "Generate a distance matrix of manhattan distances between two feature vector sets (obsolete: integer costs; use ManhattanCost)",
   "guid": "3890d147-152c-425a-b8d0-6a1cc74eb403",
   "subcategory": "Distance",
   "class": "ManhattanDistance",
-  "exposure": "primary",
+  "exposure": "hidden",
+  "obsolete": true,
   "variable_inputs": false,
   "inputs": [
    {
@@ -709,6 +942,7 @@
   "subcategory": "Matching",
   "class": "AlignToObject_GH",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -762,13 +996,131 @@
   "icon": "assets/icons/AlignToObject_GH.png"
  },
  {
+  "name": "Assign (DCT)",
+  "nick": "Assign",
+  "description": "Assign supply to demand at the lowest total cost (linear assignment on a cost matrix)",
+  "guid": "9616dae5-2f41-47e6-8515-0fb0f819939c",
+  "subcategory": "Matching",
+  "class": "Assign",
+  "exposure": "primary",
+  "obsolete": false,
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "description": "Cost matrix from a cost component (rows = demand, columns = supply)",
+    "type": "CostMatrix",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "AutoRun",
+    "nick": "Auto",
+    "description": "True: solve whenever the input changes. False: keep the last result until set to true again (e.g. wire a button for large problems)",
+    "type": "Boolean",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "True"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Assignment",
+    "nick": "A",
+    "description": "A[i] = j: supply item j serves demand item i; -1 = no supply for demand i",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Cost",
+    "nick": "C",
+    "description": "Total cost of the assigned pairs",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Unassigned",
+    "nick": "U",
+    "description": "Indices of the demand items with no supply",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/Assign.png"
+ },
+ {
+  "name": "Hungarian (DCT)",
+  "nick": "Hungarian",
+  "description": "Hungarian matching algorithm",
+  "guid": "d93d70fa-f26f-4ed8-a35d-9ffe58e460d4",
+  "subcategory": "Matching",
+  "class": "Hungarian_GH_OBSOLETE",
+  "exposure": "hidden",
+  "obsolete": true,
+  "variable_inputs": false,
+  "inputs": [
+   {
+    "name": "DistanceMatrix",
+    "nick": "DM",
+    "description": "Distance matrix as tree: number of branches = number of demand; count in each branch = number of supply. If assignment = -1, no real assignment occurred.",
+    "type": "Integer",
+    "access": "tree",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "AutoRun",
+    "nick": "Auto",
+    "description": "Automatically run the algorithm. Set to false when working with large parametric problems so that you can manually perform the assignment between parameter changes. I.e., add a button here.",
+    "type": "Boolean",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "True"
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Assignment",
+    "nick": "A",
+    "description": "Assignment indices. A[i] = j: assign inventory element j to demand element i",
+    "type": "Integer",
+    "access": "list",
+    "optional": false,
+    "default": []
+   },
+   {
+    "name": "Cost",
+    "nick": "C",
+    "description": "Total cost of assignment",
+    "type": "Number",
+    "access": "item",
+    "optional": false,
+    "default": []
+   }
+  ],
+  "icon": "assets/icons/Hungarian_GH_OBSOLETE.png"
+ },
+ {
   "name": "Match (DCT)",
   "nick": "Match",
-  "description": "Perform linear assignment of supply to demand using the Jonker-Volgenant algorithm",
+  "description": "Perform linear assignment of supply to demand using the Jonker-Volgenant algorithm (obsolete: integer costs; use Assign with a CostMatrix)",
   "guid": "00a166a1-0044-4e16-ab8e-415fe55e2e1f",
   "subcategory": "Matching",
   "class": "Match",
-  "exposure": "primary",
+  "exposure": "hidden",
+  "obsolete": true,
   "variable_inputs": false,
   "inputs": [
    {
@@ -822,6 +1174,7 @@
   "subcategory": "Matching",
   "class": "MatchLines_GH",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -873,6 +1226,7 @@
   "subcategory": "Objects",
   "class": "BoxObject_GH",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -981,6 +1335,7 @@
   "subcategory": "Objects",
   "class": "Param_DesignObject",
   "exposure": "hidden",
+  "obsolete": false,
   "variable_inputs": false,
   "icon": "assets/icons/Param_DesignObject.png"
  },
@@ -992,6 +1347,7 @@
   "subcategory": "Objects",
   "class": "LinearObject_GH",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1089,6 +1445,7 @@
   "subcategory": "Objects",
   "class": "Object_GH",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1153,6 +1510,7 @@
   "subcategory": "Objects",
   "class": "ObjectProperties",
   "exposure": "secondary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1303,6 +1661,7 @@
   "subcategory": "Objects",
   "class": "OverridePCA",
   "exposure": "secondary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1345,6 +1704,7 @@
   "subcategory": "Objects",
   "class": "PlanarObject_GH",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1453,6 +1813,7 @@
   "subcategory": "Objects",
   "class": "SphericalObject_GH",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1539,6 +1900,7 @@
   "subcategory": "Sets",
   "class": "BoxInventory",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1653,6 +2015,7 @@
   "subcategory": "Sets",
   "class": "LinearInventory",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1758,6 +2121,7 @@
   "subcategory": "Sets",
   "class": "PlanarInventory",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1872,6 +2236,7 @@
   "subcategory": "Sets",
   "class": "SphericalInventory",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -1968,6 +2333,7 @@
   "subcategory": "Utilities",
   "class": "AlignToPlane",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -2030,6 +2396,7 @@
   "subcategory": "Utilities",
   "class": "Knoll",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -2116,6 +2483,7 @@
   "subcategory": "Utilities",
   "class": "Normalize",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -2160,6 +2528,7 @@
   "subcategory": "Utilities",
   "class": "PairNormalize",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -2231,6 +2600,7 @@
   "subcategory": "Utilities",
   "class": "PlanarHull",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -2273,6 +2643,7 @@
   "subcategory": "Utilities",
   "class": "PlanarOutline",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {
@@ -2315,6 +2686,7 @@
   "subcategory": "Utilities",
   "class": "RotatePCA",
   "exposure": "primary",
+  "obsolete": false,
   "variable_inputs": false,
   "inputs": [
    {

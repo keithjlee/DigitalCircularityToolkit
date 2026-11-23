@@ -20,22 +20,22 @@ Useful features:
 - shape descriptors from [`HarmonicAnalysisReal`](@ref comp-HarmonicAnalysisReal) and [`HarmonicAnalysisComplex`](@ref comp-HarmonicAnalysisComplex) (see [Shape descriptors](shape-descriptors.md)), which already output one branch per object;
 - any other per-piece numbers computed in Grasshopper, such as a structural demand from an analysis plugin.
 
-## Distance metrics
+## Cost components
 
 | Component | Cost for demand `d` and supply `s` | Use when |
 |:----------|:-----------------------------------|:---------|
-| [`EuclideanDistance`](@ref comp-EuclideanDistance) | `‖d − s‖^Power` | Pieces should be as close as possible in every feature; over- and undersize are equally bad. |
-| [`AsymmEuclideanDistance`](@ref comp-AsymmEuclideanDistance) | `‖d − s‖^Power1` if `s ≥ d` in every feature, else `‖d − s‖^Power2` | Supply can be cut down but not extended: too-small pieces get the higher power. |
-| [`ManhattanDistance`](@ref comp-ManhattanDistance) | `Σ |d − s|` | Differences should add up linearly. |
+| [`EuclideanCost`](@ref comp-EuclideanCost) | `‖s − d‖^Power` | Pieces should be as close as possible in every feature; over- and undersize are equally bad. |
+| [`AsymmEuclideanCost`](@ref comp-AsymmEuclideanCost) | `‖s − d‖^Power1` if `s ≥ d` in every feature, else `‖s − d‖^Power2`, or forbidden | Supply can be cut down but not extended: too-small pieces cost more, or (with `ForbidShortfall`) are never used. |
+| [`ManhattanCost`](@ref comp-ManhattanCost) | `Σ |s − d|` | Differences should add up linearly. |
 
-Each produces a `DistanceMatrix`: a tree with one branch per demand piece and one cost per supply piece in every branch. That is the input of [`Match`](@ref comp-Match).
+Each produces one **[`CostMatrix`](@ref comp-CostMatrix)**: one row per demand piece, one column per supply piece. That is the input of [`Assign`](@ref comp-Assign). The matrix travels as a single item, so even thousands of pieces on each side move between components without delay; [`CostMatrixToTree`](@ref comp-CostMatrixToTree) shows the individual numbers when you want to inspect them.
 
-## Costs are integers
+## Exact costs and forbidden pairs
 
-The distance components round every cost **up** to a whole number. This is a legacy of the original assignment solver, and it makes the scale of the features matter:
+Costs are decimal numbers, computed without rounding, and powers can be decimals too (`Power` 1.5). A cost can also be **∞**, which means "never assign this pair". [`AsymmEuclideanCost`](@ref comp-AsymmEuclideanCost) with `ForbidShortfall` produces ∞ for every supply piece that is smaller than the demand in some feature; [`Assign`](@ref comp-Assign) then serves as many demand parts as possible with allowed pairs and marks the rest `-1`.
 
-- Any distance between 0 and 1 becomes a cost of 1. Features in the range 0 to 1 (ratios, scores, lengths in meters for small parts) leave the solver little to distinguish.
-- Features of very different magnitudes are weighted unequally: a length in millimetres dominates a thickness ratio.
-- In [`AsymmEuclideanDistance`](@ref comp-AsymmEuclideanDistance), a higher `Power2` penalizes undersized pieces only when distances are larger than 1.
+Scaling still matters when features have different units: a length in millimetres dominates a thickness ratio in a Euclidean distance. Scale features of different kinds before combining them, with [`PairNormalize`](@ref comp-PairNormalize) (one shared maximum for a demand list and a supply list) or [`Normalize`](@ref comp-Normalize). A single feature, such as length alone, needs no scaling.
 
-Scale the features before building feature vectors. [`PairNormalize`](@ref comp-PairNormalize) rescales a demand list and a supply list with one shared maximum, so that the largest value of the pair becomes `Factor` (default 100); use one per feature. [`Normalize`](@ref comp-Normalize) does the same for a single list. With millimetre lengths, as in the [examples](../workflows/linear.md), distances are already large and normalization is optional.
+## Before v0.6: integer costs
+
+The earlier components ([`EuclideanDistance`](@ref comp-EuclideanDistance), [`AsymmEuclideanDistance`](@ref comp-AsymmEuclideanDistance), [`ManhattanDistance`](@ref comp-ManhattanDistance), with [`Match`](@ref comp-Match)) are hidden from the toolbar but keep working in saved files. They output a tree of integers: every cost is rounded **up** to a whole number, so any distance between 0 and 1 becomes 1 and features had to be scaled up (e.g. `PairNormalize` with `Factor` 100) for the solver to tell pieces apart. To upgrade a definition, replace the distance component with its `…Cost` counterpart and `Match` with `Assign`; the inputs are the same.

@@ -1,3 +1,6 @@
+!!! warning "Obsolete since v0.6"
+    Replaced by [`AsymmEuclideanCost`](@ref comp-AsymmEuclideanCost). This component is hidden from the toolbar but still works in saved files.
+
 Builds a cost matrix for [`Match`](@ref comp-Match) that penalizes supply items that are too small. `Demand` and `Supply` are trees with one branch per object, each branch holding that object's feature vector (the layout of [`FeatureVector`](@ref comp-FeatureVector)). For each pair the component computes the per-feature differences `s - d` (supply minus demand) and the Euclidean distance over all of them:
 
 ```math

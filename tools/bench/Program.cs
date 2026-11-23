@@ -22,12 +22,32 @@ static class P {
     if(par) Parallel.For(0,n,Row); else for(int i=0;i<n;i++) Row(i);
     return C;
   }
+  // Writes rectangular integer cost matrices (1-D lengths, quantized, many ties) with the LapjvCSharp and
+  // LinearAssignment answers, for an independent optimality check (scipy): tools/bench/rectcheck.py.
+  static void RectCheck(string dir){
+    Directory.CreateDirectory(dir);
+    var rng=new Random(5);
+    int k=0;
+    foreach(var (n,m) in new[]{(30,128),(40,25),(200,600),(1000,3000)}){
+      for(int t=0;t<3;t++,k++){
+        var d=Enumerable.Range(0,n).Select(_=>1000+rng.NextDouble()*3000).ToArray(); var s=Enumerable.Range(0,m).Select(_=>1500+rng.NextDouble()*4500).ToArray();
+        var C=new double[n,m]; var v=new double[n*m];
+        for(int i=0;i<n;i++)for(int j=0;j<m;j++){ double x=s[j]-d[i]; double c=Math.Ceiling(x>=0?x:x*x); C[i,j]=c; v[i*m+j]=c; }
+        var lap=new Lapjv().lapjvCsharp(C,true,double.PositiveInfinity).Item1;
+        var la=LinearAssignment.Solve(new CostMatrix(n,m,v)).Assignment;
+        File.WriteAllLines(Path.Combine(dir,$"m{k}.csv"), Enumerable.Range(0,n).Select(i=>string.Join(",",Enumerable.Range(0,m).Select(j=>C[i,j].ToString(System.Globalization.CultureInfo.InvariantCulture)))));
+        File.WriteAllText(Path.Combine(dir,$"m{k}_lapjv.txt"), string.Join(",",lap));
+        File.WriteAllText(Path.Combine(dir,$"m{k}_ours.txt"), string.Join(",",la));
+      }
+    }
+  }
   static double T(Action a,int reps=3){ a(); var sw=Stopwatch.StartNew(); for(int r=0;r<reps;r++) a(); return sw.Elapsed.TotalMilliseconds/reps; }
 
   static void Main(string[] args){
     if (args.Length > 0 && args[0] == "pca") { PcaBench.Run(); return; }
     if (args.Length > 0 && args[0] == "pcasign") { PcaSignProbe.Run(); return; }
     if (args.Length > 0 && args[0] == "eigcheck") { EigenCheck.Run(); return; }
+    if (args.Length > 1 && args[0] == "rectcheck") { RectCheck(args[1]); return; }
     var rng=new Random(1);
     Console.WriteLine($"cores={Environment.ProcessorCount}");
     foreach(var (n,m,k) in new[]{(500,500,8),(2000,2000,8),(2000,2000,64)}){

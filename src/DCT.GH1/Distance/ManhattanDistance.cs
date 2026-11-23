@@ -16,7 +16,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         public ManhattanDistance()
           : base("ManhattanDistance (DCT)", "DMManhattan",
-              "Generate a distance matrix of manhattan distances between two feature vector sets",
+              "Generate a distance matrix of manhattan distances between two feature vector sets (obsolete: integer costs; use ManhattanCost)",
               "DigitalCircularityToolkit", "Distance")
         {
         }
@@ -84,5 +84,8 @@ namespace DigitalCircularityToolkit.Distance
         {
             get { return new Guid("3890D147-152C-425A-B8D0-6A1CC74EB403"); }
         }
+        // Replaced in v0.6 (COMPONENT_SPEC §2): kept loadable for saved files.
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override bool Obsolete => true;
     }
 }

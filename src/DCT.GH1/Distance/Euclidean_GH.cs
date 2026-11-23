@@ -16,7 +16,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         public Euclidean_GH()
           : base("EuclideanDistance (DCT)", "DMEuclidean",
-              "Generate a distance matrix of Euclidean distances between two feature vector sets",
+              "Generate a distance matrix of Euclidean distances between two feature vector sets (obsolete: integer costs; use EuclideanCost)",
               "DigitalCircularityToolkit", "Distance")
         {
         }
@@ -81,5 +81,8 @@ namespace DigitalCircularityToolkit.Distance
         {
             get { return new Guid("1D4C7587-5D12-44AF-B21B-F4168018BB7B"); }
         }
+        // Replaced in v0.6 (COMPONENT_SPEC §2): kept loadable for saved files.
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override bool Obsolete => true;
     }
 }

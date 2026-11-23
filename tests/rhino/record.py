@@ -9,6 +9,7 @@ tests/compare.py compares two recordings.
 """
 import hashlib
 import json
+import math
 import os
 import time
 
@@ -96,6 +97,12 @@ def ser(v, depth=0):
                 "bbox": bbox(v.GetBoundingBox(True))}
     if isinstance(v, rg.GeometryBase):
         return {"geometry": tn, "bbox": bbox(v.GetBoundingBox(True))}
+    if tn == "CostMatrix":
+        vals = [v[i, j] for i in range(v.Rows) for j in range(v.Cols)]
+        finite = [x for x in vals if not math.isinf(x)]
+        return {"cost_matrix": [v.Rows, v.Cols], "forbidden": v.ForbiddenCount, "monotone": v.Monotone is not None,
+                "sum": num(sum(finite)) if finite else 0, "min": num(min(finite)) if finite else None,
+                "max": num(max(finite)) if finite else None, "row0": [num(x) for x in vals[:min(v.Cols, 8)]]}
     if t is not None and t.IsArray or isinstance(v, System.Collections.IList):
         items = [ser(x, depth + 1) for x in v]
         return digest(items) if len(items) > 50 else items

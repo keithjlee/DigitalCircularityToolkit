@@ -16,13 +16,13 @@ The plate Breps go into a second `PlanarObject` with their `Quantity` and `ID`, 
 
 ## 3. Feature vectors and cost
 
-Each side gets a [`FeatureVector`](@ref comp-FeatureVector) with two features, `EffectiveLength` and `EffectiveWidth`, connected in the same order on both sides. [`AsymmEuclideanDistance`](@ref comp-AsymmEuclideanDistance) treats a plate as valid only if it is at least as long *and* at least as wide as the panel; a plate that is too small in either direction gets the higher power `Power2`.
+Each side gets a [`FeatureVector`](@ref comp-FeatureVector) with two features, `EffectiveLength` and `EffectiveWidth`, connected in the same order on both sides. [`AsymmEuclideanCost`](@ref comp-AsymmEuclideanCost) treats a plate as valid only if it is at least as long *and* at least as wide as the panel; a plate that is too small in either direction gets the higher power `Power2`.
 
 ## 4. Match and place
 
-[`Match`](@ref comp-Match), [`MatchLines`](@ref comp-MatchLines), List Item and [`AlignToObject`](@ref comp-AlignToObject) work exactly as in [Linear members from stock](linear.md). AlignToObject lays each plate in its panel's plane, centred on the panel, with the long sides aligned; the parts of the plate outside the panel are the offcuts.
+[`Assign`](@ref comp-Assign), [`MatchLines`](@ref comp-MatchLines), List Item and [`AlignToObject`](@ref comp-AlignToObject) work exactly as in [Linear members from stock](linear.md). AlignToObject lays each plate in its panel's plane, centred on the panel, with the long sides aligned; the parts of the plate outside the panel are the offcuts.
 
 ## Variations
 
-- **Thickness:** add `Thickness` as a third feature, or use [`EuclideanDistance`](@ref comp-EuclideanDistance) on thickness alone when plates must match a nominal thickness in both directions.
+- **Thickness:** add `Thickness` as a third feature, or use [`EuclideanCost`](@ref comp-EuclideanCost) on thickness alone when plates must match a nominal thickness in both directions.
 - **Square panels:** a square panel has no defined long side (see [Orientation](../concepts/orientation.md)); its `EffectiveLength` and `EffectiveWidth` are still correct, but its in-plane rotation is arbitrary. Use [`OverridePCA`](@ref comp-OverridePCA) when the rotation of the placed plate matters, for example for grain direction.

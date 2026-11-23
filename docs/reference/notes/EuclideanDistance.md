@@ -1,3 +1,6 @@
+!!! warning "Obsolete since v0.6"
+    Replaced by [`EuclideanCost`](@ref comp-EuclideanCost). This component is hidden from the toolbar but still works in saved files.
+
 Builds the cost matrix for [`Match`](@ref comp-Match) from two sets of feature vectors. `Demand` and `Supply` are trees with one branch per object, each branch holding that object's feature vector, which is the layout [`FeatureVector`](@ref comp-FeatureVector) produces. For every demand vector `d` and supply vector `s` the cost is
 
 ```math

@@ -53,38 +53,6 @@ namespace DigitalCircularityToolkit.Distance
             return tree;
         }
 
-        public static int[,] CostTree2CostMatrix(GH_Structure<GH_Integer> tree, bool pad = true)
-        {
-            int n_demand = tree.PathCount;
-            int n_supply = tree.get_Branch(0).Count;
-
-            int[,] cost_matrix = new int[n_demand, n_supply];
-
-            for (int i = 0; i < n_demand; i++)
-            {
-                var branch = tree.Branches[i];
-                for (int j = 0; j < n_supply; j++)
-                {
-                    cost_matrix[i, j] = branch[j].Value;
-                }
-            }
-
-            if (n_demand != n_supply && pad)
-            {
-                if (n_demand < n_supply)
-                {
-                    return PadRows(cost_matrix);
-                }
-                else
-                {
-                    return PadCols(cost_matrix);
-                }
-            }
-            else
-            {
-                return cost_matrix;
-            }
-        }
 
         public static List<int[]> Tree2List(GH_Structure<GH_Integer> tree)
         {
@@ -128,76 +96,8 @@ namespace DigitalCircularityToolkit.Distance
             return list_data;
         }
 
-        public static int[,] PadRows(int[,] cost_matrix)
-        {
-            int n = cost_matrix.GetLength(0);
-            int m = cost_matrix.GetLength(1);
 
-            int[,] sq_costs = new int[m, m];
 
-            for (int i = 0; i < m; i++)
-            {
-                for (int j = 0; j < m; j++)
-                {
-                    if (i >= n)
-                    {
-                        sq_costs[i, j] = Int32.MaxValue;
-                    }
-                    else
-                    {
-                        sq_costs[i, j] = cost_matrix[i, j];
-                    }
-                }
-            }
-
-            return sq_costs;
-        }
-
-        public static int[,] PadCols(int[,] cost_matrix)
-        {
-            int n = cost_matrix.GetLength(0);
-            int m = cost_matrix.GetLength(1);
-
-            int[,] sq_costs = new int[n, n];
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    if (j >= m)
-                    {
-                        sq_costs[i, j] = Int32.MaxValue;
-                    }
-                    else
-                    {
-                        sq_costs[i, j] = cost_matrix[i, j];
-                    }
-                }
-            }
-
-            return sq_costs;
-        }
-
-        public static int[] AssignmentIndices(int[] init_assignments, int n_demand, int n_supply)
-        {
-            int[] assignments = new int[n_demand];
-
-            for (int i = 0; i < n_demand; i++)
-            {
-                int assignment = init_assignments[i];
-
-                if (assignment >= n_supply)
-                {
-                    assignments[i] = -1;
-                }
-                else
-                {
-                    assignments[i] = assignment;
-                }
-            }
-
-            return assignments;
-        }
 
         public static bool CheckDims(GH_Structure<GH_Number> dem, GH_Structure<GH_Number> sup)
         {

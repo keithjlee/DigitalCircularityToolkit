@@ -24,11 +24,11 @@ To account for damaged ends, set the supply `LengthBuffer` below 1 (for example 
 
 ## 3. Feature vectors and cost
 
-Each side gets a [`FeatureVector`](@ref comp-FeatureVector) with one feature, `EffectiveLength`. [`AsymmEuclideanDistance`](@ref comp-AsymmEuclideanDistance) compares them: a piece at least as long as the member (it can be cut to length) costs the difference in length, with `Power1` = 1; a piece that is too short costs the difference squared (`Power2` = 2), which strongly discourages it. Because the lengths are in millimetres, the differences are large numbers and the integer rounding of the costs is negligible.
+Each side gets a [`FeatureVector`](@ref comp-FeatureVector) with one feature, `EffectiveLength`. [`AsymmEuclideanCost`](@ref comp-AsymmEuclideanCost) compares them: a piece at least as long as the member (it can be cut to length) costs the difference in length, with `Power1` = 1; a piece that is too short costs the difference squared (`Power2` = 2), which strongly discourages it. With one feature, [`Assign`](@ref comp-Assign) solves this by sorting, in milliseconds. To rule out short pieces entirely, set `ForbidShortfall` to true: members with no long-enough piece then stay unassigned (`-1`).
 
 ## 4. Match and place
 
-[`Match`](@ref comp-Match) assigns one piece to every member at minimum total cost. [`MatchLines`](@ref comp-MatchLines) draws a line from each member to its piece. List Item picks the assigned supply objects (`Objects` of the supply set, indexed by `Assignment`), and [`AlignToObject`](@ref comp-AlignToObject) moves each onto its member. Each piece is centred on its member, so the overhang at both ends is the length to cut off.
+[`Assign`](@ref comp-Assign) assigns one piece to every member at minimum total cost. [`MatchLines`](@ref comp-MatchLines) draws a line from each member to its piece. List Item picks the assigned supply objects (`Objects` of the supply set, indexed by `Assignment`), and [`AlignToObject`](@ref comp-AlignToObject) moves each onto its member. Each piece is centred on its member, so the overhang at both ends is the length to cut off.
 
 ## Variations
 
