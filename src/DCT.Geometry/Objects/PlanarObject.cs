@@ -1,144 +1,40 @@
-﻿using DigitalCircularityToolkit.GeometryProcessing;
 using Rhino.Geometry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class PlanarObject : DesignObject
+    /// <summary>A rectangle in the PCA1-PCA2 plane: Dimension1 × Dimension2 (buffered), with a thickness.</summary>
+    public sealed record PlanarObject : DesignObject
     {
-        public int Quantity;
-        public double LengthBuffer;
-        public double WidthBuffer;
-        // > 0: user-supplied thickness; otherwise the local-box height is used (B7: the setter used to be empty).
-        private double _thickness = -1;
-        public double Thickness
-        {
-            get { return _thickness > 0 ? _thickness : Height; }
-            set { _thickness = value; }
-        }
-        public double Dimension1
-        {
-            get { return LengthBuffer * Length; }
-        }
-        public double Dimension2
-        {
-            get { return WidthBuffer * Width; }
-        }
-        public Plane Plane
-        {
-            get { return GetPlane(); }
-        }
-        public PlaneSurface EffectivePlane
-        {
-            get { return GetEffectivePlane(); }
-        }
+        private PlanarObject(ShapeAnalysis analysis) : base(analysis) { }
 
-        public Polyline Hull
-        {
-            get
+        /// <param name="geometry">A Curve, Brep, Mesh or PointCloud.</param>
+        /// <param name="n">Target number of samples (curves and Breps).</param>
+        /// <param name="thickness">Thickness; ≤ 0 uses the box height.</param>
+        public static PlanarObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double widthBuffer = 1, double thickness = -1, string id = "NoID") =>
+            new PlanarObject(ShapeAnalysis.Analyze(geometry, n))
             {
-                return Hull2D;
-            }
-        }
+                Quantity = quantity,
+                LengthBuffer = Positive(lengthBuffer, nameof(lengthBuffer)),
+                WidthBuffer = Positive(widthBuffer, nameof(widthBuffer)),
+                Thickness = thickness,
+                ID = id,
+            };
 
-        public PlanarObject() { }
+        public double LengthBuffer { get; init; } = 1;
+        public double WidthBuffer { get; init; } = 1;
 
-        public PlanarObject(DesignObject obj)
-        {
-            this.Centroid = obj.Centroid;
-            this.NSamples = obj.NSamples;
-            this.SampledPoints = obj.SampledPoints;
-            this.PCA1 = obj.PCA1;
-            this.PCA2 = obj.PCA2;
-            this.PCA3 = obj.PCA3;
-            this.Localbox = obj.Localbox;
-            this.LocalPlane = obj.LocalPlane;
-            this.Boundingbox = obj.Boundingbox;
-            this.Geometry = obj.Geometry;
-            this.TransformedGeometry = obj.TransformedGeometry;
-            this.ID = obj.ID;
+        private readonly double _thickness = -1;
+        /// <summary>Thickness. Set ≤ 0 to use the box height (B7: the user value used to be ignored).</summary>
+        public double Thickness { get => _thickness > 0 ? _thickness : Height; init => _thickness = value; }
 
-            Quantity = 1;
-            LengthBuffer = 1;
-            WidthBuffer = 1;
-        }
+        public double Dimension1 => LengthBuffer * Length;
+        public double Dimension2 => WidthBuffer * Width;
 
-        public PlanarObject (Curve curve, int n_samples, int qty, double length_buffer, double width_buffer, double thickness, Vector3d pca_override)
-        {
-            Populate(curve, n_samples);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
+        public Plane Plane => new Plane(Localbox.Center, PCA1, PCA2);
 
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
+        public PlaneSurface EffectivePlane =>
+            new PlaneSurface(Plane, new Interval(-Dimension1 / 2, Dimension1 / 2), new Interval(-Dimension2 / 2, Dimension2 / 2));
 
-            // Override thickness if value supplied
-            if (thickness > 0)
-            {
-                Thickness = thickness;
-            }
-        }
-        
-        public PlanarObject(Brep brep, int n_samples, int qty, double length_buffer, double width_buffer, double thickness, Vector3d pca_override)
-        {
-            Populate(brep, n_samples);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
-
-            // Override thickness if value supplied
-            if (thickness > 0)
-            {
-                Thickness = thickness;
-            }
-        }
-
-        public PlanarObject(PointCloud points, int qty, double length_buffer, double width_buffer, double thickness, Vector3d pca_override)
-        {
-            Populate(points.GetPoints().ToList());
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
-
-            // Override thickness if value supplied
-            if (thickness > 0)
-            {
-                Thickness = thickness;
-            }
-        }
-
-        public PlanarObject(Mesh mesh, int qty, double length_buffer, double width_buffer, double thickness, Vector3d pca_override)
-        {
-            Populate(mesh);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
-
-            // Override thickness if value supplied
-            if (thickness > 0)
-            {
-                Thickness = thickness;
-            }
-        }
-
-        public Plane GetPlane()
-        {
-            return new Plane(Localbox.Center, PCA1, PCA2);
-        }
-
-        public PlaneSurface GetEffectivePlane()
-        {
-            return new PlaneSurface(Plane, new Interval(-Dimension1/2, Dimension1/2), new Interval(-Dimension2/2, Dimension2/2));
-        }
+        public Polyline Hull => Hull2D;
     }
 }

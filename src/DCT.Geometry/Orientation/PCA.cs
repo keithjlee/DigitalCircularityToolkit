@@ -186,7 +186,7 @@ namespace DigitalCircularityToolkit.Orientation
         /// </summary>
         /// <param name="points"></param>
         /// <returns></returns>
-        public static Point3d GetCentroid(List<Point3d> points)
+        public static Point3d GetCentroid(IReadOnlyList<Point3d> points)
         {
             Point3d centroid = new Point3d();
 

@@ -50,7 +50,6 @@ namespace DigitalCircularityToolkit.Objects
             int n = 50;
             int qty = 1;
             double buffer = 1;
-            Vector3d pca_user = new Vector3d(0, 0, 0);
             string id = "NoID";
 
             if (!DA.GetData(0, ref geo)) return null;
@@ -70,16 +69,7 @@ namespace DigitalCircularityToolkit.Objects
                 return null;
             }
 
-            return () =>
-            {
-                SphericalObject obj = new SphericalObject();
-                if (geo is Curve curve) obj = new SphericalObject(curve, n, qty, buffer, pca_user);
-                if (geo is Brep brep) obj = new SphericalObject(brep, n, qty, buffer, pca_user);
-                if (geo is Mesh mesh) obj = new SphericalObject(mesh, qty, buffer, pca_user);
-                if (geo is PointCloud pointcloud) obj = new SphericalObject(pointcloud, qty, buffer, pca_user);
-                obj.ID = id;
-                return obj;
-            };
+            return () => SphericalObject.Create(geo, n, qty, buffer, id);
         }
 
         protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)

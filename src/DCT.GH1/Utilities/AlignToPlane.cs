@@ -43,7 +43,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject obj = new DesignObject();
+            DesignObject obj = null;
             Plane pl = Plane.WorldXY;
 
             if (!DA.GetData(0, ref obj)) return;
@@ -51,7 +51,7 @@ namespace DigitalCircularityToolkit.Utilities
 
             Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, pl);
 
-            obj = obj.TransformObject(transformer);
+            obj = obj.Transformed(transformer);
 
             DA.SetData(0, obj);
             DA.SetData(1, obj.Geometry);

@@ -41,7 +41,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            BoxObject obj = new BoxObject();
+            BoxObject obj = null;
             if (!DA.GetData(0, ref obj)) return;
 
             double factor = 100;

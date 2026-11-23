@@ -41,20 +41,14 @@ namespace DigitalCircularityToolkit.Objects
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject obj = new DesignObject();
+            DesignObject obj = null;
             Plane plane = new Plane();
 
             if (!DA.GetData(0, ref obj)) return;
             if (!DA.GetData(1, ref plane)) return;
 
-            // Grasshopper hands this component the same instance as the upstream output: work on a copy (B4).
-            // ShallowCopy keeps the concrete type; Repopulate only assigns fields, so the copy is safe to change.
-            obj = obj.ShallowCopy();
-
-            // assert that plane origin is centered
-            plane.Origin = obj.Localbox.Center;
-
-            obj.Repopulate(plane);
+            // A new object with the plane's axes; the input (shared with the upstream output) is not touched (B4).
+            obj = obj.WithFrame(plane);
 
             DA.SetData(0, obj);
         }

@@ -55,7 +55,6 @@ namespace DigitalCircularityToolkit.Objects
             double buffer1 = 1;
             double buffer2 = 1;
             double buffer3 = -1;
-            Vector3d pca_user = new Vector3d(0, 0, 0);
             string id = "NoID";
 
             if (!DA.GetData(0, ref geo)) return null;
@@ -77,16 +76,7 @@ namespace DigitalCircularityToolkit.Objects
                 return null;
             }
 
-            return () =>
-            {
-                BoxObject obj = new BoxObject();
-                if (geo is Curve curve) obj = new BoxObject(curve, n, qty, buffer1, buffer2, buffer3, pca_user);
-                if (geo is Brep brep) obj = new BoxObject(brep, n, qty, buffer1, buffer2, buffer3, pca_user);
-                if (geo is Mesh mesh) obj = new BoxObject(mesh, qty, buffer1, buffer2, buffer3, pca_user);
-                if (geo is PointCloud pointcloud) obj = new BoxObject(pointcloud, qty, buffer1, buffer2, buffer3, pca_user);
-                obj.ID = id;
-                return obj;
-            };
+            return () => BoxObject.Create(geo, n, qty, buffer1, buffer2, buffer3, id);
         }
 
         protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)

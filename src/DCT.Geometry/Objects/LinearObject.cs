@@ -1,166 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using DigitalCircularityToolkit.GeometryProcessing;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
 {
-	public class LinearObject : DesignObject
-	{
-		public int Quantity;
-        public double LengthBuffer;
-        public Line EffectiveLine
-        {
-            get { return GetEffectiveLine(); }
-        }
-        public double EffectiveLength
-        {
-            get
+    /// <summary>A line along PCA1: effective length = Length × LengthBuffer, with a cross-section area.</summary>
+    public sealed record LinearObject : DesignObject
+    {
+        private LinearObject(ShapeAnalysis analysis) : base(analysis) { }
+
+        /// <param name="geometry">A Curve, Brep, Mesh or PointCloud.</param>
+        /// <param name="n">Target number of samples (curves and Breps).</param>
+        /// <param name="area">Cross-section area; ≤ 0 estimates it as Width × Height.</param>
+        public static LinearObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double area = -1, string id = "NoID") =>
+            new LinearObject(ShapeAnalysis.Analyze(geometry, n))
             {
-                return Length * LengthBuffer;
-            }
-        }
-        public double Area;
-        public Plane CrossSectionPlane
-        {
-            get { return GetCrossSectionPlane(); }
-        }
-        public Polyline Hull
-        {
-            get
-            {
-                return Hull2D;
-            }
-        }
+                Quantity = quantity,
+                LengthBuffer = Positive(lengthBuffer, nameof(lengthBuffer)),
+                Area = area,
+                ID = id,
+            };
 
-		public LinearObject()
-		{
-		}
+        public double LengthBuffer { get; init; } = 1;
 
-        public LinearObject(DesignObject obj)
-        {
-            this.Centroid = obj.Centroid;
-            this.NSamples = obj.NSamples;
-            this.SampledPoints = obj.SampledPoints;
-            this.PCA1 = obj.PCA1;
-            this.PCA2 = obj.PCA2;
-            this.PCA3 = obj.PCA3;
-            this.Localbox = obj.Localbox;
-            this.LocalPlane = obj.LocalPlane;
-            this.Boundingbox = obj.Boundingbox;
-            this.Geometry = obj.Geometry;
-            this.TransformedGeometry = obj.TransformedGeometry;
-            this.ID = obj.ID;
+        private readonly double _area = -1;
+        /// <summary>Cross-section area. Set ≤ 0 to estimate it as Width × Height (then it follows a new frame).</summary>
+        public double Area { get => _area > 0 ? _area : Width * Height; init => _area = value; }
+        /// <summary>True when <see cref="Area"/> is the Width × Height estimate.</summary>
+        public bool AreaEstimated => _area <= 0;
 
-            Quantity = 1;
-            LengthBuffer = 1;
+        public double EffectiveLength => Length * LengthBuffer;
 
-            GetApproxArea();
-        }
+        public Line EffectiveLine => new Line(Localbox.Center - PCA1 * EffectiveLength / 2, Localbox.Center + PCA1 * EffectiveLength / 2);
 
-        public LinearObject(Curve curve, int n_samples, int qty, double buffer, double area, Vector3d pca_override)
-        {
-            Populate(curve, n_samples);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
+        public Plane CrossSectionPlane => new Plane(Localbox.Center, PCA2, PCA3);
 
-            Quantity = qty;
-            LengthBuffer = buffer;
-            
-            if (area <= 0)
-            {
-                GetApproxArea() ;
-            }
-            else
-            {
-                Area = area;
-            }
-
-        }
-
-        public LinearObject(Brep brep, int n_samples, int qty, double buffer, double area, Vector3d pca_override)
-        {
-            Populate(brep, n_samples);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = buffer;
-
-            if (area <= 0)
-            {
-                GetApproxArea();
-            }
-            else
-            {
-                Area = area;
-            }
-
-        }
-
-        public LinearObject(PointCloud points, int qty, double buffer, double area, Vector3d pca_override)
-        {
-            Populate(points.GetPoints().ToList());
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = buffer;
-
-            if (area <= 0)
-            {
-                GetApproxArea();
-            }
-            else
-            {
-                Area = area;
-            }
-
-        }
-
-        public LinearObject(Mesh mesh, int qty, double buffer, double area, Vector3d pca_override)
-        {
-            Populate(mesh);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = buffer;
-
-            if (area <= 0)
-            {
-                GetApproxArea();
-            }
-            else
-            {
-                Area = area;
-            }
-
-        }
-
-        private Plane GetCrossSectionPlane()
-        {
-            return new Plane(Localbox.Center, PCA2, PCA3);
-        }
-
-        // True when Area was estimated from the bounding box rather than given (then it follows a new frame).
-        private bool _areaEstimated;
-
-        protected override void RepopulateDerived()
-        {
-            if (_areaEstimated) GetApproxArea();
-        }
-
-        private void GetApproxArea()
-        {
-            _areaEstimated = true;
-            Area = Width * Height;
-        }
-
-        private Line GetEffectiveLine()
-        {
-            Point3d point_at_start = Localbox.Center - PCA1 * EffectiveLength / 2;
-            Point3d point_at_end = Localbox.Center + PCA1 * EffectiveLength / 2;
-
-            return new Line(point_at_start, point_at_end);
-        }
-	}
+        public Polyline Hull => Hull2D;
+    }
 }

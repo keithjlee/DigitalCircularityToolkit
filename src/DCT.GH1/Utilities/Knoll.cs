@@ -134,7 +134,7 @@ namespace DigitalCircularityToolkit.Utilities
                     Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, target_plane);
 
                     // Make transformed object
-                    var new_obj = obj.TransformObject(transformer);
+                    var new_obj = obj.Transformed(transformer);
                     new_objects.Add(new_obj);
 
                     //update longest object and x offset

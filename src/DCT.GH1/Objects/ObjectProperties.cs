@@ -63,7 +63,7 @@ namespace DigitalCircularityToolkit.Characterization
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Initialize
-            DesignObject obj = new DesignObject();
+            DesignObject obj = null;
 
             // Read
             if (!DA.GetData(0, ref obj)) return;
