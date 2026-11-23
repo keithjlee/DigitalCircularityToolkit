@@ -94,12 +94,113 @@
   ]
  },
  {
+  "name": "Assign (DCT)",
+  "nick": "Assign",
+  "guid": "9616dae5-2f41-47e6-8515-0fb0f819939c",
+  "subcategory": "Matching",
+  "class": "DigitalCircularityToolkit.Matching.Assign",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "type": "Param_CostMatrix",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "AutoRun",
+    "nick": "Auto",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Assignment",
+    "nick": "A",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   },
+   {
+    "name": "Cost",
+    "nick": "C",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": false
+   },
+   {
+    "name": "Unassigned",
+    "nick": "U",
+    "type": "Param_Integer",
+    "access": "list",
+    "optional": false
+   }
+  ]
+ },
+ {
+  "name": "AsymmEuclideanCost (DCT)",
+  "nick": "CostAsym",
+  "guid": "fd022099-ada8-4c3e-b854-2dba3849dcef",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.AsymmEuclideanCost",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Power1",
+    "nick": "p",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Power2",
+    "nick": "q",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "ForbidShortfall",
+    "nick": "Forbid",
+    "type": "Param_Boolean",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "type": "Param_CostMatrix",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
   "name": "AsymmEuclideanDistance (DCT)",
   "nick": "DMAsymm",
   "guid": "669170c3-521e-47a6-8cac-82e5d9cae3a0",
   "subcategory": "Distance",
   "class": "DigitalCircularityToolkit.Distance.AsymmEuclidean_GH",
-  "exposure": "primary",
+  "exposure": "hidden",
   "inputs": [
    {
     "name": "Demand",
@@ -338,6 +439,40 @@
   ]
  },
  {
+  "name": "CostMatrix (DCT)",
+  "nick": "CM",
+  "guid": "86abd24a-74fd-49fb-ba90-d35607ce5d60",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.Param_CostMatrix",
+  "exposure": "hidden"
+ },
+ {
+  "name": "CostMatrixToTree (DCT)",
+  "nick": "CM2Tree",
+  "guid": "b8d68aab-a674-4218-a9f2-12612c6a349b",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.CostMatrixToTree",
+  "exposure": "secondary",
+  "inputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "type": "Param_CostMatrix",
+    "access": "item",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Costs",
+    "nick": "C",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   }
+  ]
+ },
+ {
   "name": "DesignObject (DCT)",
   "nick": "DObj",
   "guid": "bfe61750-9409-4744-bb89-e0d4c3c8a74c",
@@ -346,12 +481,52 @@
   "exposure": "hidden"
  },
  {
+  "name": "EuclideanCost (DCT)",
+  "nick": "CostEuc",
+  "guid": "0b64f7db-d657-46b8-8712-db2ef9ff53e2",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.EuclideanCost",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Power",
+    "nick": "p",
+    "type": "Param_Number",
+    "access": "item",
+    "optional": true
+   }
+  ],
+  "outputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "type": "Param_CostMatrix",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
   "name": "EuclideanDistance (DCT)",
   "nick": "DMEuclidean",
   "guid": "1d4c7587-5d12-44af-b21b-f4168018bb7b",
   "subcategory": "Distance",
   "class": "DigitalCircularityToolkit.Distance.Euclidean_GH",
-  "exposure": "primary",
+  "exposure": "hidden",
   "inputs": [
    {
     "name": "Demand",
@@ -889,12 +1064,45 @@
   ]
  },
  {
+  "name": "ManhattanCost (DCT)",
+  "nick": "CostMan",
+  "guid": "857a4bd8-c8d8-4a2d-bac3-145fa6473410",
+  "subcategory": "Distance",
+  "class": "DigitalCircularityToolkit.Distance.ManhattanCost",
+  "exposure": "primary",
+  "inputs": [
+   {
+    "name": "Demand",
+    "nick": "FVdemand",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   },
+   {
+    "name": "Supply",
+    "nick": "FVsupply",
+    "type": "Param_Number",
+    "access": "tree",
+    "optional": false
+   }
+  ],
+  "outputs": [
+   {
+    "name": "CostMatrix",
+    "nick": "CM",
+    "type": "Param_CostMatrix",
+    "access": "item",
+    "optional": false
+   }
+  ]
+ },
+ {
   "name": "ManhattanDistance (DCT)",
   "nick": "DMManhattan",
   "guid": "3890d147-152c-425a-b8d0-6a1cc74eb403",
   "subcategory": "Distance",
   "class": "DigitalCircularityToolkit.Distance.ManhattanDistance",
-  "exposure": "primary",
+  "exposure": "hidden",
   "inputs": [
    {
     "name": "Demand",
@@ -927,7 +1135,7 @@
   "guid": "00a166a1-0044-4e16-ab8e-415fe55e2e1f",
   "subcategory": "Matching",
   "class": "DigitalCircularityToolkit.Matching.Match",
-  "exposure": "primary",
+  "exposure": "hidden",
   "inputs": [
    {
     "name": "DistanceMatrix",

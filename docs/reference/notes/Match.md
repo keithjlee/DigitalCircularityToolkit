@@ -1,4 +1,7 @@
-Solves the linear assignment problem: it pairs demand items with supply items so that the sum of the costs of all pairs is as small as possible. The solver is LAPJV (Jonker-Volgenant, via the LapjvCSharp library), which finds the exact optimum.
+!!! warning "Obsolete since v0.6"
+    Replaced by [`Assign`](@ref comp-Assign). This component is hidden from the toolbar but still works in saved files.
+
+Solves the linear assignment problem: it pairs demand items with supply items so that the sum of the costs of all pairs is as small as possible. Since v0.6 it uses the same in-house solver as [`Assign`](@ref comp-Assign), which finds the exact optimum (the LapjvCSharp library used before was not always optimal on rectangular problems).
 
 `DistanceMatrix` is a tree with one branch per demand item and, in every branch, one cost per supply item: item `j` of branch `i` is the cost of assigning supply `j` to demand `i`. This is the output of [`EuclideanDistance`](@ref comp-EuclideanDistance), [`AsymmEuclideanDistance`](@ref comp-AsymmEuclideanDistance) and [`ManhattanDistance`](@ref comp-ManhattanDistance). Branches are read in order; their path names do not matter. `Assignment` has one entry per demand item: `A[i] = j` means supply `j` goes to demand `i`. `Cost` is the sum of the costs of the assigned pairs.
 

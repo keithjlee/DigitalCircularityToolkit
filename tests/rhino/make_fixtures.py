@@ -616,6 +616,58 @@ def fx_inputs():
     return c
 
 
+def fx_cost_matrix():
+    """The CostMatrix pipeline (v0.6): every cost component into Assign, 1-D (monotone fast path) and 2-D (general
+    solver), with demand > supply and forbidden shortfalls (-1 rows), plus CostMatrixToTree and MatchLines."""
+    rng = random.Random(11)
+    c = Canvas()
+    dem = c.data(P.Param_Curve, lambda g: g, demand_lines(rng, 45), "DemandCurves", 0, 0)
+    sup_goo, sup_ids = timber_supply(rng, 20, 60000)
+    sup = c.data(P.Param_Geometry, lambda g: g, sup_goo, "SupplyGeometry", 0, 300)
+    qty = c.data(P.Param_Integer, T.GH_Integer, [rng.choice([1, 2, 3]) for _ in range(20)], "SupplyQuantity", 0, 400)
+
+    d_obj = c.comp("LinearObject (DCT)", "D_LinearObject", 250, 0)
+    c.wire(dem, d_obj, "Geometry")
+    s_obj = c.comp("LinearObject (DCT)", "S_LinearObject", 250, 300)
+    c.wire(sup, s_obj, "Geometry")
+    c.wire(qty, s_obj, "Quantity")
+    d_set = c.comp("LinearSet (DCT)", "D_LinearSet", 500, 0)
+    c.wire((d_obj, "LinearObject"), d_set, "Objects")
+    s_set = c.comp("LinearSet (DCT)", "S_LinearSet", 500, 300)
+    c.wire((s_obj, "LinearObject"), s_set, "Objects")
+
+    d_fv = c.feature_vector("D_FV", 750, 0, [(d_set, "EffectiveLength")])
+    s_fv = c.feature_vector("S_FV", 750, 300, [(s_set, "EffectiveLength")])
+    d_fv2 = c.feature_vector("D_FV2", 750, 100, [(d_set, "EffectiveLength"), (d_set, "Area")])
+    s_fv2 = c.feature_vector("S_FV2", 750, 400, [(s_set, "EffectiveLength"), (s_set, "Area")])
+
+    def cost(kind, nick, y, d, s, **values):
+        comp = c.comp(kind + " (DCT)", nick, 1000, y)
+        c.wire((d, "FeatureVector"), comp, "Demand")
+        c.wire((s, "FeatureVector"), comp, "Supply")
+        for k, v in values.items():
+            c.value(comp, k, v)
+        a = c.comp("Assign (DCT)", "Assign_" + nick, 1250, y)
+        c.wire((comp, "CostMatrix"), a, "CostMatrix")
+        return comp, a
+
+    asym1, a_asym1 = cost("AsymmEuclideanCost", "Asym1D", 0, d_fv, s_fv, Power1=1.0, Power2=2.0)
+    cost("AsymmEuclideanCost", "AsymForbid1D", 150, d_fv, s_fv, Power1=1.0, ForbidShortfall=True)
+    cost("AsymmEuclideanCost", "Asym2D", 300, d_fv2, s_fv2, Power1=1.0, Power2=2.0)
+    cost("AsymmEuclideanCost", "AsymForbid2D", 450, d_fv2, s_fv2, Power1=1.5, ForbidShortfall=True)
+    cost("EuclideanCost", "Euc2D", 600, d_fv2, s_fv2, Power=2.0)
+    cost("EuclideanCost", "Euc1D", 750, d_fv, s_fv, Power=0.5)
+    cost("ManhattanCost", "Man2D", 900, d_fv2, s_fv2)
+
+    tree = c.comp("CostMatrixToTree (DCT)", "Asym1D_Tree", 1250, 1050)
+    c.wire((asym1, "CostMatrix"), tree, "CostMatrix")
+    lines = c.comp("MatchLines (DCT)", "MatchLines", 1500, 0)
+    c.wire((d_set, "Centroids"), lines, "DemandPoints")
+    c.wire((s_set, "Centroids"), lines, "SupplyPoints")
+    c.wire((a_asym1, "Assignment"), lines, "AssignmentIndices")
+    return c
+
+
 FIXTURES = [
     ("linear_small", fx_linear_small),
     ("linear_shortage", fx_linear_shortage),
@@ -626,6 +678,7 @@ FIXTURES = [
     ("modifiers", fx_modifiers),
     ("characterization", fx_characterization),
     ("inputs", fx_inputs),
+    ("cost_matrix", fx_cost_matrix),
 ]
 
 

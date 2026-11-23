@@ -86,9 +86,9 @@ def stock_pieces(rng, n, y0, lengths, section):
 
 
 def matching_tail(c, x, d_set, s_set, cost):
-    """Match -> MatchLines, and List Item -> AlignToObject to place the matched supply on the demand."""
-    m = c.comp("Match (DCT)", "Match", x, 0)
-    c.wire((cost, "DistanceMatrix"), m, "DistanceMatrix")
+    """Assign -> MatchLines, and List Item -> AlignToObject to place the matched supply on the demand."""
+    m = c.comp("Assign (DCT)", "Assign", x, 0)
+    c.wire((cost, "CostMatrix"), m, "CostMatrix")
     lines = c.comp("MatchLines (DCT)", "MatchLines", x + COL, -60)
     c.wire((d_set, "Centroids"), lines, "DemandPoints")
     c.wire((s_set, "Centroids"), lines, "SupplyPoints")
@@ -125,7 +125,7 @@ def ex_linear():
 
     d_fv = c.feature_vector("DemandFV", 3 * COL, 0, [(d_set, "EffectiveLength")])
     s_fv = c.feature_vector("SupplyFV", 3 * COL, 300, [(s_set, "EffectiveLength")])
-    cost = c.comp("AsymmEuclideanDistance (DCT)", "LengthCost", 4 * COL, 0)
+    cost = c.comp("AsymmEuclideanCost (DCT)", "LengthCost", 4 * COL, -90)
     c.wire((d_fv, "FeatureVector"), cost, "Demand")
     c.wire((s_fv, "FeatureVector"), cost, "Supply")
     c.group("3  Feature vectors and cost", [d_fv, s_fv, cost], GREY)
@@ -173,7 +173,7 @@ def ex_planar():
     feats = ["EffectiveLength", "EffectiveWidth"]
     d_fv = c.feature_vector("DemandFV", 3 * COL, 0, [(d_set, f) for f in feats])
     s_fv = c.feature_vector("SupplyFV", 3 * COL, 300, [(s_set, f) for f in feats])
-    cost = c.comp("AsymmEuclideanDistance (DCT)", "SizeCost", 4 * COL, 0)
+    cost = c.comp("AsymmEuclideanCost (DCT)", "SizeCost", 4 * COL, -90)
     c.wire((d_fv, "FeatureVector"), cost, "Demand")
     c.wire((s_fv, "FeatureVector"), cost, "Supply")
     c.group("3  Feature vectors and cost", [d_fv, s_fv, cost], GREY)
@@ -228,10 +228,10 @@ def ex_shapes():
     c.value(s_h, "FVLength", 8)
     c.group("2  Supply: stone outlines", [sup, s_obj, s_set, outline, s_sig, s_h], GREEN)
 
-    cost = c.comp("EuclideanDistance (DCT)", "ShapeCost", 4 * COL, 0)
+    cost = c.comp("EuclideanCost (DCT)", "ShapeCost", 4 * COL, -90)
     c.wire((d_h, "HarmonicFeatureVector"), cost, "Demand")
     c.wire((s_h, "HarmonicFeatureVector"), cost, "Supply")
-    c.value(cost, "Power", 1)
+    c.value(cost, "Power", 1.0)
     c.group("3  Cost", [cost], GREY)
     matching_tail(c, 5 * COL, d_set, s_set, cost)
     return c
@@ -296,10 +296,10 @@ def ex_scans():
 
     d_fv = c.feature_vector("DemandFV", 3 * COL, 0, [(d_set, "EffectiveLength")])
     s_fv = c.feature_vector("SupplyFV", 3 * COL, 300, [(s_set, "EffectiveLength")])
-    cost = c.comp("EuclideanDistance (DCT)", "LengthCost", 4 * COL, 0)
+    cost = c.comp("EuclideanCost (DCT)", "LengthCost", 4 * COL, -90)
     c.wire((d_fv, "FeatureVector"), cost, "Demand")
     c.wire((s_fv, "FeatureVector"), cost, "Supply")
-    c.value(cost, "Power", 1)
+    c.value(cost, "Power", 1.0)
     c.group("3  Feature vectors and cost", [d_fv, s_fv, cost], GREY)
     matching_tail(c, 5 * COL, d_set, s_set, cost)
     return c

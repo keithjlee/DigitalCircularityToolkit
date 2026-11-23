@@ -1,3 +1,6 @@
+!!! warning "Obsolete since v0.6"
+    Replaced by [`ManhattanCost`](@ref comp-ManhattanCost). This component is hidden from the toolbar but still works in saved files.
+
 Builds a cost matrix for [`Match`](@ref comp-Match) from the Manhattan (L1) distance between feature vectors: the sum of the absolute differences of all features, rounded up to an integer.
 
 ```math

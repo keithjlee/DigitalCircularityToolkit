@@ -24,11 +24,11 @@ The descriptors do not depend on where an outline is, how it is rotated, where i
 
 ## 3. Cost
 
-The harmonics already have one branch per object, the layout the distance components expect, so they go straight into [`EuclideanDistance`](@ref comp-EuclideanDistance) without a FeatureVector component. With `Power` 1 the cost is the distance between the descriptors, in millimetres.
+The harmonics already have one branch per object, the layout the cost components expect, so they go straight into [`EuclideanCost`](@ref comp-EuclideanCost) without a FeatureVector component. With `Power` 1 the cost is the distance between the descriptors, in millimetres.
 
 ## 4. Match and place
 
-[`Match`](@ref comp-Match) picks a different stone for each cell. [`AlignToObject`](@ref comp-AlignToObject) moves each stone onto its cell by matching their PCA frames: centres coincide and the long directions align.
+[`Assign`](@ref comp-Assign) picks a different stone for each cell. [`AlignToObject`](@ref comp-AlignToObject) moves each stone onto its cell by matching their PCA frames: centres coincide and the long directions align.
 
 ## Variations
 

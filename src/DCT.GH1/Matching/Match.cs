@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using LapjvCSharp;
+using DigitalCircularityToolkit.Numerics;
 
 namespace DigitalCircularityToolkit.Matching
 {
@@ -19,7 +19,7 @@ namespace DigitalCircularityToolkit.Matching
         /// </summary>
         public Match()
           : base("Match (DCT)", "Match",
-              "Perform linear assignment of supply to demand using the Jonker-Volgenant algorithm",
+              "Perform linear assignment of supply to demand using the Jonker-Volgenant algorithm (obsolete: integer costs; use Assign with a CostMatrix)",
               "DigitalCircularityToolkit", "Matching")
         {
         }
@@ -68,20 +68,12 @@ namespace DigitalCircularityToolkit.Matching
 
             if (auto)
             {
-                int[,] cost_matrix_int = Distance.Utilities.CostTree2CostMatrix(dm, false);
-                double[,] cost_matrix = new double[n_demand, n_supply];
-                for (int i = 0; i < n_demand; i++)
-                {
-                    for (int j = 0; j < n_supply; j++)
-                    {
-                        cost_matrix[i, j] = cost_matrix_int[i, j];
-                    }
-                }
-
-                Lapjv lap = new Lapjv();
-                (int[] row_assignments, int[] _) = lap.lapjvCsharp(cost_matrix, true, double.PositiveInfinity);
-                assignments = row_assignments;
-                total_cost = DigitalCircularityToolkit.Numerics.Assignment.AssignedCost(cost_matrix_int, assignments, out int unassigned);
+                // In-house solver since v0.6 (was LapjvCSharp): the same optimal total cost; among equally cheap
+                // assignments it may pick different pairs.
+                AssignmentResult result = LinearAssignment.Solve(AssignmentHelpers.ToCostMatrix(dm, n_demand, n_supply));
+                assignments = result.Assignment;
+                total_cost = result.Cost;
+                int unassigned = result.Unassigned;
 
                 if (unassigned > 0)
                 {
@@ -119,5 +111,8 @@ namespace DigitalCircularityToolkit.Matching
         {
             get { return new Guid("00A166A1-0044-4E16-AB8E-415FE55E2E1F"); }
         }
+        // Replaced in v0.6 (COMPONENT_SPEC §2): kept loadable for saved files.
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override bool Obsolete => true;
     }
 }

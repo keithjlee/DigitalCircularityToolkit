@@ -30,6 +30,8 @@ const SUBCATEGORY_INTRO = Dict(
     "Utilities" => "Move and orient objects, project outlines, and normalize values.",
 )
 const EXPOSURE_ORDER = Dict("primary" => 1, "secondary" => 2, "tertiary" => 3)
+# Obsolete components (hidden, kept for saved files) come last on every page.
+sortkey(c) = (get(c, "obsolete", false) ? 99 : get(EXPOSURE_ORDER, c["exposure"], 9), shortname(c))
 
 shortname(c) = replace(c["name"], " (DCT)" => "")
 pageslug(sub) = lowercase(sub)
@@ -55,7 +57,7 @@ function componentpages(components)
     pages = Pair{String,String}[]
     for sub in SUBCATEGORIES
         comps = sort(filter(c -> c["subcategory"] == sub, components);
-                     by = c -> (get(EXPOSURE_ORDER, c["exposure"], 9), shortname(c)))
+                     by = sortkey)
         isempty(comps) && continue
         file = "components/$(pageslug(sub)).md"
         open(joinpath(SRC, file), "w") do io
@@ -95,7 +97,7 @@ function componentpages(components)
                 "Each entry explains what the component computes and lists its inputs and outputs, as defined in the plugin.\n")
         for sub in SUBCATEGORIES
             comps = sort(filter(c -> c["subcategory"] == sub, components);
-                         by = c -> (get(EXPOSURE_ORDER, c["exposure"], 9), shortname(c)))
+                         by = sortkey)
             isempty(comps) && continue
             println(io, "## ", sub, "\n")
             println(io, "| | Component | Description |")
@@ -103,7 +105,8 @@ function componentpages(components)
             for c in comps
                 name = shortname(c)
                 icon = haskey(c, "icon") ? "![](../$(c["icon"]))" : ""
-                println(io, "| ", icon, " | [", name, "](@ref comp-", name, ") | ", cell(c["description"]), " |")
+                label = get(c, "obsolete", false) ? "*(obsolete)* " : ""
+                println(io, "| ", icon, " | [", name, "](@ref comp-", name, ") | ", label, cell(c["description"]), " |")
             end
             println(io)
         end

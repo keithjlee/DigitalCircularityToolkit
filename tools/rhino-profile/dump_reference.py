@@ -42,13 +42,14 @@ os.makedirs(ICON_DIR, exist_ok=True)
 
 out = []
 for proxy in gh.Instances.ComponentServer.ObjectProxies:
-    if proxy.Desc.Category != "DigitalCircularityToolkit" or proxy.Obsolete:
+    # Obsolete (replaced) components stay documented: saved files still use them.
+    if proxy.Desc.Category != "DigitalCircularityToolkit":
         continue
     obj = proxy.CreateInstance()
     cls = obj.GetType().Name
     rec = {"name": proxy.Desc.Name, "nick": proxy.Desc.NickName, "description": proxy.Desc.Description,
            "guid": str(proxy.Guid), "subcategory": proxy.Desc.SubCategory, "class": cls,
-           "exposure": str(proxy.Exposure), "variable_inputs": isinstance(obj, gh.Kernel.IGH_VariableParameterComponent)}
+           "exposure": str(proxy.Exposure), "obsolete": bool(proxy.Obsolete), "variable_inputs": isinstance(obj, gh.Kernel.IGH_VariableParameterComponent)}
     if hasattr(obj, "Params"):
         rec["inputs"] = params(obj.Params.Input)
         rec["outputs"] = params(obj.Params.Output)

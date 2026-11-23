@@ -27,11 +27,11 @@ The same meshes also go into a [`BoxObject`](@ref comp-BoxObject), which serves 
 
 ## 3. Feature vectors and cost
 
-Both sides get a [`FeatureVector`](@ref comp-FeatureVector) of `EffectiveLength`. Here [`EuclideanDistance`](@ref comp-EuclideanDistance) (`Power` 1) is used instead of the asymmetric metric, because rocks cannot be cut: a rock slightly shorter than its segment is as good as one slightly longer.
+Both sides get a [`FeatureVector`](@ref comp-FeatureVector) of `EffectiveLength`. Here [`EuclideanCost`](@ref comp-EuclideanCost) (`Power` 1) is used instead of the asymmetric metric, because rocks cannot be cut: a rock slightly shorter than its segment is as good as one slightly longer.
 
 ## 4. Match and place
 
-[`Match`](@ref comp-Match) assigns a rock to each segment, and [`AlignToObject`](@ref comp-AlignToObject) moves each rock onto its segment, with its longest axis along the path.
+[`Assign`](@ref comp-Assign) assigns a rock to each segment, and [`AlignToObject`](@ref comp-AlignToObject) moves each rock onto its segment, with its longest axis along the path.
 
 ## Variations
 

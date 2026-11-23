@@ -16,7 +16,7 @@ namespace DigitalCircularityToolkit.Distance
         /// </summary>
         public AsymmEuclidean_GH()
           : base("AsymmEuclideanDistance (DCT)", "DMAsymm",
-              "Generate a distance matrix of asymmetric Euclidean distances between two feature vector sets",
+              "Generate a distance matrix of asymmetric Euclidean distances between two feature vector sets (obsolete: integer costs; use AsymmEuclideanCost)",
               "DigitalCircularityToolkit", "Distance")
         {
         }
@@ -96,5 +96,8 @@ namespace DigitalCircularityToolkit.Distance
         {
             get { return new Guid("669170C3-521E-47A6-8CAC-82E5D9CAE3A0"); }
         }
+        // Replaced in v0.6 (COMPONENT_SPEC §2): kept loadable for saved files.
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override bool Obsolete => true;
     }
 }

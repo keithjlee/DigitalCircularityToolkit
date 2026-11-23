@@ -21,8 +21,8 @@ The quickest way to see the whole chain is the first example, which matches the 
 2. Follow the four groups from left to right:
    - **1 Demand:** the truss lines become [`LinearObject`](@ref comp-LinearObject)s and a [`LinearSet`](@ref comp-LinearSet).
    - **2 Supply:** the timber Breps become `LinearObject`s with a `Quantity` and an `ID`, expanded by a second `LinearSet`.
-   - **3 Feature vectors and cost:** each piece is described by its effective length ([`FeatureVector`](@ref comp-FeatureVector)), and [`AsymmEuclideanDistance`](@ref comp-AsymmEuclideanDistance) penalizes timber that is too short.
-   - **4 Match and place:** [`Match`](@ref comp-Match) assigns one timber piece to every truss member, [`MatchLines`](@ref comp-MatchLines) draws the assignment, and [`AlignToObject`](@ref comp-AlignToObject) moves each matched piece onto its member.
+   - **3 Feature vectors and cost:** each piece is described by its effective length ([`FeatureVector`](@ref comp-FeatureVector)), and [`AsymmEuclideanCost`](@ref comp-AsymmEuclideanCost) penalizes timber that is too short.
+   - **4 Match and place:** [`Assign`](@ref comp-Assign) assigns one timber piece to every truss member, [`MatchLines`](@ref comp-MatchLines) draws the assignment, and [`AlignToObject`](@ref comp-AlignToObject) moves each matched piece onto its member.
 3. Preview the `MatchLines` and `AlignToDemand` outputs in the Rhino viewport.
 
 ![The first example definition](assets/examples/01_linear_truss.png)

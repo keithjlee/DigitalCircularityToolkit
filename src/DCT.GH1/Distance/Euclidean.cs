@@ -13,44 +13,6 @@ namespace DigitalCircularityToolkit.Distance
 {
     public static class Euclidean
     {
-        /// <summary>
-        /// Get the |ndemand| x |nsupply| cost matrix DM where DM[i,j] is the distance between the demand and supply points raised to a power
-        /// </summary>
-        /// <param name="demands"></param>
-        /// <param name="supply"></param>
-        /// <param name="power"></param>
-        /// <returns></returns>
-        public static int[,] EuclideanCostMatrix(List<double[]> demands, List<double[]> supply, int power)
-        {
-            int n_demand = demands.Count;
-            int n_supply = supply.Count;
-
-            int[,] cost_matrix = new int[n_demand, n_supply];
-
-            for (int i = 0; i < n_demand; i++)
-            {
-                for (int j = 0; j < n_supply; j++)
-                {
-                    double dist = EuclideanDist(demands[i], supply[j]);
-
-                    cost_matrix[i, j] = (int)(Math.Ceiling(Math.Pow(dist, power)));
-                }
-            }
-
-            if (n_demand != n_supply)
-            {
-                if (n_demand > n_supply)
-                {
-                    return Utilities.PadCols(cost_matrix);
-                }
-                else
-                {
-                    return Utilities.PadRows(cost_matrix);
-                }
-            }
-
-            return cost_matrix;
-        }
 
         /// <summary>
         /// Get the |ndemand| x |nsupply| cost matrix DM in data tree format where DM.Branches[i].Values[j] is the distance between the demand and supply points raised to a power

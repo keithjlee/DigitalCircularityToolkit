@@ -33,5 +33,17 @@ namespace DigitalCircularityToolkit.Matching
             }
             return null;
         }
+
+        /// <summary>A validated integer cost tree as a CostMatrix (integer costs, int.MaxValue stays a finite cost).</summary>
+        public static Numerics.CostMatrix ToCostMatrix(GH_Structure<GH_Integer> tree, int nDemand, int nSupply)
+        {
+            var values = new double[nDemand * nSupply];
+            for (int i = 0; i < nDemand; i++)
+            {
+                var branch = tree.get_Branch(i);
+                for (int j = 0; j < nSupply; j++) values[i * nSupply + j] = ((GH_Integer)branch[j]).Value;
+            }
+            return new Numerics.CostMatrix(nDemand, nSupply, values);
+        }
     }
 }
