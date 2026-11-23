@@ -668,6 +668,67 @@ def fx_cost_matrix():
     return c
 
 
+def fx_orientation():
+    """Orientation modes (v0.7): newly placed constructors default to Auto. Rotated square/near-square/rectangular
+    slabs as box Breps and meshes, rocks in every mode, round and square members, closed planar outlines, and a
+    Plane override."""
+    rng = random.Random(23)
+    c = Canvas()
+    breps, meshes = [], []
+    for k, (l, w) in enumerate([(1000, 1000), (1000, 1010), (1000, 600)] * 4):
+        pl = rand_plane(rng, grid_point(k, 4, 3000))
+        box = box_from_dims(pl, l, w, 50)
+        breps.append(box.ToBrep())
+        meshes.append(rg.Mesh.CreateFromBox(box, 8, 8, 2))
+    b = c.data(P.Param_Brep, T.GH_Brep, breps, "SlabBreps", 0, 0)
+    m = c.data(P.Param_Mesh, T.GH_Mesh, meshes, "SlabMeshes", 0, 150)
+    ob = c.comp("Object (DCT)", "Slab_Brep_Object", 250, 0)
+    c.wire(b, ob, "Geometry")
+    om = c.comp("Object (DCT)", "Slab_Mesh_Object", 250, 150)
+    c.wire(m, om, "Geometry")
+    pb = c.comp("PlanarObject (DCT)", "Slab_PlanarObject", 500, 0)
+    c.wire(b, pb, "Geometry")
+    ps = c.comp("PlanarSet (DCT)", "Slab_PlanarSet", 750, 0)
+    c.wire((pb, "PlanarObject"), ps, "Objects")
+    bx = c.comp("BoxObject (DCT)", "Slab_Mesh_BoxObject", 500, 150)
+    c.wire(m, bx, "Geometry")
+
+    rocks = c.data(P.Param_Mesh, T.GH_Mesh,
+                   [rock_mesh(rng, grid_point(k, 4, 4000, y0=20000), (1500, 900, 500), res=40) for k in range(6)], "Rocks", 0, 300)
+    for mode, name in ((0, "Auto"), (1, "PCA"), (2, "MinBox"), (3, "Legacy")):
+        o = c.comp("Object (DCT)", "Rock_Object_" + name, 250 + 250 * mode, 300)
+        c.wire(rocks, o, "Geometry")
+        c.value(o, "Orientation", mode)
+
+    members = []
+    for k in range(4):
+        pl = rand_plane(rng, grid_point(k, 4, 3000, y0=40000))
+        members.append(rg.Cylinder(rg.Circle(pl, 80), 3000).ToBrep(True, True))
+        members.append(box_from_dims(pl, 120, 120, 3000).ToBrep())
+    mem = c.data(P.Param_Brep, T.GH_Brep, members, "Members", 0, 450)
+    lo = c.comp("LinearObject (DCT)", "Member_LinearObject", 250, 450)
+    c.wire(mem, lo, "Geometry")
+    ls = c.comp("LinearSet (DCT)", "Member_LinearSet", 500, 450)
+    c.wire((lo, "LinearObject"), ls, "Objects")
+
+    outlines = []
+    for k in range(4):
+        pl = rand_plane(rng, grid_point(k, 4, 4000, y0=60000))
+        pts = [(0, 0), (3000, 0), (3000, 500), (500, 500), (500, 1200), (0, 1200), (0, 0)] if k % 2 == 0 else \
+              [(0, 0), (1000, 0), (1000, 1000), (0, 1000), (0, 0)]
+        outlines.append(rg.Polyline([pl.PointAt(x, y) for x, y in pts]).ToPolylineCurve())
+    out = c.data(P.Param_Curve, T.GH_Curve, outlines, "Outlines", 0, 600)
+    po = c.comp("PlanarObject (DCT)", "Outline_PlanarObject", 250, 600)
+    c.wire(out, po, "Geometry")
+
+    ov = c.comp("PlanarObject (DCT)", "Override_PlanarObject", 500, 600)
+    c.wire(out, ov, "Geometry")
+    c.value(ov, "Plane", rg.Plane(rg.Point3d(0, 0, 0), rg.Vector3d(1, 1, 0), rg.Vector3d(-1, 1, 0)))
+    props = c.comp("ObjectProperties (DCT)", "Slab_Props", 750, 150)
+    c.wire((om, "Object"), props, "Object")
+    return c
+
+
 FIXTURES = [
     ("linear_small", fx_linear_small),
     ("linear_shortage", fx_linear_shortage),
@@ -679,6 +740,7 @@ FIXTURES = [
     ("characterization", fx_characterization),
     ("inputs", fx_inputs),
     ("cost_matrix", fx_cost_matrix),
+    ("orientation", fx_orientation),
 ]
 
 

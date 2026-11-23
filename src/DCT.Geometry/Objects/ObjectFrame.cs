@@ -19,6 +19,15 @@ namespace DigitalCircularityToolkit.Objects
         public Box Localbox { get; init; }
         public BoundingBox Boundingbox { get; init; }
 
+        /// <summary>How the axes were chosen (Legacy for frames built as before v0.7; Override after <c>WithFrame</c>).</summary>
+        public OrientationMode Mode { get; init; }
+        /// <summary>Which ambiguity rule set the axes, if any.</summary>
+        public OrientationResolution Resolved { get; init; }
+        /// <summary>λ₁/λ₂ of the shape's principal variances (∞ when λ₂ is 0); near 1 = PCA1/PCA2 ambiguous. NaN for Legacy frames.</summary>
+        public double Gap12 { get; init; }
+        /// <summary>λ₂/λ₃; near 1 = PCA2/PCA3 ambiguous (square or round cross-section). NaN for Legacy frames.</summary>
+        public double Gap23 { get; init; }
+
         /// <summary>Extent along PCA1.</summary>
         public double Length => Boundingbox.Corner(true, true, true).DistanceTo(Boundingbox.Corner(false, true, true));
         /// <summary>Extent along PCA2.</summary>
@@ -38,6 +47,9 @@ namespace DigitalCircularityToolkit.Objects
             plane.Origin = box.Center;
             return new ObjectFrame
             {
+                Mode = OrientationMode.Legacy,
+                Gap12 = double.NaN,
+                Gap23 = double.NaN,
                 Centroid = centroid,
                 PCA1 = pca1,
                 PCA2 = pca2,

@@ -18,7 +18,10 @@ namespace DigitalCircularityToolkit.Framework
     /// </summary>
     internal static class AppendedInputs
     {
-        public static bool Read(GH_Component component, GH_IReader reader, int legacyInputCount, Func<GH_IReader, bool> baseRead)
+        /// <param name="onOldFile">Called after an old file was read and the appended inputs were put back, e.g. to give
+        /// them a value that reproduces the old behaviour when it differs from the default for new components.</param>
+        public static bool Read(GH_Component component, GH_IReader reader, int legacyInputCount, Func<GH_IReader, bool> baseRead,
+            Action onOldFile = null)
         {
             var appended = new List<IGH_Param>();
             if (!reader.ChunkExists("param_input", legacyInputCount))
@@ -34,7 +37,11 @@ namespace DigitalCircularityToolkit.Framework
             bool ok = baseRead(reader);
 
             foreach (IGH_Param p in appended) component.Params.RegisterInputParam(p);
-            if (appended.Count > 0) component.Params.OnParametersChanged();
+            if (appended.Count > 0)
+            {
+                component.Params.OnParametersChanged();
+                onOldFile?.Invoke();
+            }
             return ok;
         }
     }
