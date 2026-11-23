@@ -34,7 +34,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Design object", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Design object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("Geometry", "Geo", "The analyzed geometry: the input, or its conversion (surfaces and extrusions become Breps, SubDs meshes)", GH_ParamAccess.item);
         }
 

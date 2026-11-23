@@ -85,6 +85,8 @@ Each workflow is explained step by step in the [documentation](https://keithjlee
 - **Rhino 7 is no longer supported** (the `net48` package is gone); use v0.5.x for Rhino 7.
 - The package now contains `DigitalCircularityToolkit.Numerics.dll` and `DigitalCircularityToolkit.Geometry.dll` next to the `.gha`: copy all files from the zip.
 - Planar hulls are correct on sampled geometry. Grasshopper's convex hull solver, used until now, sometimes returned self-overlapping outlines that were too long (a 1 m square slab's hull measured 7.85 m instead of 4 m), or outlines that left some sample points outside. Affects the `Hulls` outputs of the Set components, `PlanarHull`, `ObjectProperties.PlanarHull` and the `PlanarOutline` fallback. Hulls also have fewer redundant vertices.
+- Design objects travel on typed **DesignObject** wires instead of generic ones. Panels and tooltips show the object type, ID and size (`LinearObject 'B-12' L=3200 W=100 H=50`); an object wired into a Plane, Box or Geometry input gives its local plane, local box or source geometry; a wrong object type is reported at the input. Existing files open and compute exactly as before.
+- For script (GhPython/C#) users: design objects are now immutable. Their members (`PCA1`, `Localbox`, `Quantity`, ...) are read-only properties with the same names. Build objects with `LinearObject.Create(geometry, n, ...)` (and the same for the other types) instead of the constructors. Change them with `obj.Transformed(t)`, `obj.WithFrame(plane)` or `obj with { ... }`, which return a new object of the same type. `TransformedGeometry` now maps the object's local box to world XY, centred at the origin.
 
 ## v0.5.2
 Documentation and citation only; the plugin's behaviour is unchanged from v0.5.1.

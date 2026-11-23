@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Object", "Object to align", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Object", "Object to align", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Plane", "Plane", "Plane to align to", GH_ParamAccess.item, Plane.WorldXY);
         }
 
@@ -32,7 +32,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Aligned object", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Aligned object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of aligned object", GH_ParamAccess.item);
             pManager.AddTransformParameter("Transform", "T", "Transformation object used in alignment", GH_ParamAccess.item);
         }

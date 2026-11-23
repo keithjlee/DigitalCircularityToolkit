@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Sets
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Objects", "SphereObjs", "Set of objects that form an inventory", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_DesignObject(), "Objects", "SphereObjs", "Set of objects that form an inventory", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace DigitalCircularityToolkit.Sets
             pManager.AddPlaneParameter("Plane", "Plane", "Object plane centered in sphere", GH_ParamAccess.list);
             pManager.AddNumberParameter("EffectiveRadius", "r", "Radius of effective sphere", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Indexer", "Inds", "Index of output with respect to input (when there are objects with more than one quantity)", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Objects", "Obj", "Collected objects", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_DesignObject(), "Objects", "Obj", "Collected objects", GH_ParamAccess.list);
             pManager.AddPointParameter("Centroids", "Centroid", "Center of each object's oriented bounding box (not the PCA centroid)", GH_ParamAccess.list);
             pManager.AddMeshParameter("Hulls", "Hulls", "Object hulls (3D convex hulls; computed only when this output is connected or the component preview is on)", GH_ParamAccess.list);
             pManager.AddTextParameter("IDs", "IDs", "Object IDs", GH_ParamAccess.list);

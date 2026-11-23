@@ -25,7 +25,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to analyze", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object to analyze", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Plane", "Plane", "PCA Plane to project to", GH_ParamAccess.item);
 
             //make plane optional

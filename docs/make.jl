@@ -73,6 +73,8 @@ function componentpages(components)
                 else
                     push!(missing_notes, name)
                 end
+                # Parameter types (e.g. DesignObject) have a note but no inputs/outputs.
+                haskey(c, "inputs") || continue
                 if c["variable_inputs"]
                     println(io, "!!! note \"Variable inputs\"\n    Zoom in on the component to add or remove inputs with the ⊕/⊖ buttons. The table lists the inputs of a newly placed component.\n")
                 end

@@ -24,7 +24,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to analyze", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object to analyze", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to analyze", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object to analyze", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Plane", "Plane", "Plane to project to (default: the object's local plane). Its origin is moved to the center of the object's oriented bounding box.", GH_ParamAccess.item);
 
             pManager[1].Optional = true;

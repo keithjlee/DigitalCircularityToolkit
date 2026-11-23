@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to modify", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object to modify", GH_ParamAccess.item);
             pManager.AddPlaneParameter("PrincipalPlane", "XYPCA", "A plane that whose X,Y components represent the overriding PCA1, PCA2", GH_ParamAccess.item);
         }
 
@@ -32,7 +32,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object with overriden principal component", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object with overriden principal component", GH_ParamAccess.item);
         }
 
         /// <summary>
