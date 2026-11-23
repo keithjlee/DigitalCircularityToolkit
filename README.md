@@ -81,6 +81,15 @@ Each workflow is explained step by step in the [documentation](https://keithjlee
 - Public release coincides with the S2024 design workshop: *4.185 ODDS & MODS Castaways*
   
 # Release Notes
+## Unreleased (next: v0.7)
+- **Better orientation.** Every object constructor has a new `Orientation` input (Auto, PCA, MinBox, Legacy) and an optional `Plane`. **Auto**, the default for newly placed components:
+  - takes the principal axes of the shape itself (mesh triangles by area, Breps through a render mesh, the region of a closed outline, curves by length), so axes no longer depend on how finely an object is meshed;
+  - aligns square and near-square plates, and square or round members, with a side (minimum-area rectangle) instead of an arbitrary angle;
+  - takes the edges of box Breps exactly.
+- **Saved files keep their results:** constructors in files from v0.6 and earlier open in Legacy mode.
+- Shapes with no preferred direction (an exact square, a round section, a sphere) get a reproducible frame and a remark; use the `Plane` input to set it.
+- Analysis stays fast: a 160k-vertex scan in about 7 ms, a filleted Brep in about 5 ms.
+
 ## v0.6
 A new, much faster matching pipeline, typed design objects, and correct planar hulls. **Rhino 8 only** (Rhino 7 users: stay on v0.5.2). Existing definitions open and compute as before, apart from the fixes listed below.
 

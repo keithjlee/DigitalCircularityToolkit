@@ -29,6 +29,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddNumberParameter("LengthBuffer", "fL", "Scale the line length by fL", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Area", "Area", "Area of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
             pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
+            RegisterOrientationInputs(pManager);   // v0.7, appended: see LegacyInputCount
         }
 
         /// <summary>
@@ -72,8 +73,13 @@ namespace DigitalCircularityToolkit.Objects
                 return null;
             }
 
-            return () => LinearObject.Create(geo, n, qty, buffer, area, id);
+            AnalysisOptions options = ReadOrientation(DA, out error);
+            if (options == null) return null;
+
+            return () => LinearObject.Create(geo, n, qty, buffer, area, id, options);
         }
+
+        protected override int LegacyInputCount => 6;
 
         protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)
         {

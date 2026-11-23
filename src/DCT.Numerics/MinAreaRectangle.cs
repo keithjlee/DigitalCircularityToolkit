@@ -4,7 +4,10 @@ using System.Collections.Generic;
 namespace DigitalCircularityToolkit.Numerics
 {
     /// <summary>The minimum-area rectangle around a 2D point set: its side directions and side lengths.</summary>
-    /// <param name="Ux">Unit direction of the longer side (Length ≥ Width), with Uy; the other side is (−Uy, Ux).</param>
+    /// <param name="Ux">X component of the unit direction of the longer side; the other side is (−Uy, Ux).</param>
+    /// <param name="Uy">Y component of that direction (≥ 0).</param>
+    /// <param name="Length">Longer side.</param>
+    /// <param name="Width">Shorter side.</param>
     public readonly record struct Rectangle2D(double Ux, double Uy, double Length, double Width)
     {
         public double Area => Length * Width;

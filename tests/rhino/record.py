@@ -119,6 +119,10 @@ def ser(v, depth=0):
                     out[p.Name] = ser(p.GetValue(v), depth + 1)
                 except Exception as e:  # noqa: BLE001
                     out[p.Name] = "<%s>" % type(e).__name__
+        # v0.7 orientation: recorded only for non-Legacy frames, so recordings of older files are unchanged
+        fr = getattr(v, "Frame", None)
+        if fr is not None and hasattr(fr, "Mode") and str(fr.Mode) != "Legacy":
+            out["Orientation"] = {"mode": str(fr.Mode), "resolved": str(fr.Resolved), "gap12": num(fr.Gap12), "gap23": num(fr.Gap23)}
         return out
     return "<%s>" % tn
 

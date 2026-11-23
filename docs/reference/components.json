@@ -1303,6 +1303,26 @@
     "default": [
      "NoID"
     ]
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "description": "How the axes are found. 0 Auto: principal axes of the shape (by area or length); square, round or symmetric shapes are aligned with a side by the minimum-area rectangle, box Breps with their edges. 1 PCA: principal axes only. 2 MinBox: minimum-area rectangle around the third axis. 3 Legacy: as v0.6 and earlier (sample points, unweighted); files saved before v0.7 use Legacy. Ignored when Plane is given",
+    "type": "Integer",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "0"
+    ]
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "description": "Optional: use this plane's X and Y axes as the object's axes (overrides Orientation). Its origin is ignored",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
    }
   ],
   "outputs": [
@@ -1413,6 +1433,26 @@
     "default": [
      "NoID"
     ]
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "description": "How the axes are found. 0 Auto: principal axes of the shape (by area or length); square, round or symmetric shapes are aligned with a side by the minimum-area rectangle, box Breps with their edges. 1 PCA: principal axes only. 2 MinBox: minimum-area rectangle around the third axis. 3 Legacy: as v0.6 and earlier (sample points, unweighted); files saved before v0.7 use Legacy. Ignored when Plane is given",
+    "type": "Integer",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "0"
+    ]
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "description": "Optional: use this plane's X and Y axes as the object's axes (overrides Orientation). Its origin is ignored",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
    }
   ],
   "outputs": [
@@ -1478,6 +1518,26 @@
     "default": [
      "NoID"
     ]
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "description": "How the axes are found. 0 Auto: principal axes of the shape (by area or length); square, round or symmetric shapes are aligned with a side by the minimum-area rectangle, box Breps with their edges. 1 PCA: principal axes only. 2 MinBox: minimum-area rectangle around the third axis. 3 Legacy: as v0.6 and earlier (sample points, unweighted); files saved before v0.7 use Legacy. Ignored when Plane is given",
+    "type": "Integer",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "0"
+    ]
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "description": "Optional: use this plane's X and Y axes as the object's axes (overrides Orientation). Its origin is ignored",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
    }
   ],
   "outputs": [
@@ -1781,6 +1841,26 @@
     "default": [
      "NoID"
     ]
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "description": "How the axes are found. 0 Auto: principal axes of the shape (by area or length); square, round or symmetric shapes are aligned with a side by the minimum-area rectangle, box Breps with their edges. 1 PCA: principal axes only. 2 MinBox: minimum-area rectangle around the third axis. 3 Legacy: as v0.6 and earlier (sample points, unweighted); files saved before v0.7 use Legacy. Ignored when Plane is given",
+    "type": "Integer",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "0"
+    ]
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "description": "Optional: use this plane's X and Y axes as the object's axes (overrides Orientation). Its origin is ignored",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
    }
   ],
   "outputs": [
@@ -1868,6 +1948,26 @@
     "default": [
      "NoID"
     ]
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "description": "How the axes are found. 0 Auto: principal axes of the shape (by area or length); square, round or symmetric shapes are aligned with a side by the minimum-area rectangle, box Breps with their edges. 1 PCA: principal axes only. 2 MinBox: minimum-area rectangle around the third axis. 3 Legacy: as v0.6 and earlier (sample points, unweighted); files saved before v0.7 use Legacy. Ignored when Plane is given",
+    "type": "Integer",
+    "access": "item",
+    "optional": true,
+    "default": [
+     "0"
+    ]
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "description": "Optional: use this plane's X and Y axes as the object's axes (overrides Orientation). Its origin is ignored",
+    "type": "Plane",
+    "access": "item",
+    "optional": true,
+    "default": []
    }
   ],
   "outputs": [

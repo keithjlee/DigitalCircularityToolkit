@@ -290,9 +290,12 @@ namespace DigitalCircularityToolkit.Objects
         /// <paramref name="origin"/> with normal <paramref name="normal"/> (<paramref name="u"/> lies in it).
         /// With <paramref name="xFirst"/> the rectangle gives X (long side) and Y, and the normal is Z (ambiguous X/Y);
         /// otherwise the normal is X and the rectangle gives Y (long side) and Z (ambiguous cross-section). When the
-        /// rectangle is square within τ, the side closest to <paramref name="preferred"/> (or <paramref name="fallback"/>
+        /// rectangle is square (sides within <see cref="SquareTolerance"/>), the side closest to <paramref name="preferred"/> (or <paramref name="fallback"/>
         /// when that is normal to the plane) comes first: a deterministic choice among equivalent sides.
         /// </summary>
+        /// <summary>Relative difference below which the sides of a minimum-area rectangle count as equal (0.1%).</summary>
+        public const double SquareTolerance = 1e-3;
+
         private static Vector3d[] InPlane(List<Point3d> points, Point3d origin, Vector3d u, Vector3d normal, double tolerance,
             Vector3d preferred, Vector3d fallback, bool xFirst, out bool square)
         {
@@ -311,7 +314,9 @@ namespace DigitalCircularityToolkit.Objects
             Rectangle2D r = MinAreaRectangle.Compute(xs, ys);
             Vector3d side = u * r.Ux + v * r.Uy;
             Vector3d other = Vector3d.CrossProduct(normal, side);
-            square = r.Length <= 0 || r.Width >= r.Length / (1 + tolerance);
+            // Side lengths are measured, not estimated like variances, so "square" is much stricter than τ: a 1000 × 1010
+            // slab has a long side.
+            square = r.Length <= 0 || r.Width >= r.Length * (1 - SquareTolerance);
             if (square) return Pick(side, other, normal, preferred, fallback, xFirst);
             return xFirst ? new[] { side, other, normal } : new[] { normal, side, Vector3d.CrossProduct(normal, side) };
         }

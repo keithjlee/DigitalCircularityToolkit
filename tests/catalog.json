@@ -297,6 +297,20 @@
     "type": "Param_String",
     "access": "item",
     "optional": false
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
    }
   ],
   "outputs": [
@@ -962,6 +976,20 @@
     "type": "Param_String",
     "access": "item",
     "optional": false
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
    }
   ],
   "outputs": [
@@ -1270,6 +1298,20 @@
     "type": "Param_String",
     "access": "item",
     "optional": false
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
    }
   ],
   "outputs": [
@@ -1582,6 +1624,20 @@
     "type": "Param_String",
     "access": "item",
     "optional": false
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
    }
   ],
   "outputs": [
@@ -2014,6 +2070,20 @@
     "type": "Param_String",
     "access": "item",
     "optional": false
+   },
+   {
+    "name": "Orientation",
+    "nick": "Orient",
+    "type": "Param_Integer",
+    "access": "item",
+    "optional": true
+   },
+   {
+    "name": "Plane",
+    "nick": "Pl",
+    "type": "Param_Plane",
+    "access": "item",
+    "optional": true
    }
   ],
   "outputs": [

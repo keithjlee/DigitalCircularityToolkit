@@ -30,6 +30,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddNumberParameter("WidthBuffer", "fW", "Scale the plane width by fW", GH_ParamAccess.item, 1.0);
             pManager.AddNumberParameter("Thickness", "Thickness", "Thickness of element (-1 for auto estimation)", GH_ParamAccess.item, -1.0);
             pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
+            RegisterOrientationInputs(pManager);   // v0.7, appended: see LegacyInputCount
         }
 
         /// <summary>
@@ -75,8 +76,13 @@ namespace DigitalCircularityToolkit.Objects
                 return null;
             }
 
-            return () => PlanarObject.Create(geo, n, qty, buffer1, buffer2, thickness, id);
+            AnalysisOptions options = ReadOrientation(DA, out error);
+            if (options == null) return null;
+
+            return () => PlanarObject.Create(geo, n, qty, buffer1, buffer2, thickness, id, options);
         }
+
+        protected override int LegacyInputCount => 7;
 
         protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)
         {

@@ -1,7 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using DigitalCircularityToolkit.Objects;
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
+using Grasshopper.Kernel.Types;
+using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Framework
 {
@@ -34,6 +38,65 @@ namespace DigitalCircularityToolkit.Framework
         /// <summary>Set the outputs for a successfully built object.</summary>
         protected abstract void SetOutputs(IGH_DataAccess DA, DesignObject obj);
 
+        // ---- Orientation inputs (v0.7, ALIGNMENT_SPEC §5): appended after the released inputs.
+
+        /// <summary>Number of inputs in the last release without the orientation inputs (they follow at this index).</summary>
+        protected abstract int LegacyInputCount { get; }
+
+        /// <summary>Append the Orientation and Plane inputs; call at the end of RegisterInputParams.</summary>
+        protected static void RegisterOrientationInputs(GH_InputParamManager pManager)
+        {
+            int i = pManager.AddIntegerParameter("Orientation", "Orient",
+                "How the axes are found. 0 Auto: principal axes of the shape (by area or length); square, round or symmetric " +
+                "shapes are aligned with a side by the minimum-area rectangle, box Breps with their edges. 1 PCA: principal " +
+                "axes only. 2 MinBox: minimum-area rectangle around the third axis. 3 Legacy: as v0.6 and earlier (sample " +
+                "points, unweighted); files saved before v0.7 use Legacy. Ignored when Plane is given", GH_ParamAccess.item, 0);
+            var mode = (Param_Integer)pManager[i];
+            mode.AddNamedValue("Auto", 0);
+            mode.AddNamedValue("PCA", 1);
+            mode.AddNamedValue("MinBox", 2);
+            mode.AddNamedValue("Legacy", 3);
+            pManager[i].Optional = true;
+            int j = pManager.AddPlaneParameter("Plane", "Pl",
+                "Optional: use this plane's X and Y axes as the object's axes (overrides Orientation). Its origin is ignored",
+                GH_ParamAccess.item);
+            pManager[j].Optional = true;
+        }
+
+        /// <summary>The analysis options from the orientation inputs, or null with an error.</summary>
+        protected AnalysisOptions ReadOrientation(IGH_DataAccess DA, out string error)
+        {
+            error = null;
+            int mode = 0;
+            DA.GetData(LegacyInputCount, ref mode);
+            Plane plane = Plane.Unset;
+            if (DA.GetData(LegacyInputCount + 1, ref plane) && plane.IsValid)
+                return new AnalysisOptions(OrientationMode.Override, 0.05, plane, null);
+            if (mode < 0 || mode > 3)
+            {
+                error = string.Format("Orientation must be 0 (Auto), 1 (PCA), 2 (MinBox) or 3 (Legacy); got {0}", mode);
+                return null;
+            }
+            return new AnalysisOptions((OrientationMode)mode);
+        }
+
+        /// <summary>Files saved before v0.7 keep their frames: their Orientation input is set to Legacy.</summary>
+        public override bool Read(GH_IReader reader) =>
+            AppendedInputs.Read(this, reader, LegacyInputCount, base.Read, () =>
+            {
+                var mode = (Param_Integer)Params.Input[LegacyInputCount];
+                mode.PersistentData.Clear();
+                mode.PersistentData.Append(new GH_Integer((int)OrientationMode.Legacy));
+            });
+
+        private bool _remarkedSymmetric;
+
+        protected override void BeforeSolveInstance()
+        {
+            _remarkedSymmetric = false;
+            base.BeforeSolveInstance();
+        }
+
         protected sealed override void SolveInstance(IGH_DataAccess DA)
         {
             if (InPreSolve)
@@ -58,6 +121,13 @@ namespace DigitalCircularityToolkit.Framework
                 return;
             }
             if (result.Object == null) return;
+            if (result.Object.Frame.Resolved == OrientationResolution.Symmetric && !_remarkedSymmetric)
+            {
+                _remarkedSymmetric = true;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark,
+                    "Some objects have no preferred direction (square, round or symmetric): their axes follow a fixed rule " +
+                    "(the side closest to world X). Use the Plane input to set them.");
+            }
             SetOutputs(DA, result.Object);
         }
     }

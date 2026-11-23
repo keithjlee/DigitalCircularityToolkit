@@ -27,6 +27,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddGenericParameter("Geometry", "Geo", "Geometry of object", GH_ParamAccess.item);
             pManager.AddIntegerParameter("NumSamples", "n", "Target number of samples for analysis", GH_ParamAccess.item, 50);
             pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
+            RegisterOrientationInputs(pManager);   // v0.7, appended: see LegacyInputCount
         }
 
         /// <summary>
@@ -58,8 +59,13 @@ namespace DigitalCircularityToolkit.Objects
             error = ObjectInput.CheckCounts(geo, n, 0);
             if (error != null) return null;
 
-            return () => DesignObject.Create(geo, n, id);
+            AnalysisOptions options = ReadOrientation(DA, out error);
+            if (options == null) return null;
+
+            return () => DesignObject.Create(geo, n, id, options);
         }
+
+        protected override int LegacyInputCount => 3;
 
         protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)
         {

@@ -28,6 +28,7 @@ namespace DigitalCircularityToolkit.Objects
             pManager.AddIntegerParameter("Quantity", "qty", "Quantity of object", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RadiusBuffer", "fR", "Scale the sphere radius by fR", GH_ParamAccess.item, 1.0);
             pManager.AddTextParameter("ID", "ID", "Object identifier", GH_ParamAccess.item, "NoID");
+            RegisterOrientationInputs(pManager);   // v0.7, appended: see LegacyInputCount
         }
 
         /// <summary>
@@ -69,8 +70,13 @@ namespace DigitalCircularityToolkit.Objects
                 return null;
             }
 
-            return () => SphericalObject.Create(geo, n, qty, buffer, id);
+            AnalysisOptions options = ReadOrientation(DA, out error);
+            if (options == null) return null;
+
+            return () => SphericalObject.Create(geo, n, qty, buffer, id, options);
         }
+
+        protected override int LegacyInputCount => 5;
 
         protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)
         {
