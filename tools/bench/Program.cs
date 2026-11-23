@@ -48,6 +48,19 @@ static class P {
     if (args.Length > 0 && args[0] == "pcasign") { PcaSignProbe.Run(); return; }
     if (args.Length > 0 && args[0] == "eigcheck") { EigenCheck.Run(); return; }
     if (args.Length > 1 && args[0] == "rectcheck") { RectCheck(args[1]); return; }
+    if (args.Length > 0 && args[0] == "geo") { // Euclidean feature-space matrices (the Assign workload), Release timing
+      foreach(var (n,m,k) in new[]{(2000,2000,8),(1000,3000,2),(2000,2000,2)}){
+        var r=new Random(1);
+        double[][] D=Enumerable.Range(0,n).Select(_=>Enumerable.Range(0,k).Select(__=>1000+r.NextDouble()*3000).ToArray()).ToArray();
+        double[][] S=Enumerable.Range(0,m).Select(_=>Enumerable.Range(0,k).Select(__=>1500+r.NextDouble()*4500).ToArray()).ToArray();
+        var sw=Stopwatch.StartNew(); var C=CostFunctions.EuclideanMatrix(D,S,1); var _v=C[0,0]; double build=sw.Elapsed.TotalMilliseconds;
+        sw.Restart(); var res=LinearAssignment.Solve(C); double solve=sw.Elapsed.TotalMilliseconds;
+        var C2=new double[n,m]; for(int i=0;i<n;i++)for(int j=0;j<m;j++) C2[i,j]=C[i,j];
+        sw.Restart(); new Lapjv().lapjvCsharp(C2,true,double.PositiveInfinity); double lap=sw.Elapsed.TotalMilliseconds;
+        Console.WriteLine($"geo {n}x{m} k={k}: build {build:F1} ms | LinearAssignment {solve:F0} ms | LapjvCSharp {lap:F0} ms");
+      }
+      return;
+    }
     var rng=new Random(1);
     Console.WriteLine($"cores={Environment.ProcessorCount}");
     foreach(var (n,m,k) in new[]{(500,500,8),(2000,2000,8),(2000,2000,64)}){
