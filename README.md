@@ -81,15 +81,36 @@ Each workflow is explained step by step in the [documentation](https://keithjlee
 - Public release coincides with the S2024 design workshop: *4.185 ODDS & MODS Castaways*
   
 # Release Notes
-## Unreleased (next: v0.6, Rhino 8 and Rhino 9 only)
-- **Rhino 7 is no longer supported** (the `net48` package is gone); use v0.5.x for Rhino 7.
-- The package now contains `DigitalCircularityToolkit.Numerics.dll` and `DigitalCircularityToolkit.Geometry.dll` next to the `.gha`: copy all files from the zip.
-- Planar hulls are correct on sampled geometry. Grasshopper's convex hull solver, used until now, sometimes returned self-overlapping outlines that were too long (a 1 m square slab's hull measured 7.85 m instead of 4 m), or outlines that left some sample points outside. Affects the `Hulls` outputs of the Set components, `PlanarHull`, `ObjectProperties.PlanarHull` and the `PlanarOutline` fallback. Hulls also have fewer redundant vertices.
-- **New matching pipeline.** `EuclideanCost`, `AsymmEuclideanCost` and `ManhattanCost` build a **CostMatrix** (exact decimal costs, passed as one item instead of a tree of integers), and `Assign` solves it. Building and passing a 2000×2000 matrix takes milliseconds instead of seconds. Assign handles more demand than supply and forbidden pairs (`-1`, plus a new `Unassigned` output). Matching on one feature, such as length, is solved by sorting: milliseconds for thousands of pieces. Matching on several features uses a new exact solver for large problems: 2000×2000 pieces with 8 features in about 0.2 s (was over 4 s with the old Match). `AsymmEuclideanCost` can forbid supply that is too small (`ForbidShortfall`) instead of only penalizing it. `CostMatrixToTree` shows the numbers.
-- The old `EuclideanDistance`, `AsymmEuclideanDistance`, `ManhattanDistance` and `Match` are hidden from the toolbar and keep working in saved files. To upgrade a definition, swap each for its new counterpart; the inputs are the same.
-- `Match` (and the hidden `Hungarian`) now use DCT's own solver. The LapjvCSharp library used before sometimes returned slightly suboptimal assignments on rectangular problems (up to 0.05% too costly in tests), so reopened files can show a slightly lower `Cost` and different pairs. With equal costs, the chosen pairs can also differ. The LapjvCSharp and HungarianAlgorithm DLLs are no longer shipped.
-- Design objects travel on typed **DesignObject** wires instead of generic ones. Panels and tooltips show the object type, ID and size (`LinearObject 'B-12' L=3200 W=100 H=50`); an object wired into a Plane, Box or Geometry input gives its local plane, local box or source geometry; a wrong object type is reported at the input. Existing files open and compute exactly as before.
-- For script (GhPython/C#) users: design objects are now immutable. Their members (`PCA1`, `Localbox`, `Quantity`, ...) are read-only properties with the same names. Build objects with `LinearObject.Create(geometry, n, ...)` (and the same for the other types) instead of the constructors. Change them with `obj.Transformed(t)`, `obj.WithFrame(plane)` or `obj with { ... }`, which return a new object of the same type. `TransformedGeometry` now maps the object's local box to world XY, centred at the origin.
+## v0.6
+A new, much faster matching pipeline, typed design objects, and correct planar hulls. **Rhino 8 only** (Rhino 7 users: stay on v0.5.2). Existing definitions open and compute as before, apart from the fixes listed below.
+
+**Install:** copy *all* files from the zip into your Grasshopper Libraries folder (or one subfolder of it). The package now has two more DLLs next to the `.gha`: `DigitalCircularityToolkit.Numerics.dll` and `DigitalCircularityToolkit.Geometry.dll`. The `LapjvCSharp.dll` and `HungarianAlgorithm.dll` of earlier versions are no longer used and can be deleted.
+
+### New: cost matrices and Assign
+- `EuclideanCost`, `AsymmEuclideanCost` and `ManhattanCost` build a **CostMatrix**: exact decimal costs (no rounding up to integers), passed between components as one item instead of a tree of numbers. Building and passing a 2000×2000 matrix takes milliseconds instead of seconds. Powers can be decimals.
+- `Assign` finds the lowest-cost assignment. It handles more demand than supply and forbidden pairs: unserved demand gets `-1`, listed in the new `Unassigned` output.
+  - Matching on one feature, such as length, is solved by sorting: milliseconds for thousands of pieces.
+  - Matching on several features uses a new exact solver for large problems: 2000×2000 pieces with 8 features in about 0.2 s (over 4 s with the old Match).
+- `AsymmEuclideanCost` can forbid supply that is too small (`ForbidShortfall`) instead of only penalizing it.
+- `CostMatrixToTree` shows the individual costs.
+- The old `EuclideanDistance`, `AsymmEuclideanDistance`, `ManhattanDistance` and `Match` are hidden from the toolbar and keep working in saved files. To upgrade a definition, swap each for its new counterpart; the inputs are the same. The documentation examples use the new components.
+
+### New: typed design objects
+- Design objects travel on **DesignObject** wires instead of generic ones. Panels and tooltips show the object type, ID and size (`LinearObject 'B-12' L=3200 W=100 H=50`). An object wired into a Plane, Box or Geometry input gives its local plane, local box or source geometry. A wrong object type is reported at the input.
+- Objects are immutable: a modifier (OverridePCA, RotatePCA, AlignToPlane, AlignToObject, Knoll) always returns a new object of the same type and never changes its input.
+- Building an object from a heavy mesh is about 20× faster: hulls are only computed when an output needs them.
+
+### Fixes
+- **Planar hulls** are correct on sampled geometry. Grasshopper's convex hull solver, used until now, sometimes returned self-overlapping outlines that were too long (a 1 m square slab's hull measured 7.85 m instead of 4 m), or outlines that left some sample points outside. Affects the `Hulls` outputs of the Set components, `PlanarHull`, `ObjectProperties.PlanarHull` and the `PlanarOutline` fallback. Hulls also have fewer redundant vertices.
+- **Match was not always optimal.** The LapjvCSharp library behind `Match` sometimes returned slightly suboptimal assignments on rectangular problems (up to 0.05% too costly in tests). `Match` and the hidden `Hungarian` now use DCT's own solver, so reopened files can show a slightly lower `Cost` and different pairs; among equally cheap assignments the chosen pairs can also differ.
+
+### For script (GhPython/C#) users
+- Design objects are immutable. Their members (`PCA1`, `Localbox`, `Quantity`, ...) are read-only properties with the same names.
+- Build objects with `LinearObject.Create(geometry, n, ...)` (and the same for the other types) instead of the constructors. Change them with `obj.Transformed(t)`, `obj.WithFrame(plane)` or `obj with { ... }`, which return a new object of the same type.
+- `TransformedGeometry` now maps the object's local box to world XY, centred at the origin.
+- Cost matrices and solvers are in `DigitalCircularityToolkit.Numerics` (`CostMatrix`, `CostFunctions`, `LinearAssignment`) and need no Rhino.
+
+Tested in Rhino 8.37 on macOS.
 
 ## v0.5.2
 Documentation and citation only; the plugin's behaviour is unchanged from v0.5.1.

@@ -17,7 +17,7 @@
   
     <PropertyGroup>
       <!-- Specifies information for Assembly and Yak -->
-      <Version>0.5.2</Version>
+      <Version>0.6.0</Version>
       <Title>DigitalCircularityToolkit</Title>
       <Company>DigitalCircularityToolkit Authors</Company>
       <Description>Inventory-driven / circular structural design for Grasshopper: abstraction, characterization, distance matrices and optimal assignment of reclaimed objects.</Description>
