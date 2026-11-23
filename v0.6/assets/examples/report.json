@@ -1,0 +1,34 @@
+{
+ "01_linear_truss": {
+  "messages": {},
+  "image": [
+   2652,
+   978
+  ],
+  "objects": 19
+ },
+ "02_planar_panels": {
+  "messages": {},
+  "image": [
+   2666,
+   978
+  ],
+  "objects": 19
+ },
+ "03_shape_tiling": {
+  "messages": {},
+  "image": [
+   2658,
+   1605
+  ],
+  "objects": 20
+ },
+ "04_scanned_rocks": {
+  "messages": {},
+  "image": [
+   2660,
+   1326
+  ],
+  "objects": 20
+ }
+}
