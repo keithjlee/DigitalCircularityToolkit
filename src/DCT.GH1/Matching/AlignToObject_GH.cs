@@ -23,8 +23,8 @@ namespace DigitalCircularityToolkit.Matching
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SourceObject", "Source", "Source object to align", GH_ParamAccess.item);
-            pManager.AddGenericParameter("TargetObject", "Target", "Object to align to", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "SourceObject", "Source", "Source object to align", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "TargetObject", "Target", "Object to align to", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace DigitalCircularityToolkit.Matching
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Aligned object", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Aligned object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of aligned object", GH_ParamAccess.item);
             pManager.AddTransformParameter("Transform", "T", "Transformation used to align object", GH_ParamAccess.item);
         }
@@ -43,15 +43,15 @@ namespace DigitalCircularityToolkit.Matching
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject source = new DesignObject();
-            DesignObject target = new DesignObject();
+            DesignObject source = null;
+            DesignObject target = null;
 
             if (!DA.GetData(0, ref source)) return;
             if (!DA.GetData(1, ref target)) return;
 
             Transform transformer = Transform.PlaneToPlane(source.LocalPlane, target.LocalPlane);
 
-            DesignObject newobject = source.TransformObject(transformer);
+            DesignObject newobject = source.Transformed(transformer);
 
             DA.SetData(0, newobject);
             DA.SetData(1, newobject.Geometry);

@@ -34,7 +34,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Design object", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Design object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("Geometry", "Geo", "The analyzed geometry: the input, or its conversion (surfaces and extrusions become Breps, SubDs meshes)", GH_ParamAccess.item);
         }
 
@@ -47,7 +47,6 @@ namespace DigitalCircularityToolkit.Objects
             error = null;
             GeometryBase geo = null;
             int n = 50;
-            Vector3d pca_user = new Vector3d(0, 0, 0);
             string id = "NoID";
 
             if (!DA.GetData(0, ref geo)) return null;
@@ -59,16 +58,7 @@ namespace DigitalCircularityToolkit.Objects
             error = ObjectInput.CheckCounts(geo, n, 0);
             if (error != null) return null;
 
-            return () =>
-            {
-                DesignObject obj = new DesignObject();
-                if (geo is Curve curve) obj = new DesignObject(curve, n, pca_user);
-                if (geo is Brep brep) obj = new DesignObject(brep, n, pca_user);
-                if (geo is Mesh mesh) obj = new DesignObject(mesh, n, pca_user);
-                if (geo is PointCloud pointcloud) obj = new DesignObject(pointcloud, n, pca_user);
-                obj.ID = id;
-                return obj;
-            };
+            return () => DesignObject.Create(geo, n, id);
         }
 
         protected override void SetOutputs(IGH_DataAccess DA, DesignObject obj)

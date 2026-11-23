@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to measure", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object to measure", GH_ParamAccess.item);
             pManager.AddNumberParameter("Factor", "F", "Multiplier applied to the score (default 100: the score reads as a percentage)", GH_ParamAccess.item, 100);
         }
 
@@ -41,7 +41,7 @@ namespace DigitalCircularityToolkit.Characterization
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject obj = new DesignObject();
+            DesignObject obj = null;
             if (!DA.GetData(0, ref obj)) return;
 
             double factor = 100;

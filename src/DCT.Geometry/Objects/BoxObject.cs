@@ -1,146 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DigitalCircularityToolkit.GeometryProcessing;
 using Rhino.Geometry;
 
 namespace DigitalCircularityToolkit.Objects
 {
-    public class BoxObject : DesignObject
+    /// <summary>The aligned box, each dimension scaled by its buffer.</summary>
+    public sealed record BoxObject : DesignObject
     {
-        public int Quantity;
-        public double LengthBuffer;
-        public double EffectiveLength
-        {
-            get
+        private BoxObject(ShapeAnalysis analysis) : base(analysis) { }
+
+        /// <param name="geometry">A Curve, Brep, Mesh or PointCloud.</param>
+        /// <param name="n">Target number of samples (curves and Breps).</param>
+        public static BoxObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double widthBuffer = 1, double heightBuffer = 1, string id = "NoID") =>
+            new BoxObject(ShapeAnalysis.Analyze(geometry, n))
             {
-                return LengthBuffer * Length;
-            }
-        }
-        public double WidthBuffer;
-        public double EffectiveWidth
-        {
-            get
-            {
-                return WidthBuffer * Width;
-            }
-        }
-        public double HeightBuffer;
-        public double EffectiveHeight
-        {
-            get
-            {
-                return HeightBuffer * Height;
-            }
-        }
+                Quantity = quantity,
+                LengthBuffer = Positive(lengthBuffer, nameof(lengthBuffer)),
+                WidthBuffer = Positive(widthBuffer, nameof(widthBuffer)),
+                HeightBuffer = Positive(heightBuffer, nameof(heightBuffer)),
+                ID = id,
+            };
+
+        public double LengthBuffer { get; init; } = 1;
+        public double WidthBuffer { get; init; } = 1;
+        public double HeightBuffer { get; init; } = 1;
+
+        public double EffectiveLength => LengthBuffer * Length;
+        public double EffectiveWidth => WidthBuffer * Width;
+        public double EffectiveHeight => HeightBuffer * Height;
+        public double EffectiveVolume => EffectiveLength * EffectiveWidth * EffectiveHeight;
+
         public Box EffectiveBox
         {
-            get { return GetEffectiveBox(); }
-        }
-        public double EffectiveVolume
-        {
-            get { return LengthBuffer * Length * WidthBuffer * Width * HeightBuffer * Height; }
-        }
-        public Plane Plane
-        {
             get
             {
-                return GetPlane();
-            }
-        }
-        public Mesh Hull
-        {
-            get
-            {
-                return Hull3D;
+                Box box = Localbox;
+                box.Transform(Transform.Scale(LocalPlane, LengthBuffer, WidthBuffer, HeightBuffer));
+                return box;
             }
         }
 
-        public BoxObject() { }
+        public Plane Plane => new Plane(Localbox.Center, PCA1, PCA2);
 
-        public BoxObject(DesignObject obj)
-        {
-            this.Centroid = obj.Centroid;
-            this.NSamples = obj.NSamples;
-            this.SampledPoints = obj.SampledPoints;
-            this.PCA1 = obj.PCA1;
-            this.PCA2 = obj.PCA2;
-            this.PCA3 = obj.PCA3;
-            this.Localbox = obj.Localbox;
-            this.LocalPlane = obj.LocalPlane;
-            this.Boundingbox = obj.Boundingbox;
-            this.Geometry = obj.Geometry;
-            this.TransformedGeometry = obj.TransformedGeometry;
-            this.ID = obj.ID;
-
-            Quantity = 1;
-            LengthBuffer = 1;
-            WidthBuffer = 1;
-            HeightBuffer = 1;
-        }
-
-        public BoxObject(Curve curve, int n_samples, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
-        {
-            Populate(curve, n_samples);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
-            HeightBuffer = height_buffer;
-
-        }
-
-        public BoxObject(Brep brep, int n_samples, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
-        {
-            Populate(brep, n_samples);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
-            HeightBuffer = height_buffer;
-
-        }
-
-        public BoxObject(PointCloud points, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
-        {
-            Populate(points.GetPoints().ToList());
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
-            HeightBuffer = height_buffer;
-
-        }
-
-        public BoxObject(Mesh mesh, int qty, double length_buffer, double width_buffer, double height_buffer, Vector3d pca_override)
-        {
-            Populate(mesh);
-            if (pca_override.Length > 0) ObjectAnalysis.OverridePCA(pca_override, this);
-
-            Quantity = qty;
-            LengthBuffer = length_buffer;
-            WidthBuffer = width_buffer;
-            HeightBuffer = height_buffer;
-
-        }
-
-        public Box GetEffectiveBox()
-        {
-            var scaler = Transform.Scale(LocalPlane, LengthBuffer, WidthBuffer, HeightBuffer);
-
-            Box box = new Box(Localbox);
-            box.Transform(scaler);
-            return box;
-        }
-
-        public Plane GetPlane()
-        {
-            return new Plane(Localbox.Center, PCA1, PCA2);
-        }
+        public Mesh Hull => Hull3D;
     }
 }

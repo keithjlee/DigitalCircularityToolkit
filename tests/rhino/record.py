@@ -44,6 +44,16 @@ def plane(p):
     return {"o": pt(p.Origin), "x": pt(p.XAxis), "y": pt(p.YAxis)}
 
 
+SKIP_MEMBERS = {"Frame", "AreaEstimated"}
+# Extra members to leave out, for comparing two builds across an intended change: "Member" or "Type.Member",
+# comma-separated, e.g. DCT_RECORD_SKIP=TransformedGeometry,DesignObject.Quantity
+EXTRA_SKIP = {m.strip() for m in os.environ.get("DCT_RECORD_SKIP", "").split(",") if m.strip()}
+
+
+def skipped(type_name, member):
+    return member in SKIP_MEMBERS or member in EXTRA_SKIP or (type_name + "." + member) in EXTRA_SKIP
+
+
 def ser(v, depth=0):
     """Summarize a .NET or Python value as JSON-able data."""
     if v is None:
@@ -90,12 +100,14 @@ def ser(v, depth=0):
         items = [ser(x, depth + 1) for x in v]
         return digest(items) if len(items) > 50 else items
     if t is not None and t.Namespace and t.Namespace.startswith("DigitalCircularityToolkit") and depth < 2:
+        # P3 members that repackage data recorded under the original names (Frame = Centroid, PCA*, LocalPlane,
+        # Localbox, Boundingbox; AreaEstimated = Area input <= 0). Skipped so recordings stay comparable.
         out = {"__type": tn}
         for f in t.GetFields():
-            if not f.IsStatic:
+            if not f.IsStatic and not skipped(tn, f.Name):
                 out[f.Name] = ser(f.GetValue(v), depth + 1)
         for p in t.GetProperties():
-            if p.CanRead and p.GetIndexParameters().Length == 0 and p.Name not in out:
+            if p.CanRead and p.GetIndexParameters().Length == 0 and p.Name not in out and not skipped(tn, p.Name):
                 try:
                     out[p.Name] = ser(p.GetValue(v), depth + 1)
                 except Exception as e:  # noqa: BLE001

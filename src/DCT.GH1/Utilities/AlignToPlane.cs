@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Object", "Object to align", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Object", "Object to align", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Plane", "Plane", "Plane to align to", GH_ParamAccess.item, Plane.WorldXY);
         }
 
@@ -32,7 +32,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Aligned object", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Aligned object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("Geometry", "Geo", "Geometry of aligned object", GH_ParamAccess.item);
             pManager.AddTransformParameter("Transform", "T", "Transformation object used in alignment", GH_ParamAccess.item);
         }
@@ -43,7 +43,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject obj = new DesignObject();
+            DesignObject obj = null;
             Plane pl = Plane.WorldXY;
 
             if (!DA.GetData(0, ref obj)) return;
@@ -51,7 +51,7 @@ namespace DigitalCircularityToolkit.Utilities
 
             Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, pl);
 
-            obj = obj.TransformObject(transformer);
+            obj = obj.Transformed(transformer);
 
             DA.SetData(0, obj);
             DA.SetData(1, obj.Geometry);

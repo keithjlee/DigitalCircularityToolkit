@@ -28,7 +28,7 @@ namespace DigitalCircularityToolkit.Utilities
     /// </summary>
     protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
     {
-            pManager.AddGenericParameter("Objects", "Objs", "Collection of objects to knoll", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_DesignObject(), "Objects", "Objs", "Collection of objects to knoll", GH_ParamAccess.list);
             pManager.AddPlaneParameter("OriginPlane", "Plane", "Plane that defines the starting origin of grid", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddIntegerParameter("NumRows", "nRows", "Number of rows in knoll", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RowSpacing", "dRow", "Spacing of rows", GH_ParamAccess.item, 1);
@@ -40,7 +40,7 @@ namespace DigitalCircularityToolkit.Utilities
     /// </summary>
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
     {
-      pManager.AddGenericParameter("Objects", "Objs", "Knolled objects", GH_ParamAccess.list);
+      pManager.AddParameter(new Param_DesignObject(), "Objects", "Objs", "Knolled objects", GH_ParamAccess.list);
       pManager.AddGeometryParameter("Geo", "Geo", "Geometry of knolled objects", GH_ParamAccess.list);
     }
 
@@ -134,7 +134,7 @@ namespace DigitalCircularityToolkit.Utilities
                     Transform transformer = Transform.PlaneToPlane(obj.LocalPlane, target_plane);
 
                     // Make transformed object
-                    var new_obj = obj.TransformObject(transformer);
+                    var new_obj = obj.Transformed(transformer);
                     new_objects.Add(new_obj);
 
                     //update longest object and x offset

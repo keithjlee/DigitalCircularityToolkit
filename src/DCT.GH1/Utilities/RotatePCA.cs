@@ -25,7 +25,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to rotate", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object to rotate", GH_ParamAccess.item);
             pManager.AddIntegerParameter("RotationAxis", "Axis", "PCA axis to rotate about: 1, 2 or 3", GH_ParamAccess.item, 1);
             pManager.AddNumberParameter("RotationDegrees", "Degree", "Amount to rotate (degrees)", GH_ParamAccess.item, 0);
 
@@ -40,7 +40,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("RotatedObject", "Obj", "New rotated object", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "RotatedObject", "Obj", "New rotated object", GH_ParamAccess.item);
             pManager.AddGeometryParameter("RotatedGeometry", "Geo", "Rotated geometry", GH_ParamAccess.list);
         }
 
@@ -50,7 +50,7 @@ namespace DigitalCircularityToolkit.Utilities
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject obj = new DesignObject();
+            DesignObject obj = null;
             int axis = 1;
             double deg = 0;
 

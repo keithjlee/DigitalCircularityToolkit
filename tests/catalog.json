@@ -10,14 +10,14 @@
    {
     "name": "SourceObject",
     "nick": "Source",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
    {
     "name": "TargetObject",
     "nick": "Target",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    }
@@ -26,7 +26,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -57,7 +57,7 @@
    {
     "name": "Object",
     "nick": "Object",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -73,7 +73,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -202,7 +202,7 @@
    {
     "name": "BoxObject",
     "nick": "BoxObj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -226,7 +226,7 @@
    {
     "name": "BoxObject",
     "nick": "BoxObj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -259,7 +259,7 @@
    {
     "name": "Objects",
     "nick": "BoxObjs",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    }
@@ -310,7 +310,7 @@
    {
     "name": "Objects",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    },
@@ -336,6 +336,14 @@
     "optional": false
    }
   ]
+ },
+ {
+  "name": "DesignObject (DCT)",
+  "nick": "DObj",
+  "guid": "bfe61750-9409-4744-bb89-e0d4c3c8a74c",
+  "subcategory": "Objects",
+  "class": "DigitalCircularityToolkit.Objects.Param_DesignObject",
+  "exposure": "hidden"
  },
  {
   "name": "EuclideanDistance (DCT)",
@@ -647,7 +655,7 @@
    {
     "name": "Objects",
     "nick": "Objs",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    },
@@ -684,7 +692,7 @@
    {
     "name": "Objects",
     "nick": "Objs",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    },
@@ -708,7 +716,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -785,7 +793,7 @@
    {
     "name": "LinearObject",
     "nick": "LinearObj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -809,7 +817,7 @@
    {
     "name": "Objects",
     "nick": "LinearObjs",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    }
@@ -853,7 +861,7 @@
    {
     "name": "Objects",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    },
@@ -1060,7 +1068,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1084,7 +1092,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    }
@@ -1201,7 +1209,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1217,7 +1225,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    }
@@ -1288,7 +1296,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1372,7 +1380,7 @@
    {
     "name": "PlanarObject",
     "nick": "PlaneObj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1396,7 +1404,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1429,7 +1437,7 @@
    {
     "name": "Objects",
     "nick": "PlanarObjs",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    }
@@ -1480,7 +1488,7 @@
    {
     "name": "Objects",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    },
@@ -1518,7 +1526,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1612,7 +1620,7 @@
    {
     "name": "Object",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1635,7 +1643,7 @@
    {
     "name": "RotatedObject",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1659,7 +1667,7 @@
    {
     "name": "SphericalObject",
     "nick": "SphereObj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },
@@ -1692,7 +1700,7 @@
    {
     "name": "Objects",
     "nick": "SphereObjs",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    }
@@ -1729,7 +1737,7 @@
    {
     "name": "Objects",
     "nick": "Obj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "list",
     "optional": false
    },
@@ -1804,7 +1812,7 @@
    {
     "name": "SphereObject",
     "nick": "SphereObj",
-    "type": "Param_GenericObject",
+    "type": "Param_DesignObject",
     "access": "item",
     "optional": false
    },

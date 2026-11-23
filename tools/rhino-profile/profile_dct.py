@@ -25,8 +25,8 @@ clr.AddReference("Grasshopper")
 from System.Reflection import Assembly  # noqa: E402
 
 # Assembly.LoadFrom (not clr.AddReference, which takes names, not paths); pythonnet picks up loaded assemblies.
-for dll in ("MathNet.Numerics.dll", "Accord.dll", "Accord.Math.Core.dll", "Accord.Math.dll", "Accord.Statistics.dll",
-            "MIConvexHull.dll", "DigitalCircularityToolkit.gha"):
+for dll in ("MathNet.Numerics.dll", "MIConvexHull.dll", "DigitalCircularityToolkit.Numerics.dll",
+            "DigitalCircularityToolkit.Geometry.dll", "DigitalCircularityToolkit.gha"):
     Assembly.LoadFrom(os.path.join(BIN, dll))
 
 from System import Array  # noqa: E402
@@ -96,19 +96,19 @@ res["notes"].append("filleted box faces: %d" % sets["filleted_box_brep"][0].Face
 meshes = {"mesh_10k": [make_mesh(100) for _ in range(10)], "mesh_160k": [make_mesh(400) for _ in range(4)]}
 
 for name, breps in sets.items():
-    timed(name + ".DesignObject(brep, 50) TOTAL", lambda b: DesignObject(b, 50), breps)
+    timed(name + ".DesignObject.Create(brep, 50) TOTAL", lambda b: DesignObject.Create(b, 50), breps)
     pts = timed(name + ".  Discretizer.DiscretizeBrep", lambda b: Discretizer.DiscretizeBrep(b, 50), breps)
     res["notes"].append("%s sample count: %d" % (name, pts[0].Count))
     arrs = [Array[rg.Point3d](list(p)) for p in pts]
-    timed(name + ".  PCA.PCAvectors (Accord)", lambda a: PCA.PCAvectors(Discretizer.PositionMatrix(a), True), arrs)
+    timed(name + ".  PCA.PCAvectors (Jacobi)", lambda a: PCA.PCAvectors(Discretizer.PositionMatrix(a), True), arrs)
     timed(name + ".  VolumeMassProperties (centroid for transform)", lambda b: rg.VolumeMassProperties.Compute(b), breps)
     timed(name + ".  Hulls.MakeHull (3D)", lambda a: Hulls.MakeHull(a), arrs)
     timed(name + ".  Hulls.MakeHull2d", lambda a: Hulls.MakeHull2d(a, rg.Plane.WorldXY), arrs)
 
 for name, ms in meshes.items():
-    timed(name + ".DesignObject(mesh) TOTAL", lambda m: DesignObject(m, 0), ms)
+    timed(name + ".DesignObject.Create(mesh) TOTAL", lambda m: DesignObject.Create(m, 0), ms)
     arrs = [m.Vertices.ToPoint3dArray() for m in ms]
-    timed(name + ".  PCA.PCAvectors (Accord)", lambda a: PCA.PCAvectors(Discretizer.PositionMatrix(a), True), arrs)
+    timed(name + ".  PCA.PCAvectors (Jacobi)", lambda a: PCA.PCAvectors(Discretizer.PositionMatrix(a), True), arrs)
     timed(name + ".  Hulls.MakeHull (3D)", lambda a: Hulls.MakeHull(a), arrs)
     timed(name + ".  Hulls.MakeHull2d", lambda a: Hulls.MakeHull2d(a, rg.Plane.WorldXY), arrs)
 

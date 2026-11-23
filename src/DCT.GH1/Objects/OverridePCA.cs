@@ -23,7 +23,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object to modify", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object to modify", GH_ParamAccess.item);
             pManager.AddPlaneParameter("PrincipalPlane", "XYPCA", "A plane that whose X,Y components represent the overriding PCA1, PCA2", GH_ParamAccess.item);
         }
 
@@ -32,7 +32,7 @@ namespace DigitalCircularityToolkit.Objects
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Object", "Obj", "Object with overriden principal component", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_DesignObject(), "Object", "Obj", "Object with overriden principal component", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,20 +41,14 @@ namespace DigitalCircularityToolkit.Objects
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            DesignObject obj = new DesignObject();
+            DesignObject obj = null;
             Plane plane = new Plane();
 
             if (!DA.GetData(0, ref obj)) return;
             if (!DA.GetData(1, ref plane)) return;
 
-            // Grasshopper hands this component the same instance as the upstream output: work on a copy (B4).
-            // ShallowCopy keeps the concrete type; Repopulate only assigns fields, so the copy is safe to change.
-            obj = obj.ShallowCopy();
-
-            // assert that plane origin is centered
-            plane.Origin = obj.Localbox.Center;
-
-            obj.Repopulate(plane);
+            // A new object with the plane's axes; the input (shared with the upstream output) is not touched (B4).
+            obj = obj.WithFrame(plane);
 
             DA.SetData(0, obj);
         }
