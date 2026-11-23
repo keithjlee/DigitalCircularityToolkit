@@ -9,8 +9,9 @@ namespace DigitalCircularityToolkit.Objects
 
         /// <param name="geometry">A Curve, Brep, Mesh or PointCloud.</param>
         /// <param name="n">Target number of samples (curves and Breps).</param>
-        public static BoxObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double widthBuffer = 1, double heightBuffer = 1, string id = "NoID") =>
-            new BoxObject(ShapeAnalysis.Analyze(geometry, n))
+        /// <param name="options">Orientation settings; null = Legacy (the frames of v0.6 and earlier).</param>
+        public static BoxObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double widthBuffer = 1, double heightBuffer = 1, string id = "NoID", AnalysisOptions options = null) =>
+            new BoxObject(ShapeAnalysis.Analyze(geometry, n, options))
             {
                 Quantity = quantity,
                 LengthBuffer = Positive(lengthBuffer, nameof(lengthBuffer)),

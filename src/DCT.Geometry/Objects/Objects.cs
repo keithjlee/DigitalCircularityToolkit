@@ -39,8 +39,9 @@ namespace DigitalCircularityToolkit.Objects
 
         /// <summary>A generic object (frame only) from a Curve, Brep, Mesh or PointCloud.</summary>
         /// <param name="n">Target number of samples (curves and Breps).</param>
-        public static DesignObject Create(GeometryBase geometry, int n, string id = "NoID") =>
-            new DesignObject(ShapeAnalysis.Analyze(geometry, n)) { ID = id };
+        /// <param name="options">Orientation settings; null = Legacy (the frames of v0.6 and earlier).</param>
+        public static DesignObject Create(GeometryBase geometry, int n, string id = "NoID", AnalysisOptions options = null) =>
+            new DesignObject(ShapeAnalysis.Analyze(geometry, n, options)) { ID = id };
 
         /// <summary>Validation shared by the subtypes' Create methods.</summary>
         protected static double Positive(double value, string name) =>
@@ -143,7 +144,9 @@ namespace DigitalCircularityToolkit.Objects
         public DesignObject WithFrame(Plane plane)
         {
             plane.Origin = Frame.Localbox.Center;
-            return this with { Frame = ObjectFrame.FromPlane(Geometry, Frame.Centroid, plane, plane.XAxis, plane.YAxis, plane.ZAxis) };
+            ObjectFrame f = ObjectFrame.FromPlane(Geometry, Frame.Centroid, plane, plane.XAxis, plane.YAxis, plane.ZAxis)
+                with { Mode = OrientationMode.Override, Gap12 = Frame.Gap12, Gap23 = Frame.Gap23 };
+            return this with { Frame = f };
         }
 
         /// <summary>Rotation + translation only: orthonormal 3×3 part with determinant +1 and an affine bottom row.</summary>

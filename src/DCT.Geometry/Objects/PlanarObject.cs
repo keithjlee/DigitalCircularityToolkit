@@ -9,9 +9,10 @@ namespace DigitalCircularityToolkit.Objects
 
         /// <param name="geometry">A Curve, Brep, Mesh or PointCloud.</param>
         /// <param name="n">Target number of samples (curves and Breps).</param>
+        /// <param name="options">Orientation settings; null = Legacy (the frames of v0.6 and earlier).</param>
         /// <param name="thickness">Thickness; ≤ 0 uses the box height.</param>
-        public static PlanarObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double widthBuffer = 1, double thickness = -1, string id = "NoID") =>
-            new PlanarObject(ShapeAnalysis.Analyze(geometry, n))
+        public static PlanarObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double widthBuffer = 1, double thickness = -1, string id = "NoID", AnalysisOptions options = null) =>
+            new PlanarObject(ShapeAnalysis.Analyze(geometry, n, options))
             {
                 Quantity = quantity,
                 LengthBuffer = Positive(lengthBuffer, nameof(lengthBuffer)),

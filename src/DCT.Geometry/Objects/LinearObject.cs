@@ -9,9 +9,10 @@ namespace DigitalCircularityToolkit.Objects
 
         /// <param name="geometry">A Curve, Brep, Mesh or PointCloud.</param>
         /// <param name="n">Target number of samples (curves and Breps).</param>
+        /// <param name="options">Orientation settings; null = Legacy (the frames of v0.6 and earlier).</param>
         /// <param name="area">Cross-section area; ≤ 0 estimates it as Width × Height.</param>
-        public static LinearObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double area = -1, string id = "NoID") =>
-            new LinearObject(ShapeAnalysis.Analyze(geometry, n))
+        public static LinearObject Create(GeometryBase geometry, int n, int quantity = 1, double lengthBuffer = 1, double area = -1, string id = "NoID", AnalysisOptions options = null) =>
+            new LinearObject(ShapeAnalysis.Analyze(geometry, n, options))
             {
                 Quantity = quantity,
                 LengthBuffer = Positive(lengthBuffer, nameof(lengthBuffer)),
