@@ -171,4 +171,72 @@ public class LinearAssignmentTests
         Assert.True(r.UsedMonotonePath);
         Assert.True(sw.ElapsedMilliseconds < 200, $"monotone path took {sw.ElapsedMilliseconds} ms");
     }
+
+    [Theory]
+    [InlineData(5, 5, 0.0)]
+    [InlineData(4, 6, 0.0)]
+    [InlineData(6, 4, 0.0)]
+    [InlineData(1, 4, 0.0)]
+    [InlineData(5, 5, 0.4)]
+    [InlineData(4, 6, 0.5)]
+    [InlineData(6, 4, 0.4)]
+    [InlineData(5, 5, 0.9)]
+    public void Auction_matches_brute_force(int rows, int cols, double forbiddenShare)
+    {
+        var rng = new Random(rows * 17 + cols * 3 + (int)(forbiddenShare * 10));
+        for (int trial = 0; trial < 80; trial++)
+        {
+            var c = new double[rows, cols];
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < cols; j++)
+                    c[i, j] = rng.NextDouble() < forbiddenShare ? double.PositiveInfinity
+                        : (trial % 2 == 0 ? Math.Round(rng.NextDouble() * 20) : rng.NextDouble() * 100 - 30);
+            var r = LinearAssignment.Solve(ToMatrix(c), false, AssignmentMethod.Auction);
+            Assert.True(r.UsedAuction);
+            CheckValid(c, r);
+            var best = BruteForce(c);
+            Assert.Equal(best.unassigned, r.Unassigned);
+            Assert.Equal(best.cost, r.Cost, 9);
+        }
+    }
+
+    [Theory]
+    [InlineData(300, 300, 8, 0.0)]
+    [InlineData(200, 500, 2, 0.0)]
+    [InlineData(500, 200, 3, 0.0)]
+    [InlineData(300, 300, 2, 0.3)]
+    [InlineData(250, 400, 4, 0.6)]
+    [InlineData(400, 400, 1, 0.0)]
+    public void Auction_equals_dense_on_feature_space_matrices(int n, int m, int k, double forbiddenShare)
+    {
+        var rng = new Random(n + m + k);
+        double[][] d = Enumerable.Range(0, n).Select(_ => Enumerable.Range(0, k).Select(__ => 1000 + rng.NextDouble() * 3000).ToArray()).ToArray();
+        double[][] s = Enumerable.Range(0, m).Select(_ => Enumerable.Range(0, k).Select(__ => 1500 + rng.NextDouble() * 4500).ToArray()).ToArray();
+        var forbid = new bool[n, m];
+        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) forbid[i, j] = rng.NextDouble() < forbiddenShare;
+        var c = CostMatrix.Build(n, m, (i, row) =>
+        {
+            for (int j = 0; j < m; j++) row[j] = forbid[i, j] ? double.PositiveInfinity : Math.Round(CostFunctions.Euclidean(d[i], s[j], 1), k == 1 ? 0 : 9);
+        });
+        var dense = LinearAssignment.Solve(c, false, AssignmentMethod.Dense);
+        var auction = LinearAssignment.Solve(c, false, AssignmentMethod.Auction);
+        // Continuous multi-feature costs: the auction finishes. Rounded 1-D costs (heavily tied) may exhaust the bid
+        // budget and fall back to the dense solver; either way the result must be optimal.
+        if (k > 1) Assert.True(auction.UsedAuction);
+        Assert.Equal(dense.Unassigned, auction.Unassigned);
+        Assert.Equal(1.0, auction.Cost / dense.Cost, 10);
+        Assert.Equal(auction.Assignment.Where(j => j >= 0).Count(), auction.Assignment.Where(j => j >= 0).Distinct().Count());
+        // deterministic despite parallel bidding
+        Assert.Equal(auction.Assignment, LinearAssignment.Solve(c, false, AssignmentMethod.Auction).Assignment);
+    }
+
+    [Fact]
+    public void Auto_uses_the_auction_for_large_matrices_only()
+    {
+        var rng = new Random(4);
+        var small = new CostMatrix(10, 10, Enumerable.Range(0, 100).Select(_ => rng.NextDouble()).ToArray());
+        var large = new CostMatrix(500, 600, Enumerable.Range(0, 300_000).Select(_ => rng.NextDouble()).ToArray());
+        Assert.False(LinearAssignment.Solve(small).UsedAuction);
+        Assert.True(LinearAssignment.Solve(large).UsedAuction);
+    }
 }

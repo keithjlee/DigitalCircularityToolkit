@@ -1,6 +1,6 @@
 # Matching
 
-Given a [cost matrix](cost-matrices.md), [`Assign`](@ref comp-Assign) finds the assignment with the lowest total cost: every demand part gets a different supply piece, and no piece is used twice. This is the linear assignment problem. DCT solves it exactly with a shortest augmenting path solver (Crouse 2016, the algorithm of SciPy's `linear_sum_assignment`): 2000 × 2000 pieces in about 0.1 s.
+Given a [cost matrix](cost-matrices.md), [`Assign`](@ref comp-Assign) finds the assignment with the lowest total cost: every demand part gets a different supply piece, and no piece is used twice. This is the linear assignment problem. DCT solves it exactly: with shortest augmenting paths (Crouse 2016, the algorithm of SciPy's `linear_sum_assignment`) for small problems, and with an ε-scaling auction plus an exact clean-up for large ones. 2000 demand × 2000 supply pieces with 8 features take about 0.2 s.
 
 **Length matching is instant.** When the cost comes from a single feature with a convex cost (length alone, with [`EuclideanCost`](@ref comp-EuclideanCost), [`ManhattanCost`](@ref comp-ManhattanCost) or [`AsymmEuclideanCost`](@ref comp-AsymmEuclideanCost)), the best assignment never crosses: shorter members get shorter pieces. Assign detects this and solves by sorting, in milliseconds even for thousands of pieces.
 

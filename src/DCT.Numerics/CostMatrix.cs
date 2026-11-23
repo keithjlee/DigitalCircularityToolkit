@@ -79,6 +79,9 @@ namespace DigitalCircularityToolkit.Numerics
 
         public ReadOnlySpan<double> Row(int i) => _values.Value.AsSpan(i * Cols, Cols);
 
+        /// <summary>The value array itself (row-major), for solvers that need an array. Never modify it.</summary>
+        internal double[] Array => _values.Value;
+
         /// <summary>All values, row-major.</summary>
         public ReadOnlySpan<double> Values => _values.Value;
 

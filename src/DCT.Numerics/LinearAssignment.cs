@@ -6,7 +6,14 @@ namespace DigitalCircularityToolkit.Numerics
     /// Result of an assignment. <see cref="Assignment"/>[i] is the column (supply) given to row (demand) i, or −1.
     /// <see cref="Cost"/> sums the assigned entries only.
     /// </summary>
-    public sealed record AssignmentResult(int[] Assignment, double Cost, int Unassigned, bool UsedMonotonePath);
+    public sealed record AssignmentResult(int[] Assignment, double Cost, int Unassigned, bool UsedMonotonePath, bool UsedAuction = false);
+
+    /// <summary>
+    /// Which general solver to use; both return an optimal assignment. Auto: the auction for matrices of at least
+    /// <see cref="LinearAssignment.AuctionThreshold"/> entries (much faster on feature-space distances), shortest
+    /// augmenting paths below that, or when the auction exceeds its bid budget (tied, wide-range integer matrices).
+    /// </summary>
+    public enum AssignmentMethod { Auto, Dense, Auction }
 
     /// <summary>
     /// Linear assignment on a <see cref="CostMatrix"/> (COST_MATRIX_SPEC §5), any shape:
@@ -17,14 +24,20 @@ namespace DigitalCircularityToolkit.Numerics
     /// <item>matrices marked <see cref="CostMatrix.Monotone"/> (one feature, convex cost) are solved by sorting
     /// (square) or an O(n·m) dynamic program, with the same objective.</item>
     /// </list>
-    /// The general solver is the shortest augmenting path method of Crouse (2016), the algorithm of SciPy's
-    /// <c>linear_sum_assignment</c> and of the DemandTransport <c>lapjv</c>. Deterministic: the same matrix always
-    /// gives the same assignment.
+    /// General solvers: shortest augmenting paths (Crouse 2016, the algorithm of SciPy's <c>linear_sum_assignment</c>)
+    /// for small matrices, and an ε-scaling auction with an exact polish (<see cref="AuctionAssignment"/>) for large
+    /// ones, which is 5–20× faster on feature-space distance matrices. Both are exact and deterministic: the same matrix
+    /// always gives the same assignment.
     /// </summary>
     public static class LinearAssignment
     {
+        /// <summary>Matrices with at least this many entries use the auction under <see cref="AssignmentMethod.Auto"/> (the measured crossover is about 500×500).</summary>
+        public const long AuctionThreshold = 250_000;
+
+        /// <param name="cost">Rows = demand, columns = supply.</param>
         /// <param name="allowMonotonePath">False forces the general solver (for tests and comparisons).</param>
-        public static AssignmentResult Solve(CostMatrix cost, bool allowMonotonePath = true)
+        /// <param name="method">General solver; both give an optimal assignment.</param>
+        public static AssignmentResult Solve(CostMatrix cost, bool allowMonotonePath = true, AssignmentMethod method = AssignmentMethod.Auto)
         {
             if (allowMonotonePath && cost.Monotone != null) return SolveMonotone(cost.Monotone);
 
@@ -43,7 +56,11 @@ namespace DigitalCircularityToolkit.Numerics
             }
             ReadOnlySpan<double> a = transposed ?? values;
 
-            int[] x = Augment(a, nr, nc, cost.ForbiddenCount > 0);
+            bool forbidden = cost.ForbiddenCount > 0;
+            bool auction = method == AssignmentMethod.Auction || (method == AssignmentMethod.Auto && (long)n * m >= AuctionThreshold);
+            int[]? x = auction ? AuctionAssignment.Solve(transposed ?? cost.Array, nr, nc, forbidden, forbidden ? DummyCost(a, nr) : 0, out _) : null;
+            auction = x != null;
+            x ??= Augment(a, nr, nc, forbidden);
 
             var assignment = new int[n];
             Array.Fill(assignment, -1);
@@ -61,7 +78,7 @@ namespace DigitalCircularityToolkit.Numerics
                 if (assignment[i] < 0) unassigned++;
                 else total += values[i * m + assignment[i]];
             }
-            return new AssignmentResult(assignment, total, unassigned, false);
+            return new AssignmentResult(assignment, total, unassigned, false, auction);
         }
 
         /// <summary>
