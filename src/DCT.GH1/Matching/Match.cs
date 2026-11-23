@@ -69,8 +69,9 @@ namespace DigitalCircularityToolkit.Matching
             if (auto)
             {
                 // In-house solver since v0.6 (was LapjvCSharp): the same optimal total cost; among equally cheap
-                // assignments it may pick different pairs.
-                AssignmentResult result = LinearAssignment.Solve(AssignmentHelpers.ToCostMatrix(dm, n_demand, n_supply));
+                // assignments it may pick different pairs. Always shortest augmenting paths: the integer, heavily tied
+                // matrices of the legacy components are the auction's worst case.
+                AssignmentResult result = LinearAssignment.Solve(AssignmentHelpers.ToCostMatrix(dm, n_demand, n_supply), true, Numerics.AssignmentMethod.Dense);
                 assignments = result.Assignment;
                 total_cost = result.Cost;
                 int unassigned = result.Unassigned;

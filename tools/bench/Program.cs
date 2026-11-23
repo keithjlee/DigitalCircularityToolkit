@@ -48,6 +48,57 @@ static class P {
     if (args.Length > 0 && args[0] == "pcasign") { PcaSignProbe.Run(); return; }
     if (args.Length > 0 && args[0] == "eigcheck") { EigenCheck.Run(); return; }
     if (args.Length > 1 && args[0] == "rectcheck") { RectCheck(args[1]); return; }
+    if (args.Length > 0 && args[0] == "shape") { // auction vs dense across aspect ratios and with forbidden pairs
+      var shapes = args.Length > 1 && args[1] == "small" ? new[]{(300,300,4,0.0),(400,400,4,0.0),(500,500,4,0.0),(700,700,4,0.0),(1000,1000,4,0.0),(300,900,2,0.0),(500,1000,4,0.0),(500,500,4,0.3)} : new[]{(2000,2000,4,0.0),(2000,2100,4,0.0),(2000,2400,4,0.0),(2000,3000,4,0.0),(1500,3000,2,0.0),(2000,2000,4,0.2),(2000,2400,4,0.2)};
+      foreach(var (n,m,k,fb) in shapes){
+        var r=new Random(2);
+        double[][] D=Enumerable.Range(0,n).Select(_=>Enumerable.Range(0,k).Select(__=>1000+r.NextDouble()*3000).ToArray()).ToArray();
+        double[][] S=Enumerable.Range(0,m).Select(_=>Enumerable.Range(0,k).Select(__=>1500+r.NextDouble()*4500).ToArray()).ToArray();
+        var F=new bool[n*m]; for(int t=0;t<F.Length;t++) F[t]=r.NextDouble()<fb;
+        var C=CostMatrix.Build(n,m,(i,row)=>{ for(int j=0;j<m;j++) row[j]=F[i*m+j]?double.PositiveInfinity:CostFunctions.Euclidean(D[i],S[j],1); }); var _v=C[0,0];
+        var sw=Stopwatch.StartNew(); var au=LinearAssignment.Solve(C,false,AssignmentMethod.Auction); double ta=sw.Elapsed.TotalMilliseconds;
+        sw.Restart(); var de=LinearAssignment.Solve(C,false,AssignmentMethod.Dense); double td=sw.Elapsed.TotalMilliseconds;
+        Console.WriteLine($"shape {n}x{m} k={k} forbidden {fb}: auction {ta:F0} ms | dense {td:F0} ms | same cost {Math.Abs(au.Cost-de.Cost)<=1e-9*de.Cost}");
+      }
+      return;
+    }
+    if (args.Length > 0 && args[0] == "asym") { // asymmetric costs (wide range: shortfall^q) on continuous k-D features
+      foreach(var (n,m,k,q) in new[]{(2000,2000,2,2.0),(1000,3000,2,2.0),(2000,2000,4,3.0),(1000,3000,3,2.0)}){
+        var r=new Random(6);
+        double[][] D=Enumerable.Range(0,n).Select(_=>Enumerable.Range(0,k).Select(__=>1000+r.NextDouble()*3000).ToArray()).ToArray();
+        double[][] S=Enumerable.Range(0,m).Select(_=>Enumerable.Range(0,k).Select(__=>1500+r.NextDouble()*4500).ToArray()).ToArray();
+        var C=CostFunctions.AsymmetricEuclideanMatrix(D,S,1,q,false); var _v=C[0,0];
+        var sw=Stopwatch.StartNew(); var au=LinearAssignment.Solve(C,false,AssignmentMethod.Auction); double ta=sw.Elapsed.TotalMilliseconds;
+        sw.Restart(); var de=LinearAssignment.Solve(C,false,AssignmentMethod.Dense); double td=sw.Elapsed.TotalMilliseconds;
+        Console.WriteLine($"asym {n}x{m} k={k} q={q}: auction {ta:F0} ms | dense {td:F0} ms | same cost {Math.Abs(au.Cost-de.Cost)<=1e-9*de.Cost}");
+      }
+      return;
+    }
+    if (args.Length > 0 && args[0] == "ties") { // integer, heavily tied matrices (old Match on 1-D quantized lengths)
+      foreach(var (n,m) in new[]{(1000,3000),(2000,2000),(1000,1000)}){
+        var r=new Random(5);
+        var d=Enumerable.Range(0,n).Select(_=>1000+r.NextDouble()*3000).ToArray(); var s2=Enumerable.Range(0,m).Select(_=>1500+r.NextDouble()*4500).ToArray();
+        var v=new double[n*m]; for(int i=0;i<n;i++)for(int j=0;j<m;j++){ double x=s2[j]-d[i]; v[i*m+j]=Math.Ceiling(x>=0?x:x*x); }
+        var C=new CostMatrix(n,m,v);
+        var sw=Stopwatch.StartNew(); var au=LinearAssignment.Solve(C,false,AssignmentMethod.Auction); double ta=sw.Elapsed.TotalMilliseconds;
+        sw.Restart(); var de=LinearAssignment.Solve(C,false,AssignmentMethod.Dense); double td=sw.Elapsed.TotalMilliseconds;
+        Console.WriteLine($"ties {n}x{m}: auction {ta:F0} ms | dense {td:F0} ms | same cost {au.Cost==de.Cost}");
+      }
+      return;
+    }
+    if (args.Length > 0 && args[0] == "auction") { // auction vs dense on feature-space matrices
+      foreach(var (n,m,k) in new[]{(300,300,8),(300,300,2),(2000,2000,8),(1000,3000,2),(2000,2000,2),(4000,4000,4)}){
+        var r=new Random(1);
+        double[][] D=Enumerable.Range(0,n).Select(_=>Enumerable.Range(0,k).Select(__=>1000+r.NextDouble()*3000).ToArray()).ToArray();
+        double[][] S=Enumerable.Range(0,m).Select(_=>Enumerable.Range(0,k).Select(__=>1500+r.NextDouble()*4500).ToArray()).ToArray();
+        var C=CostFunctions.EuclideanMatrix(D,S,1); var _v=C[0,0];
+        var sw=Stopwatch.StartNew(); var sp=LinearAssignment.Solve(C,false,AssignmentMethod.Auction); double ts=sw.Elapsed.TotalMilliseconds;
+        double td=double.NaN; AssignmentResult de=null;
+        if((long)n*m<=4_000_000){ sw.Restart(); de=LinearAssignment.Solve(C,false,AssignmentMethod.Dense); td=sw.Elapsed.TotalMilliseconds; }
+        Console.WriteLine($"auction {n}x{m} k={k}: {ts:F0} ms (cost {sp.Cost:F3}) | dense {td:F0} ms (cost {de?.Cost:F3})");
+      }
+      return;
+    }
     if (args.Length > 0 && args[0] == "geo") { // Euclidean feature-space matrices (the Assign workload), Release timing
       foreach(var (n,m,k) in new[]{(2000,2000,8),(1000,3000,2),(2000,2000,2)}){
         var r=new Random(1);

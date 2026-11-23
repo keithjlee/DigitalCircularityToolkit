@@ -68,7 +68,7 @@ namespace DigitalCircularityToolkit.Matching
             if (auto)
             {
                 // In-house solver since v0.6 (was the HungarianAlgorithm package): same optimal total cost.
-                Numerics.AssignmentResult result = Numerics.LinearAssignment.Solve(AssignmentHelpers.ToCostMatrix(dm, n_demand, n_supply));
+                Numerics.AssignmentResult result = Numerics.LinearAssignment.Solve(AssignmentHelpers.ToCostMatrix(dm, n_demand, n_supply), true, Numerics.AssignmentMethod.Dense);
                 assignments = result.Assignment;
                 total_cost = result.Cost;
                 int unassigned = result.Unassigned;
