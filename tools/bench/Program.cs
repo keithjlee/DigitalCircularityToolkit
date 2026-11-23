@@ -38,19 +38,24 @@ static class P {
       double a=T(()=>Current(Dt,St,1),1), b=T(()=>Flat(Df,Sf,n,m,k,false)), c=T(()=>Flat(Df,Sf,n,m,k,true));
       Console.WriteLine($"dist {n}x{m} k={k}: current {a:F0} ms | flat {b:F1} ms ({a/b:F0}x) | flat+parallel {c:F1} ms ({a/c:F0}x)");
     }
+    static CostMatrix M(double[,] C){ int n=C.GetLength(0), m=C.GetLength(1); var v=new double[n*m]; for(int i=0;i<n;i++)for(int j=0;j<m;j++) v[i*m+j]=C[i,j]; return new CostMatrix(n,m,v); }
     foreach(var n in new[]{500,1000,2000}){
       var C=new double[n,n]; for(int i=0;i<n;i++)for(int j=0;j<n;j++) C[i,j]=Math.Ceiling(rng.NextDouble()*1000);
-      int[] x1=null,x2=null;
+      int[] x1=null; var cm=M(C); AssignmentResult r=null;
       double l=T(()=>{ x1=new Lapjv().lapjvCsharp(C,true,double.PositiveInfinity).Item1; },1);
-      double s=T(()=>{ x2=new ShortestPathSolver().Solve(C); },1);
-      double c1=0,c2=0; for(int i=0;i<n;i++){c1+=C[i,x1[i]];c2+=C[i,x2[i]];}
-      Console.WriteLine($"LAP {n}x{n}: LapjvCSharp {l:F0} ms (cost {c1}) | ShortestPathSolver {s:F0} ms (cost {c2})");
+      double s=T(()=>{ r=LinearAssignment.Solve(cm); },1);
+      double c1=0; for(int i=0;i<n;i++) c1+=C[i,x1[i]];
+      Console.WriteLine($"LAP {n}x{n}: LapjvCSharp {l:F0} ms (cost {c1}) | LinearAssignment {s:F0} ms (cost {r.Cost})");
     }
-    foreach(var n in new[]{1000,2000,4000}){ // 1-D length matching w/ integer-quantized costs (truss case): many ties
+    foreach(var n in new[]{1000,2000,4000}){ // 1-D length matching (truss case): many ties in the quantized matrix
       var d=Enumerable.Range(0,n).Select(_=>3.0+rng.NextDouble()*2).ToArray(); var s=Enumerable.Range(0,n).Select(_=>3.0+rng.NextDouble()*2).ToArray();
       var C=new double[n,n]; for(int i=0;i<n;i++)for(int j=0;j<n;j++) C[i,j]=Math.Ceiling(Math.Abs(d[i]-s[j])*100);
-      double l=T(()=>new Lapjv().lapjvCsharp(C,true,double.PositiveInfinity),1), sp=T(()=>new ShortestPathSolver().Solve(C),1);
-      Console.WriteLine($"LAP 1D-lengths {n}x{n} (int-quantized): LapjvCSharp {l:F0} ms | ShortestPathSolver {sp:F0} ms");
+      var cm=M(C);
+      var dd=d.Select(x=>new[]{x}).ToArray(); var ss=s.Select(x=>new[]{x}).ToArray();
+      double l=T(()=>new Lapjv().lapjvCsharp(C,true,double.PositiveInfinity),1), sp=T(()=>LinearAssignment.Solve(cm),1);
+      double mono=T(()=>LinearAssignment.Solve(CostFunctions.EuclideanMatrix(dd,ss,1)),1);
+      var dr=dd.Take(n*3/4).ToArray(); double monoRect=T(()=>LinearAssignment.Solve(CostFunctions.AsymmetricEuclideanMatrix(dr,ss,1,2,true)),1);
+      Console.WriteLine($"LAP 1D-lengths {n}x{n}: LapjvCSharp {l:F0} ms | LinearAssignment general {sp:F0} ms | monotone square {mono:F1} ms | monotone {dr.Length}x{n} forbid-shortfall {monoRect:F1} ms");
     }
     // rectangular, demand > supply: what does Match.cs see?
     var R=new double[5,3]; for(int i=0;i<5;i++)for(int j=0;j<3;j++) R[i,j]=rng.Next(1,10);
